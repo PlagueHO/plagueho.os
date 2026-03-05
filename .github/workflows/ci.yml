@@ -1,0 +1,53 @@
+name: CI - Validate Repository
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check for secrets in code
+        uses: trufflesecurity/trufflehog@v3.88.18
+        with:
+          path: ./
+          extra_args: --only-verified
+
+      - name: Validate YAML files
+        run: |
+          find . \( -name "*.yml" -o -name "*.yaml" \) -not -path "./.git/*" | while read file; do
+            python3 -c "import yaml; yaml.safe_load(open('$file'))" && echo "✓ $file" || echo "✗ $file"
+          done
+
+      - name: Validate JSON files
+        run: |
+          find . -name "*.json" | grep -v ".git/" | grep -v "node_modules/" | while read file; do
+            python3 -c "import json; json.load(open('$file'))" && echo "✓ $file" || echo "✗ $file"
+          done
+
+      - name: Check for trailing whitespace
+        run: |
+          found=0
+          while IFS= read -r -d '' file; do
+            if grep -Pq '\s+$' "$file" 2>/dev/null; then
+              echo "Trailing whitespace found: $file"
+              found=1
+            fi
+          done < <(find . -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.json" -o -name "*.ps1" -o -name "*.py" -o -name "*.sh" \) -not -path "./.git/*" -print0)
+          if [ "$found" -eq 1 ]; then
+            exit 1
+          fi
+          echo "No trailing whitespace found."

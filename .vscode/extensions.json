@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "github.copilot",
+    "github.copilot-chat",
+    "ms-vscode.powershell",
+    "ms-python.python",
+    "ms-python.pylance",
+    "redhat.vscode-yaml",
+    "davidanson.vscode-markdownlint",
+    "yzhang.markdown-all-in-one",
+    "streetsidesoftware.code-spell-checker",
+    "timonwong.shellcheck",
+    "ms-azuretools.vscode-bicep"
+  ]
+}
