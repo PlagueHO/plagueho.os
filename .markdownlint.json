@@ -9,6 +9,10 @@
   "MD036": false,
   "MD040": false,
   "MD041": false,
+  "MD055": {
+    "style": "leading_and_trailing"
+  },
+  "MD056": true,
   "MD060": false,
   "no-hard-tabs": true
 }

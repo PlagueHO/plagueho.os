@@ -49,7 +49,9 @@ skills/
 
 ## SKILL.md Format
 
-Every `SKILL.md` is a Markdown file with **YAML frontmatter**:
+Every `SKILL.md` is a Markdown file with **YAML frontmatter**.
+
+Minimal (required fields only):
 
 ```yaml
 ---
@@ -60,11 +62,29 @@ description: >
 ---
 ```
 
+With optional fields:
+
+```yaml
+---
+name: my-skill-name
+description: >
+  Clear description of what the skill does and when to use it.
+  Include trigger keywords so agents discover it automatically.
+license: MIT
+compatibility: Requires PowerShell 7+, Az PowerShell modules, and internet access
+metadata:
+  author: my-org
+  version: "1.0"
+---
+```
+
 | Field | Required | Constraints |
 |-------|----------|-------------|
-| `name` | Yes | Lowercase, hyphens for spaces, max 64 characters, must match folder name |
-| `description` | Yes | 10–1024 characters. Explain **what** it does, **when** to use it, and include **keywords** |
-| `license` | No | SPDX identifier or reference to `LICENSE.txt` |
+| `name` | Yes | Max 64 characters. Lowercase letters, numbers, and hyphens only. Must not start or end with a hyphen, no consecutive hyphens. Must match the parent directory name. |
+| `description` | Yes | Max 1024 characters. Describes **what** the skill does and **when** to use it. Include specific keywords that help agents identify relevant tasks. |
+| `license` | No | License name (e.g. `MIT`, `Apache-2.0`) or reference to a bundled `LICENSE.txt`. |
+| `compatibility` | No | Max 500 characters. Indicates environment requirements: intended product, required system packages, network access needs, etc. Omit if the skill has no specific requirements. |
+| `metadata` | No | Arbitrary key-value map for additional properties (e.g. `author`, `version`). Use reasonably unique key names to avoid conflicts. |
 
 The Markdown body contains the detailed instructions, step-by-step workflows,
 examples, and guidelines for Copilot to follow.
@@ -104,6 +124,7 @@ examples, and guidelines for Copilot to follow.
 
 | Skill | Description |
 |-------|-------------|
+| [azure-github-managed-identity](azure-github-managed-identity/SKILL.md) | Creates Azure User Assigned Managed Identities with OIDC federated credentials and RBAC roles to enable GitHub Actions and GitHub Copilot coding agents to authenticate to Azure without static secrets. |
 | [create-skill-from-pr](create-skill-from-pr/SKILL.md) | Generate a new Agent Skill from a GitHub PR representing a single refactoring or tech debt remediation task |
 
 ## Reference Documentation
@@ -126,14 +147,18 @@ examples, and guidelines for Copilot to follow.
 
 ### Community Resources
 
-- [github/awesome-copilot](https://github.com/github/awesome-copilot)
-  — community-curated collection of agents, skills, instructions, and plugins for GitHub Copilot.
-  Browse the [skills directory](https://github.com/github/awesome-copilot/tree/main/skills)
-  for ready-to-use examples or the
+- [skillmd.io](https://skillmd.io/)
+  — the SKILL.md registry: browse and discover agent skills from the community indexed
+  from public GitHub repositories, with categorised search across coding, testing, DevOps,
+  productivity, and more.
+- [github/awesome-copilot — skills](https://github.com/github/awesome-copilot/tree/main/skills)
+  — community-curated collection of ready-to-use agent skills for GitHub Copilot.
+  The accompanying
   [learning hub](https://github.com/github/awesome-copilot/tree/main/website/src/content/learning-hub)
-  for in-depth guides including
+  includes in-depth guides such as
   [Creating Effective Skills](https://github.com/github/awesome-copilot/tree/main/website/src/content/learning-hub/creating-effective-skills.md)
   and
-  [What Are Agents, Skills, and Instructions](https://github.com/github/awesome-copilot/tree/main/website/src/content/learning-hub/what-are-agents-skills-instructions.md)
+  [What Are Agents, Skills, and Instructions](https://github.com/github/awesome-copilot/tree/main/website/src/content/learning-hub/what-are-agents-skills-instructions.md).
 - [anthropics/skills](https://github.com/anthropics/skills)
-  — another collection of agent skills compatible with the open specification
+  — Anthropic's collection of agent skills for Claude, compatible with the open Agent Skills
+  specification.
