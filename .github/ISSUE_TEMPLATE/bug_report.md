@@ -16,9 +16,9 @@ assignees: PlagueHO
 
 ## Steps to Reproduce
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## Expected Behavior
 
@@ -30,8 +30,8 @@ assignees: PlagueHO
 
 ## Environment
 
-- OS: 
-- Tool version (if applicable): 
+- OS:
+- Tool version (if applicable):
 
 ## Additional Context
 

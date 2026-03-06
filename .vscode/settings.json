@@ -1,48 +1,8 @@
 {
-  "editor.insertSpaces": true,
-  "editor.detectIndentation": false,
-  "editor.renderWhitespace": "boundary",
-  "editor.rulers": [120],
-  "files.trimTrailingWhitespace": true,
-  "files.insertFinalNewline": true,
-  "files.trimFinalNewlines": true,
-  "editor.wordWrap": "off",
-  "[markdown]": {
-    "editor.wordWrap": "on",
-    "editor.quickSuggestions": {
-      "comments": "off",
-      "strings": "off",
-      "other": "off"
-    }
-  },
-  "[yaml]": {
-    "editor.tabSize": 2,
-    "editor.insertSpaces": true
-  },
-  "[json]": {
-    "editor.tabSize": 2,
-    "editor.insertSpaces": true
-  },
-  "[jsonc]": {
-    "editor.tabSize": 2,
-    "editor.insertSpaces": true
-  },
-  "[powershell]": {
-    "editor.tabSize": 4,
-    "editor.insertSpaces": true
-  },
-  "[python]": {
-    "editor.tabSize": 4,
-    "editor.insertSpaces": true
-  },
-  "[shellscript]": {
-    "editor.tabSize": 2,
-    "editor.insertSpaces": true
-  },
-  "github.copilot.enable": {
-    "*": true,
-    "plaintext": true,
-    "markdown": true,
-    "yaml": true
-  }
+    "github.copilot.chat.commitMessageGeneration.instructions": [
+        {
+            "text": "The first line should be summary of no more than 50 characters starting with classification of commit from: `CHORE:`|`FIX:`|`CHANGE:`|`BREAKING CHANGE:`|`TESTS:`|`SECURITY:`|`COMPLEX:`. The second line should be blank. The following lines should be the full summary with each item starting with a `-`. Any summary item that is security related should start with `SECURITY:`. Any summary item change that causes a breaking change to a feature/interface/dependency should start with `BREAKING CHANGE:`"
+        }
+    ],
+    "github.copilot.chat.codesearch.enabled": true
 }
