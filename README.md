@@ -1,5 +1,8 @@
 # plagueho.os
 
+[![CI][ci-shield]][ci-url]
+[![License][license-shield]][license-url]
+
 Organizational engineering assets for Daniel Scott-Raynsford, including GitHub Copilot agents, prompts, scripts, patterns, and reference documentation commonly used across repositories for software development.
 
 ## Repository Structure
@@ -125,3 +128,8 @@ gh workflow run update-foundry-model-catalog.lock.yml
 2. Add your asset in the appropriate directory
 3. Follow the style and documentation conventions for that asset type
 4. Open a pull request using the provided template
+<!-- Badge reference links -->
+[ci-shield]: https://img.shields.io/github/actions/workflow/status/PlagueHO/plagueho.os/continuous-integration.yml?branch=main&label=CI
+[ci-url]: https://github.com/PlagueHO/plagueho.os/actions/workflows/continuous-integration.yml
+[license-shield]: https://img.shields.io/github/license/PlagueHO/plagueho.os
+[license-url]: https://github.com/PlagueHO/plagueho.os/blob/main/LICENSE
