@@ -1,4 +1,4 @@
-name: CI - Validate Repository
+name: Continuous Integration
 
 on:
   push:
@@ -37,6 +37,20 @@ jobs:
           find . -name "*.json" | grep -v ".git/" | grep -v "node_modules/" | while read file; do
             python3 -c "import json; json.load(open('$file'))" && echo "✓ $file" || echo "✗ $file"
           done
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Validate Markdown
+        run: pnpm lint:md
 
       - name: Check for trailing whitespace
         run: |
