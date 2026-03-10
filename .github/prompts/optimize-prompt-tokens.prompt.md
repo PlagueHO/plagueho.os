@@ -8,8 +8,12 @@ tools: [read/readFile, agent, edit, search]
 # Optimize Prompt Token Usage
 
 Reduce the token count of a prompt (`.prompt.md`), skill (`SKILL.md`), or agent
-definition (`.agent.md`) while preserving semantic completeness, determinism,
-and clarity for AI coding agents.
+definition (`.agent.md`) by removing filler words and verbose constructions.
+
+**Primary constraint**: The optimized output must retain 100% of the
+functionality, capability, and constraints of the original. The agent consuming
+the optimized definition must produce identical behavior to the original. Never
+remove, weaken, or generalize an instruction to save tokens.
 
 ## Input
 
@@ -23,7 +27,9 @@ and clarity for AI coding agents.
 
 ## Step 2 — Analyze for Optimization
 
-Scan the content for the following token-waste patterns:
+Scan for token-waste patterns. Focus on filler words and verbose phrasing.
+Do not flag content that carries functional meaning, behavioral constraints, or
+edge-case handling — these must remain intact regardless of verbosity.
 
 ### 2a. Redundant and Filler Language
 
@@ -68,8 +74,13 @@ Replace with concise equivalents:
 - Repeated instructions already covered by frontmatter or parent context.
 - Descriptions that restate the heading in prose form.
 - Section introductions that repeat the section title as a sentence.
-- Duplicate constraints stated in multiple places — consolidate to one location.
-- Examples that illustrate the same pattern more than once.
+- Duplicate constraints stated in multiple places — consolidate to one location,
+  keeping the most specific version.
+- Examples that illustrate the same pattern more than once — keep the most
+  illustrative example.
+
+**Caution**: If a statement appears duplicated but serves a different purpose in
+each location (e.g., a constraint repeated as a validation check), keep both.
 
 ### 2d. Unnecessary Formatting
 
@@ -91,11 +102,17 @@ Replace with concise equivalents:
 
 ## Step 3 — Apply Optimizations
 
-Apply all identified optimizations to the file. Follow these constraints:
+Apply all identified optimizations to the file. Follow these constraints
+strictly — when in doubt, preserve the original wording:
 
-1. **Preserve all semantic content.** Every instruction, constraint, rule, and
-   example in the original must have an equivalent in the optimized version.
-   Do not remove steps, conditions, edge cases, or tool references.
+1. **100% functional equivalence.** Every instruction, constraint, rule,
+   condition, edge case, example, and behavioral directive in the original must
+   have a semantically identical equivalent in the optimized version. If an
+   instruction cannot be shortened without altering its meaning, keep it as-is.
+1. **Preserve all steps.** Do not remove, merge, or reorder steps. Each
+   numbered step in the original must remain as a distinct numbered step.
+1. **Preserve all constraints and conditions.** Do not weaken "must" to
+   "should", remove conditional branches, or drop error-handling directives.
 1. **Preserve frontmatter fields and values.** Do not alter YAML frontmatter
    keys. Optimize the `description` field value only if it contains filler.
 1. **Preserve structural hierarchy.** Keep the same heading levels and
@@ -104,16 +121,27 @@ Apply all identified optimizations to the file. Follow these constraints:
    fenced code blocks unless it contains comments with filler language.
 1. **Preserve tool references.** Do not rename, remove, or alter `#tool:` or
    tool name references.
+1. **Preserve variable interpolations.** Do not alter `${...}` expressions.
+1. **Preserve trigger keywords.** In skill/agent `description` fields, retain
+   all USE FOR / DO NOT USE FOR keywords — these drive invocation matching.
 1. **Use imperative mood.** Instructions to the agent should be direct commands:
    "Read the file", "Extract the pattern", "Return the result".
 1. **One idea per sentence.** Break compound sentences with multiple clauses
    into separate concise sentences.
 
-## Step 4 — Validate
+## Step 4 — Validate Functional Equivalence
 
 1. Compare the optimized version against the original section-by-section.
-1. Confirm no instructions, constraints, steps, or behavioral rules were lost.
-1. Confirm no tool references or variable interpolations were altered.
+1. For each section, verify:
+   - Every instruction in the original has a corresponding instruction in the
+     optimized version.
+   - Every constraint ("must", "do not", "only if", "stop when") is preserved
+     with identical strictness.
+   - Every conditional branch and edge-case handler is present.
+   - Every tool reference, `#tool:` invocation, and `${...}` interpolation is
+     unchanged.
+   - Every step number maps 1:1 to the original.
+1. If any functional content was lost, restore it before proceeding.
 1. Estimate the new token count.
 
 ## Step 5 — Report
