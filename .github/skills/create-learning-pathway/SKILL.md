@@ -1,14 +1,7 @@
 ---
 name: create-learning-pathway
 
-description: >
-  Create a structured technical Learning Pathway document for Microsoft Partners
-  to learn a specific Microsoft technology topic. The pathway progresses from
-  L100 (foundational) through L400 (expert) using only official Microsoft Learn
-  training, labs, and first-party GitHub workshop repositories. Use this skill
-  when asked to: create a learning pathway, build a training plan, generate a
-  study guide, produce a skilling roadmap, or design a learning journey for any
-  Microsoft or Azure technology.
+description: "**WORKFLOW SKILL** — Generate structured Learning Pathway documents for Microsoft technologies, progressing L100–L400. WHEN: \"create a learning pathway\", \"build a training plan\", \"generate a study guide\", \"produce a skilling roadmap\", \"design a learning journey\". INVOKES: microsoft_docs_search, microsoft_docs_fetch, github_repo MCP tools. FOR SINGLE OPERATIONS: Use Microsoft Learn MCP directly to look up individual training modules."
 
 metadata:
   author: PlagueHO
@@ -40,6 +33,18 @@ framework:
 | **L200 — Intermediate** | Practitioners starting to build | Core features, guided tutorials, first-hand experience |
 | **L300 — Advanced** | Experienced practitioners | Architecture patterns, integration, production scenarios |
 | **L400 — Expert** | Specialists and architects | Deep internals, optimization, complex real-world solutions |
+
+## MCP Tools Used
+
+| Step | Tool | Purpose |
+|------|------|---------|
+| 2 | `microsoft_docs_search` | Search Microsoft Learn for training modules and learning paths |
+| 2 | `microsoft_docs_fetch` | Fetch full content from Microsoft Learn pages for detail |
+| 3 | `github_repo` | Search first-party GitHub orgs for workshop and lab repositories |
+
+**MCP Server (Preferred):** Use Microsoft Learn MCP tools for discovery.
+
+**CLI Fallback (if MCP unavailable):** Manually browse `learn.microsoft.com/en-us/training/` and search GitHub directly at `github.com/MicrosoftLearning`.
 
 ## Prerequisites
 
