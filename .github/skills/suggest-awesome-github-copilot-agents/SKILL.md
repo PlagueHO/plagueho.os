@@ -1,7 +1,6 @@
 ---
 name: suggest-awesome-github-copilot-agents
-description: >
-  Suggest relevant GitHub Copilot Custom Agents files from the awesome-copilot repository based on current repository context and chat history, avoiding duplicates with existing custom agents in this repository, and identifying outdated agents that need updates.
+description: "**WORKFLOW SKILL** — Suggest and install GitHub Copilot Custom Agents from the awesome-copilot repository, detecting duplicates and outdated local agents. WHEN: \"suggest copilot agents\", \"find awesome copilot agents\", \"check for agent updates\", \"install agents from awesome-copilot\", \"discover new copilot agents\". INVOKES: githubRepo MCP tool, fetch tool. FOR SINGLE OPERATIONS: Use githubRepo MCP directly to browse the agents list."
 ---
 
 # Suggest Awesome GitHub Copilot Custom Agents
@@ -76,6 +75,30 @@ Display analysis results in structured table comparing awesome-copilot custom ag
    - **Content updates** (instructions, examples, guidelines)
 5. Document key differences for outdated agents
 6. Calculate similarity to determine if update is needed
+
+## MCP Tools Used
+
+| Step | Tool | Command | Purpose |
+|------|------|---------|---------|
+| 1 | `fetch` | `fetch <url>` | Retrieve awesome-copilot README.agents.md agent list |
+| 4 | `fetch` | `fetch <raw-github-url>` | Fetch remote agent file for version comparison |
+| 8 | `githubRepo` | browse agents folder | List and navigate awesome-copilot agents |
+| 11 | `fetch` | `fetch <raw-github-url>` | Download agent files into `.github/agents/` |
+
+## Prerequisites
+
+- **Required tools:** `fetch` tool, `githubRepo` tool (GitHub MCP)
+- **Required permissions:** Read access to `github/awesome-copilot` repository (public)
+- **Enable GitHub MCP:** Ensure `githubRepo` tool is available in your Copilot session
+
+**MCP Tool (Preferred):**
+Use `githubRepo` to browse and list agents in the awesome-copilot repository.
+
+**CLI Fallback (if `githubRepo` unavailable):**
+
+```bash
+curl -s https://raw.githubusercontent.com/github/awesome-copilot/main/docs/README.agents.md
+```
 
 ## Requirements
 
