@@ -1,12 +1,7 @@
 ---
 name: create-skill-from-pr
 
-description:
-  Generate a new GitHub Copilot Agent Skill from a GitHub Pull Request.
-  Use when asked to create a reusable refactoring or tech debt remediation
-  skill from a PR. The PR must represent a single, well-defined refactoring
-  or tech debt task. If the PR contains multiple unrelated changes, stop
-  and ask the user for guidance.
+description: "**WORKFLOW SKILL** — Generate a reusable GitHub Copilot Agent Skill from a single-purpose refactoring or tech debt Pull Request. WHEN: \"create skill from PR\", \"generate skill from pull request\", \"PR to skill\", \"reusable refactoring skill\", \"tech debt skill from PR\". INVOKES: GitHub MCP tools, file system. FOR SINGLE OPERATIONS: Use GitHub MCP directly to read PR diffs."
 
 metadata:
   author: plagueho.os
