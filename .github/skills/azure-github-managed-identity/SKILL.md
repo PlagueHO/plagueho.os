@@ -1,8 +1,7 @@
 ---
 name: azure-github-managed-identity
 
-description: >
-  Creates Azure User Assigned Managed Identities with OIDC federated credentials and RBAC roles so that GitHub Actions workflows and GitHub Copilot coding agents can authenticate to Azure without storing secrets. Use this skill when asked to: set up Azure access for GitHub Actions or Copilot, configure managed identities for a GitHub repository, enable passwordless Azure authentication in CI/CD pipelines, or configure OIDC federation between GitHub and Azure.
+description: "**WORKFLOW SKILL** — Provision Azure User Assigned Managed Identities with OIDC federation and RBAC for passwordless GitHub authentication. WHEN: \"set up Azure access for GitHub Actions\", \"configure managed identity for GitHub\", \"enable passwordless Azure authentication in CI/CD\", \"configure OIDC federation GitHub Azure\", \"Copilot coding agent Azure identity\". INVOKES: run_in_terminal for PowerShell. FOR SINGLE OPERATIONS: Use az CLI for simple role assignments."
 
 metadata:
   author: PlagueHO
