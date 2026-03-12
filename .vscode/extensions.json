@@ -7,9 +7,7 @@
     "editorconfig.editorconfig",
     "esbenp.prettier-vscode",
     "github.codespaces",
-    "github.copilot",
     "github.copilot-chat",
-    "github.github-vscode-theme",
     "github.remotehub",
     "github.vscode-github-actions",
     "github.vscode-pull-request-github",
@@ -38,13 +36,11 @@
     "ms-vscode.powershell",
     "ms-vscode.remote-repositories",
     "ms-vscode.vscode-node-azure-pack",
-    "ms-windows-ai-studio.windows-ai-studio",
     "orta.vscode-jest",
     "redhat.vscode-yaml",
     "streetsidesoftware.code-spell-checker",
     "teamsdevapp.vscode-ai-foundry",
     "timonwong.shellcheck",
-    "vscode-icons-team.vscode-icons",
     "xabikos.javascriptsnippets",
     "yzhang.markdown-all-in-one"
   ]
