@@ -1,7 +1,6 @@
 ---
 name: suggest-awesome-github-copilot-skills
-description: >
-  Suggest relevant GitHub Copilot skills from the awesome-copilot repository based on current repository context and chat history, avoiding duplicates with existing skills in this repository, and identifying outdated skills that need updates.
+description: "**WORKFLOW SKILL** — Suggest and install GitHub Copilot skills from the awesome-copilot repository, detecting duplicates and outdated local skills. WHEN: \"suggest copilot skills\", \"find awesome copilot skills\", \"check for skill updates\", \"install skills from awesome-copilot\", \"discover new copilot skills\". INVOKES: githubRepo MCP tool, fetch tool. FOR SINGLE OPERATIONS: Use githubRepo MCP directly to browse the skills list."
 ---
 
 # Suggest Awesome GitHub Copilot Skills
@@ -100,6 +99,30 @@ Skills in awesome-copilot use this front matter format in `SKILL.md`:
 name: 'skill-name'
 description: 'Brief description of what this skill provides and when to use it'
 ---
+```
+
+## MCP Tools Used
+
+| Step | Tool | Command | Purpose |
+|------|------|---------|----------|
+| 1 | `fetch` | `fetch <url>` | Retrieve awesome-copilot README.skills.md skills list |
+| 4 | `fetch` | `fetch <raw-github-url>` | Fetch remote SKILL.md for version comparison |
+| 8 | `githubRepo` | browse skills folder | List and navigate awesome-copilot skills |
+| 12 | `fetch` | `fetch <raw-github-url>` | Download skill files into `.github/skills/` |
+
+## Prerequisites
+
+- **Required tools:** `fetch` tool, `githubRepo` tool (GitHub MCP)
+- **Required permissions:** Read access to `github/awesome-copilot` repository (public)
+- **Enable GitHub MCP:** Ensure `githubRepo` tool is available in your Copilot session
+
+**MCP Tool (Preferred):**
+Use `githubRepo` to browse and list skills in the awesome-copilot repository.
+
+**CLI Fallback (if `githubRepo` unavailable):**
+
+```bash
+curl -s https://raw.githubusercontent.com/github/awesome-copilot/main/docs/README.skills.md
 ```
 
 ## Requirements
