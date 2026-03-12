@@ -1,7 +1,6 @@
 ---
 name: suggest-awesome-github-copilot-instructions
-description: >
-  Suggest relevant GitHub Copilot instruction files from the awesome-copilot repository based on current repository context and chat history, avoiding duplicates with existing instructions in this repository, and identifying outdated instructions that need updates.
+description: "**WORKFLOW SKILL** — Suggest and install GitHub Copilot instruction files from the awesome-copilot repository, detecting duplicates and outdated local instructions. WHEN: \"suggest copilot instructions\", \"find awesome copilot instructions\", \"check for instruction updates\", \"install instructions from awesome-copilot\", \"discover new copilot instructions\". INVOKES: githubRepo MCP tool, fetch tool. FOR SINGLE OPERATIONS: Use githubRepo MCP directly to browse the instructions list."
 ---
 
 # Suggest Awesome GitHub Copilot Instructions
@@ -94,6 +93,30 @@ Instructions files in awesome-copilot use this front matter format:
 description: 'Brief description of what this instruction provides'
 applyTo: '**/*.js,**/*.ts' # Optional: glob patterns for file matching
 ---
+```
+
+## MCP Tools Used
+
+| Step | Tool | Command | Purpose |
+|------|------|---------|---------|
+| 1 | `fetch` | `fetch <url>` | Retrieve awesome-copilot README.instructions.md instruction list |
+| 4 | `fetch` | `fetch <raw-github-url>` | Fetch remote instruction file for version comparison |
+| 8 | `githubRepo` | browse instructions folder | List and navigate awesome-copilot instructions |
+| 12 | `fetch` | `fetch <raw-github-url>` | Download instruction files into `.github/instructions/` |
+
+## Prerequisites
+
+- **Required tools:** `fetch` tool, `githubRepo` tool (GitHub MCP)
+- **Required permissions:** Read access to `github/awesome-copilot` repository (public)
+- **Enable GitHub MCP:** Ensure `githubRepo` tool is available in your Copilot session
+
+**MCP Tool (Preferred):**
+Use `githubRepo` to browse and list instructions in the awesome-copilot repository.
+
+**CLI Fallback (if `githubRepo` unavailable):**
+
+```bash
+curl -s https://raw.githubusercontent.com/github/awesome-copilot/main/docs/README.instructions.md
 ```
 
 ## Requirements
