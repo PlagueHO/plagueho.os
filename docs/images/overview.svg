@@ -7,12 +7,12 @@
   </defs>
   <style>
     .card { opacity: 0; animation: cycle 24s infinite; }
-    .card:nth-child(2) { animation-delay: 0s; }
-    .card:nth-child(3) { animation-delay: 4s; }
-    .card:nth-child(4) { animation-delay: 8s; }
-    .card:nth-child(5) { animation-delay: 12s; }
-    .card:nth-child(6) { animation-delay: 16s; }
-    .card:nth-child(7) { animation-delay: 20s; }
+    .card:nth-child(1) { animation-delay: 0s; }
+    .card:nth-child(2) { animation-delay: 4s; }
+    .card:nth-child(3) { animation-delay: 8s; }
+    .card:nth-child(4) { animation-delay: 12s; }
+    .card:nth-child(5) { animation-delay: 16s; }
+    .card:nth-child(6) { animation-delay: 20s; }
     @keyframes cycle {
       0%      { opacity: 0; }
       2%      { opacity: 1; }
@@ -34,6 +34,7 @@
   <rect width="840" height="180" rx="12" fill="url(#bg)"/>
   <rect class="border" x="1" y="1" width="838" height="178"/>
 
+  <g id="slides">
   <!-- Slide 1: Skills -->
   <g class="card">
     <text class="emoji" x="40" y="70">&#x1F3AF;</text>
@@ -122,5 +123,6 @@
     <circle class="pip" cx="432" cy="160" r="4"/>
     <circle class="pip" cx="452" cy="160" r="4"/>
     <circle class="pip-on" cx="472" cy="160" r="4"/>
+  </g>
   </g>
 </svg>
