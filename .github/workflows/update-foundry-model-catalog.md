@@ -9,6 +9,7 @@ labels: [automation, foundry, daily]
 permissions:
   contents: read
   actions: read
+  id-token: write
 
 engine: copilot
 
@@ -39,13 +40,10 @@ mcp-servers:
 secrets:
   AZURE_TENANT_ID:
     value: ${{ secrets.AZURE_TENANT_ID }}
-    description: Azure Entra ID tenant ID used to authenticate the service principal
+    description: Azure Entra ID tenant ID used for OIDC federated credential authentication
   AZURE_CLIENT_ID:
     value: ${{ secrets.AZURE_CLIENT_ID }}
-    description: Azure service principal client (application) ID
-  AZURE_CLIENT_SECRET:
-    value: ${{ secrets.AZURE_CLIENT_SECRET }}
-    description: Azure service principal client secret
+    description: Azure application (client) ID with a federated credential for this repository
   AZURE_SUBSCRIPTION_ID:
     value: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     description: Azure subscription ID used to scope Foundry API calls

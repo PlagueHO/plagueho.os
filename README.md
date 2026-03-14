@@ -126,20 +126,43 @@ to automate routine maintenance tasks via AI-powered GitHub Actions.
 - **GitHub Copilot** — The workflows use the `copilot` engine. A valid GitHub Copilot
   subscription is required on the repository or organisation.
 
-#### GitHub Secrets
+#### Azure OIDC Authentication
 
-The Foundry model catalog workflow authenticates to Azure using an Entra ID service
-principal. Configure the following [repository secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets):
+The Foundry model catalog workflow authenticates to Azure using
+[OpenID Connect (OIDC) federated credentials](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure)
+— no client secret is stored in the repository. The workflow requests a short-lived
+`id-token` from GitHub's OIDC provider, which Azure validates against a federated
+credential configured on the Entra ID application registration.
+
+##### 1. Create a Federated Credential
+
+In the Azure portal (or via CLI), add a **Federated credential** to your Entra ID
+app registration:
+
+| Field | Value |
+|-------|-------|
+| **Federated credential scenario** | GitHub Actions deploying Azure resources |
+| **Organization** | `PlagueHO` |
+| **Repository** | `plagueho.os` |
+| **Entity type** | Branch (`main`) |
+| **Subject identifier** | `repo:PlagueHO/plagueho.os:ref:refs/heads/main` |
+
+##### 2. Configure Repository Secrets
+
+Add the following [repository secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets):
 
 | Secret | Description |
 |--------|-------------|
 | `AZURE_TENANT_ID` | Entra ID (Azure AD) tenant ID |
-| `AZURE_CLIENT_ID` | Service principal application (client) ID |
-| `AZURE_CLIENT_SECRET` | Service principal client secret |
+| `AZURE_CLIENT_ID` | Application (client) ID with the federated credential |
 | `AZURE_SUBSCRIPTION_ID` | Azure subscription ID scoping the Foundry API calls |
 
-The service principal needs at minimum the **Reader** role on the subscription, and
-**Azure AI Developer** (or equivalent) access to query the Foundry model catalog.
+> **Note:** `AZURE_CLIENT_SECRET` is **not** required. The `id-token: write`
+> permission in the workflow enables GitHub Actions to mint an OIDC token that Azure
+> validates via the federated credential trust.
+
+The application registration needs at minimum the **Reader** role on the subscription,
+and **Azure AI Developer** (or equivalent) access to query the Foundry model catalog.
 
 #### Compiling Workflows
 
