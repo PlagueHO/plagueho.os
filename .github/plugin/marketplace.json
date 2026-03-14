@@ -64,15 +64,6 @@
       ]
     },
     {
-      "name": "sensei",
-      "source": "./.github/skills/sensei",
-      "description": "Iteratively improve skill frontmatter compliance using the Ralph loop pattern.",
-      "version": "1.0.0",
-      "skills": [
-        "."
-      ]
-    },
-    {
       "name": "skill-creator",
       "source": "./.github/skills/skill-creator",
       "description": "Create a new Agent Skill from a user's description and goal, following the agentskills.io specification. Scaffolds directory structure, generates SKILL.md with YAML frontmatter, and validates the result.",
