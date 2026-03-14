@@ -50,7 +50,7 @@ Before starting, collect the following from the user or conversation history:
 
 If any of these are missing, use `vscode_askQuestions` to ask:
 
-```
+```text
 Questions:
 1. Which GitHub Organization should the dotfiles repo be created in?
 2. What should the repository be named? (default: dotfiles)
@@ -102,7 +102,7 @@ and recommend exclusion.
 
 Example question flow:
 
-```
+```text
 I found the following dotfile candidates in your workspace:
 
 **Shell (4 files)**

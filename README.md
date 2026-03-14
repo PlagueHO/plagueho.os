@@ -11,7 +11,7 @@ Organizational engineering assets for Daniel Scott-Raynsford, including GitHub C
 
 ## Repository Structure
 
-```
+```text
 PlagueHO-OS/
 ├── .github/                    # GitHub configuration
 │   ├── agents/                 # GitHub Copilot coding agents
@@ -125,6 +125,34 @@ to automate routine maintenance tasks via AI-powered GitHub Actions.
 
 - **GitHub Copilot** — The workflows use the `copilot` engine. A valid GitHub Copilot
   subscription is required on the repository or organisation.
+
+#### Copilot Engine Authentication
+
+The `copilot` engine requires a **`COPILOT_GITHUB_TOKEN`** repository secret so
+that GitHub Actions can authenticate with GitHub Copilot at runtime.
+
+##### Creating the token
+
+1. [Create a **fine-grained Personal Access Token**](https://github.com/settings/personal-access-tokens/new?name=COPILOT_GITHUB_TOKEN&description=GitHub+Agentic+Workflows+-+Copilot+engine+authentication&user_copilot_requests=read)
+   with **Copilot** → `read` permission.
+1. Add the secret to the repository using the `gh aw` CLI:
+
+   ```bash
+   gh aw secrets set COPILOT_GITHUB_TOKEN --value "<your-github-pat>"
+   ```
+
+   Alternatively, go to your repository **Settings → Secrets and variables →
+   Actions**, click **New repository secret**, set the name to
+   `COPILOT_GITHUB_TOKEN`, and paste the token value.
+
+> **Tip:** If you store the secret at the **organisation** level, ensure the
+> repository has been granted access under **Settings → Secrets → Repository
+> access**. Environment-level secrets are only available when the job specifies that
+> environment.
+
+| Secret | Description |
+|--------|-------------|
+| `COPILOT_GITHUB_TOKEN` | Fine-grained PAT with Copilot `read` permission for the Copilot CLI engine |
 
 #### Azure OIDC Authentication
 

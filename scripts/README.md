@@ -4,7 +4,7 @@ This directory contains utility scripts organized by technology, commonly used a
 
 ## Structure
 
-```
+```text
 scripts/
 ├── README.md         # This file
 ├── powershell/       # PowerShell scripts

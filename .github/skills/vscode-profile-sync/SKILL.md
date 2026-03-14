@@ -56,19 +56,19 @@ Read the profile list from the source VS Code variant's `storage.json`:
 
 **Windows path:**
 
-```
+```text
 %APPDATA%\Code - Insiders\User\globalStorage\storage.json
 ```
 
 **macOS path:**
 
-```
+```text
 ~/Library/Application Support/Code - Insiders/User/globalStorage/storage.json
 ```
 
 **Linux path:**
 
-```
+```text
 ~/.config/Code - Insiders/User/globalStorage/storage.json
 ```
 
@@ -133,7 +133,7 @@ For each profile, compute:
 
 Present a summary table to the user before proceeding:
 
-```
+```text
 Profile: "Azure"
   Extensions in source: 25
   Extensions in target: 20
@@ -194,7 +194,7 @@ Compare the output to the source profile. All extension IDs should match.
 
 Present a final summary:
 
-```
+```text
 Sync complete:
   Profiles synced: 7 (Default + 6 custom)
   Extensions installed: 23

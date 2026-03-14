@@ -8,7 +8,7 @@ GitHub Copilot coding agents are configured via YAML files in this directory. Ea
 
 ## Structure
 
-```
+```text
 agents/
 ├── README.md        # This file
 └── *.md             # Individual agent definition files

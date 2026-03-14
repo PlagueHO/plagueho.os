@@ -20,7 +20,7 @@ recommend actions.
 1. Otherwise, check the current Git branch and find an open PR for it
    using `#tool:githubRepo`.
 1. If no PR can be determined, use `#tool:vscode_askQuestions` to ask:
-   _"Which PR number should I review comments for?"_
+   *"Which PR number should I review comments for?"*
 
 ## Step 2: Retrieve PR Context
 

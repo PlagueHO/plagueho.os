@@ -1,11 +1,18 @@
 ---
 name: suggest-awesome-github-copilot-skills
-description: "**WORKFLOW SKILL** — Suggest and install GitHub Copilot skills from the awesome-copilot repository, detecting duplicates and outdated local skills. WHEN: \"suggest copilot skills\", \"find awesome copilot skills\", \"check for skill updates\", \"install skills from awesome-copilot\", \"discover new copilot skills\". INVOKES: githubRepo MCP tool, fetch tool. FOR SINGLE OPERATIONS: Use githubRepo MCP directly to browse the skills list."
+description: >-
+  **WORKFLOW SKILL** — Suggest and install GitHub Copilot skills from the
+  awesome-copilot repository, detecting duplicates and outdated local skills.
+  WHEN: "suggest copilot skills", "find awesome copilot skills",
+  "check for skill updates", "install skills from awesome-copilot",
+  "discover new copilot skills". INVOKES: githubRepo MCP tool, fetch tool.
+  FOR SINGLE OPERATIONS: Use githubRepo MCP directly to browse the skills list.
 ---
 
 # Suggest Awesome GitHub Copilot Skills
 
-Analyze current repository context and suggest relevant Agent Skills from the [GitHub awesome-copilot repository](https://github.com/github/awesome-copilot/blob/main/docs/README.skills.md) that are not already available in this repository. Agent Skills are self-contained folders located in the [skills](https://github.com/github/awesome-copilot/tree/main/skills) folder of the awesome-copilot repository, each containing a `SKILL.md` file with instructions and optional bundled assets.
+Analyze current repository context and suggest relevant Agent Skills from the [GitHub awesome-copilot repository](https://github.com/github/awesome-copilot/blob/main/docs/README.skills.md) that are not already available in this repository.
+Agent Skills are self-contained folders located in the [skills](https://github.com/github/awesome-copilot/tree/main/skills) folder of the awesome-copilot repository, each containing a `SKILL.md` file with instructions and optional bundled assets.
 
 ## Process
 

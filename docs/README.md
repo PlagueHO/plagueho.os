@@ -4,7 +4,7 @@ This directory contains reference documentation, guides, and other materials use
 
 ## Structure
 
-```
+```text
 docs/
 ├── README.md         # This file
 ├── conventions/      # Coding conventions and standards

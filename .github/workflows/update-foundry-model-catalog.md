@@ -93,7 +93,7 @@ Use only the scientific data fields to populate the markdown output.
 
 The file `docs/foundry-model-catalog.md` must match this structure exactly:
 
-```
+```markdown
 # Microsoft Foundry Model Catalog
 
 <!-- This file is automatically updated daily by the update-foundry-model-catalog workflow. -->

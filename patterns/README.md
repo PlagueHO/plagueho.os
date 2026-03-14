@@ -4,7 +4,7 @@ This directory contains reusable development patterns, templates, and architectu
 
 ## Structure
 
-```
+```text
 patterns/
 ├── README.md             # This file
 ├── github-actions/       # Reusable GitHub Actions workflow patterns

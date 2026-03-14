@@ -8,7 +8,7 @@ Prompt files are reusable `.prompt.md` files that define instructions and contex
 
 ## Structure
 
-```
+```text
 prompts/
 ├── README.md              # This file
 └── *.prompt.md            # Individual prompt files
