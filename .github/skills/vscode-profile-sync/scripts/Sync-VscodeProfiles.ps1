@@ -189,12 +189,12 @@ $totalErrors = 0
 foreach ($profileName in $allProfileNames) {
     Write-Host "--- Profile: $profileName ---" -ForegroundColor Yellow
 
-    $sourceExts = Get-ProfileExtensions -Cli $SourceCli -ProfileName $profileName
-    $targetExts = Get-ProfileExtensions -Cli $TargetCli -ProfileName $profileName
+    $sourceExts = @(Get-ProfileExtensions -Cli $SourceCli -ProfileName $profileName)
+    $targetExts = @(Get-ProfileExtensions -Cli $TargetCli -ProfileName $profileName)
 
-    $toInstall = $sourceExts | Where-Object { $_ -notin $targetExts }
-    $toRemove = if ($RemoveExtras) { $targetExts | Where-Object { $_ -notin $sourceExts } } else { @() }
-    $alreadySynced = $sourceExts | Where-Object { $_ -in $targetExts }
+    $toInstall = @($sourceExts | Where-Object { $_ -notin $targetExts })
+    $toRemove = @(if ($RemoveExtras) { $targetExts | Where-Object { $_ -notin $sourceExts } } else { @() })
+    $alreadySynced = @($sourceExts | Where-Object { $_ -in $targetExts })
 
     Write-Host "  Source extensions: $($sourceExts.Count)"
     Write-Host "  Target extensions: $($targetExts.Count)"
