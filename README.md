@@ -5,6 +5,10 @@
 
 Organizational engineering assets for Daniel Scott-Raynsford, including GitHub Copilot agents, prompts, scripts, patterns, and reference documentation commonly used across repositories for software development.
 
+<p align="center">
+  <img src="docs/images/overview.svg" alt="Repository content overview" width="840"/>
+</p>
+
 ## Repository Structure
 
 ```

@@ -11,7 +11,8 @@
   // Files to ignore
   "ignores": [
     "**/node_modules/**",
-    "**/.vscode/**"
+    "**/.vscode/**",
+    ".github/skills/sensei/**"
   ],
   // Output formatting
   "outputFormatters": [

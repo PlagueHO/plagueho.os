@@ -148,6 +148,7 @@ az bicep build --file <updated-file>
 ```
 
 If validation fails:
+
 1. Report the specific error.
 2. Attempt to fix parameter issues caused by the version change.
 3. Re-validate.
@@ -231,7 +232,7 @@ https://github.com/Azure/bicep-registry-modules/tree/main/avm/res/{service}/{res
 Input: <description>
 Output: <description>
 
-## Edge Cases
+## Additional Edge Cases
 
 <!-- Document edge cases and how to handle them. -->
 

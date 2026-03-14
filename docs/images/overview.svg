@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 180">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1117"/>
+      <stop offset="100%" style="stop-color:#161b22"/>
+    </linearGradient>
+  </defs>
+  <style>
+    .card { opacity: 0; animation: cycle 24s infinite; }
+    .card:nth-child(2) { animation-delay: 0s; }
+    .card:nth-child(3) { animation-delay: 4s; }
+    .card:nth-child(4) { animation-delay: 8s; }
+    .card:nth-child(5) { animation-delay: 12s; }
+    .card:nth-child(6) { animation-delay: 16s; }
+    .card:nth-child(7) { animation-delay: 20s; }
+    @keyframes cycle {
+      0%      { opacity: 0; }
+      2%      { opacity: 1; }
+      14.667% { opacity: 1; }
+      16.667% { opacity: 0; }
+      100%    { opacity: 0; }
+    }
+    .emoji   { font-size: 36px; }
+    .title   { font: bold 22px 'Segoe UI',system-ui,sans-serif; fill: #58a6ff; }
+    .desc    { font: 15px 'Segoe UI',system-ui,sans-serif; fill: #c9d1d9; }
+    .count   { font: bold 14px 'Segoe UI',system-ui,sans-serif; fill: #8b949e; }
+    .path    { font: 13px 'SFMono-Regular',Consolas,monospace; fill: #7ee787; }
+    .border  { fill: none; stroke: #30363d; stroke-width: 1.5; rx: 12; }
+    .pip     { fill: #30363d; }
+    .pip-on  { fill: #58a6ff; }
+  </style>
+
+  <!-- Background -->
+  <rect width="840" height="180" rx="12" fill="url(#bg)"/>
+  <rect class="border" x="1" y="1" width="838" height="178"/>
+
+  <!-- Slide 1: Skills -->
+  <g class="card">
+    <text class="emoji" x="40" y="70">&#x1F3AF;</text>
+    <text class="title" x="90" y="58">Copilot Skills</text>
+    <text class="desc" x="90" y="82">Modular skill definitions that teach Copilot to perform specific tasks</text>
+    <text class="count" x="90" y="106">14 skills available</text>
+    <text class="path" x="90" y="128">.github/skills/</text>
+    <circle class="pip-on" cx="372" cy="160" r="4"/>
+    <circle class="pip" cx="392" cy="160" r="4"/>
+    <circle class="pip" cx="412" cy="160" r="4"/>
+    <circle class="pip" cx="432" cy="160" r="4"/>
+    <circle class="pip" cx="452" cy="160" r="4"/>
+    <circle class="pip" cx="472" cy="160" r="4"/>
+  </g>
+
+  <!-- Slide 2: Plugin Marketplace -->
+  <g class="card">
+    <text class="emoji" x="40" y="70">&#x1F4E6;</text>
+    <text class="title" x="90" y="58">Plugin Marketplace</text>
+    <text class="desc" x="90" y="82">Install skills as VS Code agent plugins directly from this repo</text>
+    <text class="count" x="90" y="106">14 installable plugins</text>
+    <text class="path" x="90" y="128">.github/plugin/marketplace.json</text>
+    <circle class="pip" cx="372" cy="160" r="4"/>
+    <circle class="pip-on" cx="392" cy="160" r="4"/>
+    <circle class="pip" cx="412" cy="160" r="4"/>
+    <circle class="pip" cx="432" cy="160" r="4"/>
+    <circle class="pip" cx="452" cy="160" r="4"/>
+    <circle class="pip" cx="472" cy="160" r="4"/>
+  </g>
+
+  <!-- Slide 3: Prompts -->
+  <g class="card">
+    <text class="emoji" x="40" y="70">&#x1F4AC;</text>
+    <text class="title" x="90" y="58">Copilot Prompts</text>
+    <text class="desc" x="90" y="82">Reusable prompt files for consistent task execution in Copilot Chat</text>
+    <text class="count" x="90" y="106">2 prompts available</text>
+    <text class="path" x="90" y="128">.github/prompts/</text>
+    <circle class="pip" cx="372" cy="160" r="4"/>
+    <circle class="pip" cx="392" cy="160" r="4"/>
+    <circle class="pip-on" cx="412" cy="160" r="4"/>
+    <circle class="pip" cx="432" cy="160" r="4"/>
+    <circle class="pip" cx="452" cy="160" r="4"/>
+    <circle class="pip" cx="472" cy="160" r="4"/>
+  </g>
+
+  <!-- Slide 4: Learning Pathways -->
+  <g class="card">
+    <text class="emoji" x="40" y="70">&#x1F393;</text>
+    <text class="title" x="90" y="58">Learning Pathways</text>
+    <text class="desc" x="90" y="82">Structured L100&#x2013;L400 learning documents for Microsoft technologies</text>
+    <text class="count" x="90" y="106">2 pathways available</text>
+    <text class="path" x="90" y="128">learning-pathways/</text>
+    <circle class="pip" cx="372" cy="160" r="4"/>
+    <circle class="pip" cx="392" cy="160" r="4"/>
+    <circle class="pip" cx="412" cy="160" r="4"/>
+    <circle class="pip-on" cx="432" cy="160" r="4"/>
+    <circle class="pip" cx="452" cy="160" r="4"/>
+    <circle class="pip" cx="472" cy="160" r="4"/>
+  </g>
+
+  <!-- Slide 5: Scripts -->
+  <g class="card">
+    <text class="emoji" x="40" y="70">&#x1F4DC;</text>
+    <text class="title" x="90" y="58">Utility Scripts</text>
+    <text class="desc" x="90" y="82">PowerShell, Python, and Bash scripts for common development tasks</text>
+    <text class="count" x="90" y="106">Organized by technology</text>
+    <text class="path" x="90" y="128">scripts/</text>
+    <circle class="pip" cx="372" cy="160" r="4"/>
+    <circle class="pip" cx="392" cy="160" r="4"/>
+    <circle class="pip" cx="412" cy="160" r="4"/>
+    <circle class="pip" cx="432" cy="160" r="4"/>
+    <circle class="pip-on" cx="452" cy="160" r="4"/>
+    <circle class="pip" cx="472" cy="160" r="4"/>
+  </g>
+
+  <!-- Slide 6: Agentic Workflows -->
+  <g class="card">
+    <text class="emoji" x="40" y="70">&#x1F916;</text>
+    <text class="title" x="90" y="58">Agentic Workflows</text>
+    <text class="desc" x="90" y="82">AI-powered GitHub Actions that automate routine maintenance via gh aw</text>
+    <text class="count" x="90" y="106">1 workflow active</text>
+    <text class="path" x="90" y="128">.github/workflows/</text>
+    <circle class="pip" cx="372" cy="160" r="4"/>
+    <circle class="pip" cx="392" cy="160" r="4"/>
+    <circle class="pip" cx="412" cy="160" r="4"/>
+    <circle class="pip" cx="432" cy="160" r="4"/>
+    <circle class="pip" cx="452" cy="160" r="4"/>
+    <circle class="pip-on" cx="472" cy="160" r="4"/>
+  </g>
+</svg>
