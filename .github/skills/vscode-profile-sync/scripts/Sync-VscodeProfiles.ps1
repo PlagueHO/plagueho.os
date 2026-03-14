@@ -95,6 +95,29 @@ function Get-StorageJsonPath {
     }
 }
 
+function Get-UserDataPath {
+    param([string]$CliName)
+
+    $dirMap = @{
+        'code-insiders' = 'Code - Insiders'
+        'code'          = 'Code'
+    }
+
+    $dirName = $dirMap[$CliName]
+    if (-not $dirName) { $dirName = $CliName }
+
+    if ($IsWindows -or $env:OS -eq 'Windows_NT') {
+        return Join-Path $env:APPDATA "$dirName\User"
+    }
+    elseif ($IsMacOS) {
+        return Join-Path $HOME "Library/Application Support/$dirName/User"
+    }
+    else {
+        $configDir = if ($env:XDG_CONFIG_HOME) { $env:XDG_CONFIG_HOME } else { Join-Path $HOME '.config' }
+        return Join-Path $configDir "$dirName/User"
+    }
+}
+
 function Get-ProfileNames {
     param([string]$StorageJsonPath)
 
@@ -113,6 +136,78 @@ function Get-ProfileNames {
     }
 
     return $profileNames
+}
+
+function Get-ProfileEntries {
+    param([string]$StorageJsonPath)
+
+    if (-not (Test-Path $StorageJsonPath)) { return @() }
+
+    $storage = Get-Content $StorageJsonPath -Raw | ConvertFrom-Json
+    if ($storage.PSObject.Properties['userDataProfiles']) {
+        return @($storage.userDataProfiles)
+    }
+    return @()
+}
+
+function Sync-ProfileDefinitions {
+    param(
+        [string]$SourceCli,
+        [string]$TargetCli,
+        [string[]]$ProfileNames
+    )
+
+    $sourceStoragePath = Get-StorageJsonPath -CliName $SourceCli
+    $targetStoragePath = Get-StorageJsonPath -CliName $TargetCli
+    $targetUserDataPath = Get-UserDataPath -CliName $TargetCli
+
+    $sourceEntries = Get-ProfileEntries -StorageJsonPath $sourceStoragePath
+    $targetStorage = Get-Content $targetStoragePath -Raw | ConvertFrom-Json
+
+    $existingTargetEntries = @()
+    if ($targetStorage.PSObject.Properties['userDataProfiles']) {
+        $existingTargetEntries = @($targetStorage.userDataProfiles)
+    }
+    $existingNames = @($existingTargetEntries | ForEach-Object { $_.name })
+
+    $created = 0
+    $newEntries = [System.Collections.ArrayList]@($existingTargetEntries)
+
+    foreach ($srcEntry in $sourceEntries) {
+        if ($srcEntry.name -notin $ProfileNames) { continue }
+        if ($srcEntry.name -in $existingNames) { continue }
+
+        # Build a new entry matching the source structure
+        $entry = [PSCustomObject]@{ location = $srcEntry.location; name = $srcEntry.name }
+        if ($srcEntry.PSObject.Properties['icon']) {
+            $entry | Add-Member -NotePropertyName 'icon' -NotePropertyValue $srcEntry.icon
+        }
+        if ($srcEntry.PSObject.Properties['useDefaultFlags']) {
+            $entry | Add-Member -NotePropertyName 'useDefaultFlags' -NotePropertyValue $srcEntry.useDefaultFlags
+        }
+        [void]$newEntries.Add($entry)
+
+        # Create the profile directory in the target
+        $profileDir = Join-Path $targetUserDataPath "profiles\$($srcEntry.location)"
+        if (-not (Test-Path $profileDir)) {
+            New-Item -ItemType Directory -Path $profileDir -Force | Out-Null
+        }
+
+        Write-Host "  Created profile: $($srcEntry.name)" -ForegroundColor Green
+        $created++
+    }
+
+    if ($created -gt 0) {
+        if ($targetStorage.PSObject.Properties['userDataProfiles']) {
+            $targetStorage.userDataProfiles = @($newEntries)
+        }
+        else {
+            $targetStorage | Add-Member -NotePropertyName 'userDataProfiles' -NotePropertyValue @($newEntries)
+        }
+        $targetStorage | ConvertTo-Json -Depth 10 | Set-Content $targetStoragePath -Encoding utf8NoBOM
+    }
+
+    return $created
 }
 
 function Get-ProfileExtensions {
@@ -169,7 +264,7 @@ if ($IncludeDefault) {
 
 # Filter if user specified specific profiles
 if ($Profiles -and $Profiles.Count -gt 0) {
-    $allProfileNames = $allProfileNames | Where-Object { $_ -in $Profiles }
+    $allProfileNames = @($allProfileNames | Where-Object { $_ -in $Profiles })
 }
 
 if ($allProfileNames.Count -eq 0) {
@@ -179,6 +274,38 @@ if ($allProfileNames.Count -eq 0) {
 
 Write-Host "Profiles to sync: $($allProfileNames -join ', ')" -ForegroundColor Green
 Write-Host ""
+
+# --- Create missing profiles in the target ---
+
+$customProfilesToCreate = @($allProfileNames | Where-Object { $_ -ne 'Default' })
+if ($customProfilesToCreate.Count -gt 0 -and -not $DryRun) {
+    Write-Host "Ensuring profiles exist in target..." -ForegroundColor Cyan
+    $createdCount = Sync-ProfileDefinitions -SourceCli $SourceCli -TargetCli $TargetCli -ProfileNames $customProfilesToCreate
+    if ($createdCount -gt 0) {
+        Write-Host "  $createdCount profile(s) created in target." -ForegroundColor Green
+    }
+    else {
+        Write-Host "  All profiles already exist." -ForegroundColor DarkGray
+    }
+    Write-Host ""
+}
+elseif ($customProfilesToCreate.Count -gt 0 -and $DryRun) {
+    # Check which profiles would need creation
+    $targetStoragePath = Get-StorageJsonPath -CliName $TargetCli
+    $existingTargetNames = @()
+    if (Test-Path $targetStoragePath) {
+        $ts = Get-Content $targetStoragePath -Raw | ConvertFrom-Json
+        if ($ts.PSObject.Properties['userDataProfiles']) {
+            $existingTargetNames = @($ts.userDataProfiles | ForEach-Object { $_.name })
+        }
+    }
+    $missing = @($customProfilesToCreate | Where-Object { $_ -notin $existingTargetNames })
+    if ($missing.Count -gt 0) {
+        Write-Host "Profiles to create in target (dry run):" -ForegroundColor Magenta
+        foreach ($m in $missing) { Write-Host "  + $m" -ForegroundColor Magenta }
+        Write-Host ""
+    }
+}
 
 # --- Enumerate and compute differences ---
 

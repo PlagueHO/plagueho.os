@@ -95,19 +95,34 @@ code-insiders --list-extensions --profile "Default"
 
 Store the extension list for each profile.
 
-### Step 3 — Enumerate Target Extensions Per Profile
+### Step 3 — Create Missing Profiles in Target
 
-For each profile that exists in the target, list its current extensions:
+VS Code stable **does not** auto-create profiles when installing extensions
+with `--profile`. If a profile doesn't exist, the CLI returns "Profile 'X'
+not found" and exits with code 1.
+
+Before enumerating target extensions, create any missing profiles by:
+
+1. Read the target's `storage.json` (`userDataProfiles` array).
+2. For each source profile name not present in the target, copy its entry
+   (name, location, icon, useDefaultFlags) from the source `storage.json`
+   into the target `storage.json`.
+3. Create the corresponding profile directory in the target's user data
+   folder (e.g., `<UserData>/profiles/<location>/`).
+
+The Default profile always exists and never needs to be created.
+
+### Step 4 — Enumerate Target Extensions Per Profile
+
+For each profile, list its current extensions in the target:
 
 ```powershell
 code --list-extensions --profile "<profile-name>"
 ```
 
-If the profile does not yet exist in the target, treat its extension list as
-empty. The profile will be implicitly created when the first extension is
-installed with `--profile`.
+If the profile was just created, its extension list will be empty.
 
-### Step 4 — Compute Differences
+### Step 5 — Compute Differences
 
 For each profile, compute:
 
@@ -129,7 +144,7 @@ Profile: "Azure"
 
 If `Dry run` is enabled, display the full list of changes and stop.
 
-### Step 5 — Apply Changes
+### Step 6 — Apply Changes
 
 For each profile, install missing extensions and optionally remove extras:
 
@@ -167,7 +182,7 @@ Alternatively, use the bundled scripts which handle the full workflow:
     --dry-run
 ```
 
-### Step 6 — Verify
+### Step 7 — Verify
 
 After syncing, verify by listing extensions in the target for each profile:
 
@@ -200,3 +215,7 @@ Sync complete:
   Default profile extensions and inform the user.
 - **storage.json not found**: If the storage.json file doesn't exist at the
   expected path, ask the user to confirm the source VS Code data directory.
+- **Profiles not auto-created by stable CLI**: VS Code stable (unlike Insiders)
+  does not create profiles on the fly via `--install-extension --profile`.
+  The scripts handle this by pre-creating missing profiles in the target's
+  `storage.json` and file system before installing extensions.
