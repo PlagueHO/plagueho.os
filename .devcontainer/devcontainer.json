@@ -5,7 +5,8 @@
     "ghcr.io/devcontainers/features/node:1": {
       "version": "lts"
     },
-    "ghcr.io/devcontainers-extra/features/pnpm:2": {}
+    "ghcr.io/devcontainers-extra/features/pnpm:2": {},
+    "ghcr.io/devcontainers/features/powershell:1": {}
   },
   "customizations": {
     "vscode": {
@@ -25,45 +26,16 @@
         "github.vscode-pull-request-github",
         "humao.rest-client",
         "ionide.ionide-fsharp",
-        "microsoft-aspire.aspire-vscode",
-        "mikestead.dotenv",
-        "ms-azure-load-testing.microsoft-testing",
-        "ms-azuretools.azure-dev",
-        "ms-azuretools.vscode-azure-github-copilot",
-        "ms-azuretools.vscode-azure-mcp-server",
-        "ms-azuretools.vscode-azureappservice",
-        "ms-azuretools.vscode-azurecontainerapps",
-        "ms-azuretools.vscode-azurefunctions",
-        "ms-azuretools.vscode-azureresourcegroups",
-        "ms-azuretools.vscode-azurestaticwebapps",
-        "ms-azuretools.vscode-azurestorage",
-        "ms-azuretools.vscode-azurevirtualmachines",
-        "ms-azuretools.vscode-bicep",
-        "ms-azuretools.vscode-cosmosdb",
-        "ms-azuretools.vscode-docker",
-        "ms-dotnettools.csharp",
-        "ms-dotnettools.vscode-dotnet-pack",
-        "ms-dotnettools.vscode-dotnet-runtime",
-        "ms-python.pylance",
-        "ms-python.python",
-        "ms-toolsai.jupyter",
-        "ms-toolsai.jupyter-keymap",
-        "ms-toolsai.jupyter-renderers",
-        "ms-toolsai.vscode-jupyter-cell-tags",
-        "ms-toolsai.vscode-jupyter-slideshow",
         "ms-vscode-remote.remote-containers",
         "ms-vscode.azure-repos",
         "ms-vscode.powershell",
         "ms-vscode.remote-repositories",
         "ms-vscode.vscode-node-azure-pack",
-        "ms-windows-ai-studio.windows-ai-studio",
         "orta.vscode-jest",
         "redhat.vscode-yaml",
         "streetsidesoftware.code-spell-checker",
-        "teamsdevapp.vscode-ai-foundry",
         "timonwong.shellcheck",
         "vscode-icons-team.vscode-icons",
-        "xabikos.javascriptsnippets",
         "yzhang.markdown-all-in-one"
       ]
     }
