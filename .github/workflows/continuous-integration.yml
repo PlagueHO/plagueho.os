@@ -52,6 +52,13 @@ jobs:
       - name: Validate Markdown
         run: pnpm lint:md
 
+      - name: Validate marketplace.json is in sync
+        shell: pwsh
+        run: ./scripts/Sync-MarketplaceJson.ps1 -Check
+
+      - name: Validate marketplace.json schema
+        run: npx --yes ajv-cli validate -s .github/plugin/marketplace.schema.json -d .github/plugin/marketplace.json
+
       - name: Check for trailing whitespace
         run: |
           found=0
