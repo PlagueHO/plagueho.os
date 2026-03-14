@@ -59,6 +59,45 @@ Reference documentation, how-to guides, conventions, and cheat sheets.
 
 Assets in this repository are intended to be copied into or referenced from other repositories. Where GitHub supports organizational-level configuration, the files in `.github/` follow those conventions.
 
+## Plugin Marketplace
+
+This repository doubles as a VS Code agent plugin marketplace. Skills defined in
+[`.github/skills/`](.github/skills/) are exposed as installable agent plugins via
+[`.github/plugin/marketplace.json`](.github/plugin/marketplace.json).
+
+### Installing the Marketplace
+
+Add `PlagueHO/plagueho.os` to the `chat.plugins.marketplaces` setting in your
+VS Code `settings.json`:
+
+```json
+"chat.plugins.enabled": true,
+"chat.plugins.marketplaces": [
+    "PlagueHO/plagueho.os"
+]
+```
+
+Then open the Extensions view (`Ctrl+Shift+X`), enter `@agentPlugins` in the search
+field, and install any skills you want.
+
+### Available Plugins
+
+| Plugin | Description |
+|--------|-------------|
+| `azure-github-managed-identity` | Provision Azure Managed Identities with OIDC federation for passwordless GitHub Actions auth |
+| `convert-prompt-to-skill` | Convert a `.prompt.md` file into a conformant Agent Skill (SKILL.md) |
+| `create-dotfiles-repo` | Scaffold a dotfiles template repository from an existing workspace |
+| `create-learning-pathway` | Generate structured Learning Pathway documents for Microsoft technologies (L100–L400) |
+| `create-skill-from-pr` | Generate a reusable Agent Skill from a single-purpose Pull Request |
+| `dotnet-sdk-style-upgrade` | Convert legacy .NET project files to modern SDK-style format |
+| `skill-creator` | Create a new Agent Skill from a description following the agentskills.io specification |
+| `suggest-awesome-github-copilot-agents` | Suggest and install Copilot agents from the awesome-copilot repository |
+| `suggest-awesome-github-copilot-instructions` | Suggest and install Copilot instruction files from the awesome-copilot repository |
+| `suggest-awesome-github-copilot-prompts` | Suggest Copilot prompt files from the awesome-copilot repository |
+| `suggest-awesome-github-copilot-skills` | Suggest and install Copilot skills from the awesome-copilot repository |
+| `update-avm-modules` | Update Azure Verified Modules (AVM) to their latest versions in Bicep files |
+| `vscode-profile-sync` | Replicate VS Code Insiders profiles and extensions into VS Code stable |
+
 ## Agentic Workflows
 
 This repository uses [GitHub Agentic Workflows](https://github.github.com/gh-aw/) (`gh aw`)

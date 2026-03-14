@@ -1,0 +1,104 @@
+{
+  "name": "plagueho-os",
+  "metadata": {
+    "description": "PlagueHO's personal GitHub Copilot agent plugins for Daniel Scott-Raynsford.",
+    "version": "1.0.0"
+  },
+  "owner": {
+    "name": "Daniel Scott-Raynsford",
+    "url": "https://github.com/PlagueHO"
+  },
+  "plugins": [
+    {
+      "name": "azure-github-managed-identity",
+      "source": "./.github/skills/azure-github-managed-identity",
+      "description": "Provision Azure User Assigned Managed Identities with OIDC federation and RBAC for passwordless GitHub Actions authentication.",
+      "version": "1.0.0",
+      "skills": ["."]
+    },
+    {
+      "name": "convert-prompt-to-skill",
+      "source": "./.github/skills/convert-prompt-to-skill",
+      "description": "Convert an existing GitHub Copilot prompt file (.prompt.md) into a conformant Agent Skill (SKILL.md) following the agentskills.io specification.",
+      "version": "1.0.0",
+      "skills": ["."]
+    },
+    {
+      "name": "create-dotfiles-repo",
+      "source": "./.github/skills/create-dotfiles-repo",
+      "description": "Scaffold a dotfiles template repository in a GitHub Organization from an existing workspace.",
+      "version": "1.0.0",
+      "skills": ["."]
+    },
+    {
+      "name": "create-learning-pathway",
+      "source": "./.github/skills/create-learning-pathway",
+      "description": "Generate structured Learning Pathway documents for Microsoft technologies, progressing L100–L400.",
+      "version": "1.1.0",
+      "skills": ["."]
+    },
+    {
+      "name": "create-skill-from-pr",
+      "source": "./.github/skills/create-skill-from-pr",
+      "description": "Generate a reusable GitHub Copilot Agent Skill from a single-purpose refactoring or tech debt Pull Request.",
+      "version": "1.0.0",
+      "skills": ["."]
+    },
+    {
+      "name": "dotnet-sdk-style-upgrade",
+      "source": "./.github/skills/dotnet-sdk-style-upgrade",
+      "description": "Convert legacy .NET project files (.csproj, .fsproj, .vbproj) to modern SDK-style format.",
+      "version": "1.0.0",
+      "skills": ["."]
+    },
+    {
+      "name": "skill-creator",
+      "source": "./.github/skills/skill-creator",
+      "description": "Create a new Agent Skill from a user's description and goal, following the agentskills.io specification.",
+      "version": "1.0.0",
+      "skills": ["."]
+    },
+    {
+      "name": "suggest-awesome-github-copilot-agents",
+      "source": "./.github/skills/suggest-awesome-github-copilot-agents",
+      "description": "Suggest and install GitHub Copilot Custom Agents from the awesome-copilot repository, detecting duplicates and outdated local agents.",
+      "version": "1.0.0",
+      "skills": ["."]
+    },
+    {
+      "name": "suggest-awesome-github-copilot-instructions",
+      "source": "./.github/skills/suggest-awesome-github-copilot-instructions",
+      "description": "Suggest and install GitHub Copilot instruction files from the awesome-copilot repository, detecting duplicates and outdated local instructions.",
+      "version": "1.0.0",
+      "skills": ["."]
+    },
+    {
+      "name": "suggest-awesome-github-copilot-prompts",
+      "source": "./.github/skills/suggest-awesome-github-copilot-prompts",
+      "description": "Suggest relevant GitHub Copilot prompt files from the awesome-copilot repository based on current repository context.",
+      "version": "1.0.0",
+      "skills": ["."]
+    },
+    {
+      "name": "suggest-awesome-github-copilot-skills",
+      "source": "./.github/skills/suggest-awesome-github-copilot-skills",
+      "description": "Suggest and install GitHub Copilot skills from the awesome-copilot repository, detecting duplicates and outdated local skills.",
+      "version": "1.0.0",
+      "skills": ["."]
+    },
+    {
+      "name": "update-avm-modules",
+      "source": "./.github/skills/update-avm-modules",
+      "description": "Update Azure Verified Modules (AVM) to their latest versions in Bicep files.",
+      "version": "1.0.0",
+      "skills": ["."]
+    },
+    {
+      "name": "vscode-profile-sync",
+      "source": "./.github/skills/vscode-profile-sync",
+      "description": "Replicate VS Code Insiders profiles and extensions into VS Code stable.",
+      "version": "1.0.0",
+      "skills": ["."]
+    }
+  ]
+}
