@@ -2,13 +2,22 @@
   "name": "plagueho-os",
   "metadata": {
     "description": "PlagueHO's personal GitHub Copilot agent plugins for Daniel Scott-Raynsford.",
-    "version": "1.0.0"
+    "version": "1.0.2"
   },
   "owner": {
     "name": "Daniel Scott-Raynsford",
     "url": "https://github.com/PlagueHO"
   },
   "plugins": [
+    {
+      "name": "ai-content-readiness-review",
+      "source": "./.github/skills/ai-content-readiness-review",
+      "description": "**ANALYSIS SKILL** — Review documents for compliance with AI-optimized content guidelines. Evaluates accuracy, metadata tagging, structure, tone, accessibility, and AI-friendly formatting.",
+      "version": "1.0.0",
+      "skills": [
+        "."
+      ]
+    },
     {
       "name": "azure-github-managed-identity",
       "source": "./.github/skills/azure-github-managed-identity",
@@ -57,7 +66,16 @@
     {
       "name": "dotnet-sdk-style-upgrade",
       "source": "./.github/skills/dotnet-sdk-style-upgrade",
-      "description": "Converts legacy .NET project files (.csproj, .fsproj, .vbproj) to modern SDK-style format. Use when asked to modernize, upgrade, migrate, or convert .NET projects, or when encountering non-SDK-style project files that need updating to current .NET standards.",
+      "description": "Convert legacy .NET project files (.csproj, .fsproj, .vbproj) to modern SDK-style format.",
+      "version": "1.0.0",
+      "skills": [
+        "."
+      ]
+    },
+    {
+      "name": "sensei",
+      "source": "./.github/skills/sensei",
+      "description": "Iteratively improve skill frontmatter compliance using the Ralph loop pattern.",
       "version": "1.0.0",
       "skills": [
         "."
@@ -93,7 +111,7 @@
     {
       "name": "suggest-awesome-github-copilot-prompts",
       "source": "./.github/skills/suggest-awesome-github-copilot-prompts",
-      "description": "Suggest relevant GitHub Copilot prompt files from the awesome-copilot repository based on current repository context and chat history, avoiding duplicates with existing prompts in this repository, and identifying outdated prompts that need updates.",
+      "description": "Suggest and install GitHub Copilot prompt files from the awesome-copilot repository, detecting duplicates and outdated local prompts.",
       "version": "1.0.0",
       "skills": [
         "."

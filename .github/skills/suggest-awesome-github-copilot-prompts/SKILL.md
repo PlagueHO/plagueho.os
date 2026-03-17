@@ -1,7 +1,7 @@
 ---
 name: suggest-awesome-github-copilot-prompts
-description: >
-  Suggest relevant GitHub Copilot prompt files from the awesome-copilot repository based on current repository context and chat history, avoiding duplicates with existing prompts in this repository, and identifying outdated prompts that need updates.
+description: >-
+  **WORKFLOW SKILL** — Suggest and install GitHub Copilot prompt files from the awesome-copilot repository, detecting duplicates and outdated local prompts. WHEN: "suggest copilot prompts", "find awesome copilot prompts", "check for prompt updates", "install prompts from awesome-copilot", "discover new copilot prompts". INVOKES: githubRepo MCP tool, fetch tool. FOR SINGLE OPERATIONS: Use githubRepo MCP directly to browse the prompts list.
 ---
 
 # Suggest Awesome GitHub Copilot Prompts

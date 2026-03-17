@@ -149,12 +149,33 @@ foreach ($dir in $skillDirs) {
     })
 }
 
+# Determine metadata version — bump patch if file already exists
+$metadataVersion = '1.0.0'
+if (Test-Path $marketplacePath) {
+    try {
+        $existing = Get-Content -Path $marketplacePath -Raw -Encoding UTF8 | ConvertFrom-Json
+        $currentVer = $existing.metadata.version
+        if ($currentVer -match '^(\d+)\.(\d+)\.(\d+)$') {
+            $major = [int]$Matches[1]
+            $minor = [int]$Matches[2]
+            $patch = [int]$Matches[3] + 1
+            $metadataVersion = "$major.$minor.$patch"
+        }
+        else {
+            $metadataVersion = $currentVer
+        }
+    }
+    catch {
+        Write-Warning "Could not read existing marketplace.json version; defaulting to 1.0.0"
+    }
+}
+
 # Build the full marketplace object
 $marketplace = [ordered]@{
     name     = 'plagueho-os'
     metadata = [ordered]@{
         description = "PlagueHO's personal GitHub Copilot agent plugins for Daniel Scott-Raynsford."
-        version     = '1.0.0'
+        version     = $metadataVersion
     }
     owner    = [ordered]@{
         name = 'Daniel Scott-Raynsford'

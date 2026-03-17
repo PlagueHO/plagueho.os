@@ -1,6 +1,7 @@
 ---
 name: dotnet-sdk-style-upgrade
-description: Converts legacy .NET project files (.csproj, .fsproj, .vbproj) to modern SDK-style format. Use when asked to modernize, upgrade, migrate, or convert .NET projects, or when encountering non-SDK-style project files that need updating to current .NET standards.
+description: >-
+  **WORKFLOW SKILL** — Convert legacy .NET project files (.csproj, .fsproj, .vbproj) to modern SDK-style format. WHEN: "modernize .NET project", "upgrade csproj to SDK-style", "migrate to SDK-style project", "convert legacy .NET project", "non-SDK-style project upgrade". INVOKES: file system tools for project file analysis. FOR SINGLE OPERATIONS: Edit the project file XML directly.
 metadata:
   author: microsoft-foundry-jumpstart
   version: "1.0"
