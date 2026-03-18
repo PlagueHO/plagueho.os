@@ -1,0 +1,31 @@
+name: update-marketplace-triggers
+skill: update-marketplace
+
+# Prompts that SHOULD activate this skill
+shouldTriggerPrompts:
+  - "update marketplace"
+  - "sync marketplace"
+  - "add to marketplace"
+  - "marketplace update"
+  - "group plugins"
+  - "update marketplace.json"
+  - "refresh marketplace"
+  - "marketplace sync"
+  - "add new skills to the marketplace"
+  - "update the plugin index"
+  - "there are skills missing from the marketplace"
+  - "sync skills and agents into marketplace plugins"
+  - "group my skills into marketplace plugins"
+
+# Prompts that should NOT activate this skill
+shouldNotTriggerPrompts:
+  - "create a new skill"
+  - "install a VS Code extension"
+  - "deploy to Azure"
+  - "validate marketplace schema"
+  - "sync VS Code profiles"
+  - "suggest copilot skills"
+  - "build the project"
+  - "run the tests"
+  - "create a learning pathway"
+  - "convert prompt to skill"
