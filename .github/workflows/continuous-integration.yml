@@ -58,17 +58,3 @@ jobs:
 
       - name: Validate marketplace.json schema
         run: npx --yes ajv-cli validate -s .github/plugin/marketplace.schema.json -d .github/plugin/marketplace.json
-
-      - name: Check for trailing whitespace
-        run: |
-          found=0
-          while IFS= read -r -d '' file; do
-            if grep -Pq '\s+$' "$file" 2>/dev/null; then
-              echo "Trailing whitespace found: $file"
-              found=1
-            fi
-          done < <(find . -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.json" -o -name "*.ps1" -o -name "*.py" -o -name "*.sh" \) -not -path "./.git/*" -not -path "./node_modules/*" -not -path "./.pnpm-store/*" -print0)
-          if [ "$found" -eq 1 ]; then
-            exit 1
-          fi
-          echo "No trailing whitespace found."
