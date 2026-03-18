@@ -1,18 +1,18 @@
 ---
-name: optimize-prompt-tokens
-description: "**WORKFLOW SKILL** — Optimize a prompt (.prompt.md), skill (SKILL.md), or agent definition (.agent.md) to minimize token count while preserving 100% of functionality, constraints, and correctness. WHEN: \"optimize tokens\", \"reduce prompt size\", \"minimize token count\", \"shrink prompt\", \"compact prompt\", \"make prompt shorter\", \"reduce token usage\", \"token optimization\". INVOKES: file read, file edit tools. FOR SINGLE OPERATIONS: manual find-and-replace of filler words."
+name: optimize-definition
+description: "**WORKFLOW SKILL** — Optimize a prompt, skill, or agent definition for minimal token count, clarity, and AI readability. WHEN: \"optimize tokens\", \"reduce prompt size\", \"minimize token count\", \"shrink prompt\", \"optimize definition\", \"reduce verbosity\", \"improve readability\". INVOKES: file read, file edit tools. FOR SINGLE OPERATIONS: manual find-and-replace of filler words."
 argument-hint: 'Provide the file path to the prompt, skill, or agent definition to optimize (e.g., .github/prompts/my-prompt.prompt.md)'
 ---
 
-# Optimize Prompt Token Usage
+# Optimize Definition
 
-Reduce the token count of a prompt (`.prompt.md`), skill (`SKILL.md`), or agent
-definition (`.agent.md`) by removing filler words and verbose constructions.
+Optimize a prompt (`.prompt.md`), skill (`SKILL.md`), or agent definition
+(`.agent.md`) for minimal token count, maximum clarity, and AI readability.
 
 **Primary constraint**: The optimized output must retain 100% of the
 functionality, capability, and constraints of the original. The agent consuming
 the optimized definition must produce identical behavior. Never remove, weaken,
-or generalize an instruction to save tokens.
+or generalize an instruction.
 
 ## Prerequisites
 
@@ -28,29 +28,66 @@ or generalize an instruction to save tokens.
 1. Read the target file.
 2. Count the approximate token count (estimate 1 token per 4 characters).
 3. Record the baseline token estimate.
+4. Note the current structure: heading hierarchy, section count, list types,
+   code blocks, and examples.
 
 ### Step 2 — Analyze for Optimization
 
-Scan for token-waste patterns. Focus on filler words and verbose phrasing.
+Read both reference files before analyzing:
+
+- `references/optimization-patterns.md` — Token-waste patterns and replacements.
+- `references/ai-readability-practices.md` — AI readability best practices.
+
 Do not flag content that carries functional meaning, behavioral constraints, or
 edge-case handling — these must remain intact regardless of verbosity.
 
-Read the optimization pattern reference for the complete catalog of patterns:
-`references/optimization-patterns.md`
-
 Apply these analysis categories:
 
-1. **Redundant and filler language** — Filler adverbs, hedging phrases,
-   redundant preambles, filler transitions, polite padding, tautologies.
+#### 2a. Token Reduction
+
+1. **Filler language** — Filler adverbs, hedging phrases, redundant preambles,
+   filler transitions, polite padding, tautologies.
 2. **Verbose constructions** — Replace with concise equivalents from the
    verbose-to-concise table in the reference.
 3. **Structural redundancy** — Repeated instructions, heading restatements,
    duplicate constraints (consolidate, keeping the most specific version).
 4. **Unnecessary formatting** — Excessive blank lines, decorative separators,
    over-use of bold/italic, long table headers.
-5. **Instruction precision** — Convert passive to active voice, conditionals
-   to imperatives where always true, vague quantifiers to specifics, remove
-   meta-commentary.
+
+#### 2b. Clarity and Precision
+
+5. **Imperative voice** — Convert passive voice to active. Convert conditional
+   instructions to imperative where the condition is always true.
+6. **One idea per sentence** — Break compound sentences with multiple clauses
+   into separate concise sentences.
+7. **Specific over vague** — Replace vague quantifiers ("some", "various",
+   "several") with specific values or remove. Replace "etc." with actual items
+   or remove.
+8. **Tell what to do** — Prefer positive instructions over negations. Reserve
+   "do not" for critical guardrails only.
+9. **Remove meta-commentary** — Remove statements about the instructions
+   themselves ("This section explains how to...").
+
+#### 2c. AI Readability and Structure
+
+10. **Section order** — Verify the definition follows the recommended order:
+    Identity → Instructions → Examples → Context.
+11. **Heading hierarchy** — Ensure consistent heading levels that convey
+    logical structure. Each section should have a clear purpose.
+12. **Structural markup** — Use Markdown headers for sections, XML tags for
+    content boundaries (where appropriate), tables for structured data,
+    fenced code blocks for code/commands.
+13. **Progressive disclosure** — Move detailed reference material (lookup
+    tables, extended examples, schemas) to `references/` files if the body
+    exceeds 500 lines or ~5000 tokens. Keep the main body focused on workflow
+    and constraints.
+14. **Decision points** — Make branching conditions explicit with both
+    branches specified. Flatten nested conditionals into decision tables
+    where possible.
+15. **Example quality** — Verify examples are diverse, cover edge cases, and
+    are clearly separated from instructions (using tags or headings).
+16. **Context placement** — Place supporting data and reference material near
+    the end, after instructions and examples.
 
 ### Step 3 — Apply Optimizations
 
@@ -76,10 +113,11 @@ doubt, preserve the original wording:
 8. **Preserve variable interpolations.** Do not alter `${...}` expressions.
 9. **Preserve trigger keywords.** In skill/agent `description` fields, retain
    all USE FOR / DO NOT USE FOR keywords — these drive invocation matching.
-10. **Use imperative mood.** Instructions to the agent should be direct
-    commands: "Read the file", "Extract the pattern", "Return the result".
-11. **One idea per sentence.** Break compound sentences with multiple clauses
-    into separate concise sentences.
+10. **Improve structure.** Reorder sections to follow Identity → Instructions
+    → Examples → Context when the original order is suboptimal. Flag the
+    reordering in the report.
+11. **Improve clarity.** Rewrite unclear or ambiguous instructions into direct,
+    specific statements — but only when the rewrite is unambiguously equivalent.
 
 ### Step 4 — Validate Functional Equivalence
 
@@ -92,8 +130,15 @@ doubt, preserve the original wording:
    - Every conditional branch and edge-case handler is present.
    - Every tool reference and `${...}` interpolation is unchanged.
    - Every step number maps 1:1 to the original.
-3. If any functional content was lost, restore it before proceeding.
-4. Estimate the new token count.
+3. Verify AI readability improvements:
+   - Structure follows Identity → Instructions → Examples → Context order
+     (or has a justified reason not to).
+   - Heading hierarchy is consistent and meaningful.
+   - Decision points have explicit branches.
+   - No wall-of-text paragraphs remain (break into lists or shorter
+     paragraphs).
+4. If any functional content was lost, restore it before proceeding.
+5. Estimate the new token count.
 
 ### Step 5 — Report
 
@@ -111,6 +156,8 @@ List the categories of changes applied:
 - **Verbose → concise**: Count of verbose constructions replaced
 - **Structural dedup**: Count of redundant sections/sentences consolidated
 - **Voice/mood fixes**: Count of passive → active or conditional → imperative
+- **Clarity improvements**: Count of ambiguous instructions rewritten
+- **Structure improvements**: Count of sections reordered or restructured
 - **Formatting cleanup**: Count of formatting-only changes
 
 If any optimization was intentionally skipped to preserve clarity or
