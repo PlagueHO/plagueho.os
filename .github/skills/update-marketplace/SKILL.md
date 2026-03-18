@@ -3,25 +3,60 @@ name: update-marketplace
 
 description: >-
   **WORKFLOW SKILL** — Update marketplace.json by discovering unassigned skills
-  and agents, grouping them into plugins, and appending entries. Append-only
-  with SemVer version bumps. WHEN: "update marketplace", "sync marketplace",
-  "add to marketplace", "marketplace update", "group plugins",
-  "update marketplace.json", "refresh marketplace", "marketplace sync".
-  INVOKES: run_in_terminal, vscode_askQuestions. FOR SINGLE OPERATIONS:
-  Edit marketplace.json directly.
+  and agents in the plugins/ directory, grouping them into plugins, and
+  appending entries. Also generates or updates README.md files in each
+  plugin directory. Append-only with SemVer version bumps. WHEN: "update
+  marketplace", "sync marketplace", "add to marketplace", "marketplace update",
+  "group plugins", "update marketplace.json", "refresh marketplace",
+  "marketplace sync". INVOKES: run_in_terminal, vscode_askQuestions.
+  FOR SINGLE OPERATIONS: Edit marketplace.json directly.
 
 metadata:
   author: plagueho.os
-  version: "1.0"
+  version: "2.0"
   reference: https://agentskills.io/specification
 ---
 
 # Update Marketplace
 
-Update `.github/plugin/marketplace.json` by discovering skills and agents that
-are not yet assigned to a plugin, grouping them into existing plugins where they
-fit, and creating new plugins when they do not. This skill is **append-only** —
-it never removes a skill or agent from a plugin once it exists.
+Update `.github/plugin/marketplace.json` by discovering skills and agents
+inside the `plugins/` directory that are not yet assigned to a plugin entry,
+grouping them into existing plugins where they fit, and creating new plugins
+when they do not. Also generates or updates `README.md` files in each
+`plugins/<plugin>/` directory.
+
+This skill is **append-only** — it never removes a skill or agent from a
+plugin once it exists.
+
+## Repository Structure
+
+The marketplace follows the canonical
+[github/copilot-plugins](https://github.com/github/copilot-plugins) layout:
+
+```text
+plugins/
+├── <plugin-name>/
+│   ├── README.md          # Plugin documentation (auto-generated)
+│   └── skills/
+│       ├── <skill-a>/
+│       │   └── SKILL.md
+│       └── <skill-b>/
+│           └── SKILL.md
+└── ...
+.github/
+├── plugin/
+│   ├── marketplace.json   # Marketplace index
+│   └── marketplace.schema.json
+└── skills/                # Repo-local skills (not in marketplace)
+    ├── sensei/
+    └── update-marketplace/
+        └── assets/
+            └── plugin-readme-template.md   # README template
+```
+
+Skills distributed via the marketplace live under `plugins/<plugin>/skills/`.
+Repo-local skills (e.g., `sensei`, `update-marketplace`) stay in
+`.github/skills/` and are **not** included in `marketplace.json`.
 
 ## Prerequisites
 
@@ -38,21 +73,28 @@ it never removes a skill or agent from a plugin once it exists.
    version MINOR component (e.g., `1.0.0` → `1.1.0`). When the marketplace
    file is updated at all, bump the marketplace `metadata.version` MINOR
    component.
-3. **Grouping**: Propose grouping by analyzing names and descriptions. If a new
+3. **Canonical paths**: Each plugin's `source` is `./plugins/<plugin-name>`.
+   Each skill entry is `./skills/<skill-name>` (relative to the plugin source).
+4. **Grouping**: Propose grouping by analyzing names and descriptions. If a new
    skill or agent clearly relates to an existing plugin's theme, append it
    there. If uncertain, use `vscode_askQuestions` to propose one or more target
    plugins and let the user decide.
-4. **New plugins**: If a skill or agent does not fit any existing plugin, use
+5. **New plugins**: If a skill or agent does not fit any existing plugin, use
    `vscode_askQuestions` to propose creating a new plugin — provide a suggested
-   name, source path, and description for the user to approve.
+   name and description for the user to approve. Then create
+   `plugins/<plugin-name>/skills/` and move the skill there.
+6. **README generation**: After any changes, regenerate `README.md` in each
+   affected plugin directory using the template asset at
+   `<skill-root>/assets/plugin-readme-template.md` and data from the plugin
+   description and skill list. The template follows the canonical format from
+   [github/copilot-plugins](https://github.com/github/copilot-plugins/tree/main/plugins/advanced-security).
 
 ## Process
 
 ### Step 1 — Discover Unassigned Items
 
-Run the discovery script to identify skills and agents not yet in any plugin.
-
-**PowerShell** (Windows):
+Run the discovery script to identify skills and agents inside `plugins/`
+that are not yet listed in any plugin entry in `marketplace.json`.
 
 ```powershell
 & "<skill-root>/scripts/Update-Marketplace.ps1" `
@@ -60,16 +102,9 @@ Run the discovery script to identify skills and agents not yet in any plugin.
     -Discover
 ```
 
-**Shell** (macOS/Linux):
-
-```bash
-"<skill-root>/scripts/update-marketplace.sh" \
-    --repo-root "<repo-root>" \
-    --discover
-```
-
 The script outputs a JSON array of unassigned items, each with `type`
-(`skill` or `agent`), `name`, `description`, and `source` fields.
+(`skill` or `agent`), `name`, `description`, `plugin` (parent plugin
+directory name), and `relativePath` (e.g., `./skills/my-skill`).
 
 If the output is empty, the marketplace is already up to date — report this
 to the user and stop.
@@ -79,19 +114,17 @@ to the user and stop.
 For each unassigned item:
 
 1. Read the current `marketplace.json` plugins list.
-2. Compare the item's name and description against existing plugin names and
-   descriptions.
-3. If there is a clear match (e.g., a skill named `suggest-awesome-github-copilot-prompts`
-   fits the `suggest-awesome-github-copilot` plugin group), plan to append it.
-4. If no clear match exists, collect these items as "new plugin candidates."
+2. The item's `plugin` field indicates which plugin directory it is in.
+3. If a matching plugin entry already exists in `marketplace.json`, plan to
+   append the skill to it.
+4. If no plugin entry exists for that directory, collect it as a "new plugin
+   candidate."
 
-For any items where the grouping is uncertain, or for new plugin candidates,
-use `vscode_askQuestions` to present the proposal:
+For new plugin candidates, use `vscode_askQuestions` to present the proposal:
 
-- Show the item name and description.
-- List candidate existing plugins with explanations of why they might fit.
-- Include an option to create a new plugin (with a suggested name, source, and
-  description).
+- Show the plugin directory name, the skill names and descriptions.
+- Suggest a plugin description.
+- Let the user approve or modify.
 
 ### Step 3 — Apply Changes
 
@@ -103,33 +136,10 @@ Once grouping is confirmed, run the update script to apply changes.
 & "<skill-root>/scripts/Update-Marketplace.ps1" `
     -RepoRoot "<repo-root>" `
     -PluginName "<plugin-name>" `
-    -AddSkill "<relative-skill-path>"
+    -AddSkill "./skills/<skill-name>"
 ```
 
-```bash
-"<skill-root>/scripts/update-marketplace.sh" \
-    --repo-root "<repo-root>" \
-    --plugin-name "<plugin-name>" \
-    --add-skill "<relative-skill-path>"
-```
-
-**To add an agent to an existing plugin:**
-
-```powershell
-& "<skill-root>/scripts/Update-Marketplace.ps1" `
-    -RepoRoot "<repo-root>" `
-    -PluginName "<plugin-name>" `
-    -AddAgent "<relative-agent-path>"
-```
-
-```bash
-"<skill-root>/scripts/update-marketplace.sh" \
-    --repo-root "<repo-root>" \
-    --plugin-name "<plugin-name>" \
-    --add-agent "<relative-agent-path>"
-```
-
-**To create a new plugin with a skill or agent:**
+**To create a new plugin with a skill:**
 
 ```powershell
 & "<skill-root>/scripts/Update-Marketplace.ps1" `
@@ -137,24 +147,37 @@ Once grouping is confirmed, run the update script to apply changes.
     -NewPlugin `
     -PluginName "<plugin-name>" `
     -PluginDescription "<description>" `
-    -PluginSource "<source-path>" `
-    -AddSkill "<relative-skill-path>"
-```
-
-```bash
-"<skill-root>/scripts/update-marketplace.sh" \
-    --repo-root "<repo-root>" \
-    --new-plugin \
-    --plugin-name "<plugin-name>" \
-    --plugin-description "<description>" \
-    --plugin-source "<source-path>" \
-    --add-skill "<relative-skill-path>"
+    -AddSkill "./skills/<skill-name>"
 ```
 
 Each invocation bumps the affected plugin's MINOR version and the marketplace
 MINOR version automatically.
 
-### Step 4 — Validate
+### Step 4 — Update READMEs
+
+After all marketplace.json changes are applied, regenerate READMEs for
+affected plugins:
+
+```powershell
+& "<skill-root>/scripts/Update-Marketplace.ps1" `
+    -RepoRoot "<repo-root>" `
+    -UpdateReadmes
+```
+
+This reads each plugin entry from `marketplace.json`, reads each skill's
+SKILL.md frontmatter, and generates a `README.md` in that plugin directory
+using the template asset at `<skill-root>/assets/plugin-readme-template.md`.
+
+The generated README follows the canonical
+[github/copilot-plugins](https://github.com/github/copilot-plugins/tree/main/plugins/advanced-security)
+format:
+
+- **H1 title** — Title-cased plugin name.
+- **Description** — Plugin description from `marketplace.json`.
+- **What it does** — Bullet list derived from each skill's description.
+- **Skills** — One H3 subsection per skill with the activation context.
+
+### Step 5 — Validate
 
 After all changes are applied, validate the marketplace JSON against its schema:
 
@@ -166,14 +189,15 @@ npx --yes ajv-cli validate \
 
 If validation fails, report the errors and do not commit the change.
 
-### Step 5 — Present Results
+### Step 6 — Present Results
 
 Show the user:
 
 1. A summary of items added and which plugins they were assigned to.
 2. Any new plugins created.
 3. Updated version numbers for affected plugins and the marketplace.
-4. Validation result (pass/fail).
+4. READMEs generated or updated.
+5. Validation result (pass/fail).
 
 ## Edge Cases
 
@@ -184,19 +208,22 @@ Show the user:
   no version bump.
 - **Empty marketplace.json**: Create the initial structure with the first
   plugin.
+- **Plugin directory has no matching marketplace.json entry**: Treat all skills
+  in it as unassigned and propose creating a new plugin entry.
 
 ## Marketplace Schema Reference
 
-Plugins in `marketplace.json` have this structure:
+Plugins in `marketplace.json` follow the canonical structure:
 
 ```json
 {
   "name": "plugin-name",
-  "source": "./.github/skills/plugin-name",
+  "source": "./plugins/plugin-name",
   "description": "What this plugin bundle does.",
   "version": "1.0.0",
-  "skills": ["."],
-  "agents": []
+  "skills": [
+    "./skills/my-skill"
+  ]
 }
 ```
 

@@ -1,7 +1,7 @@
-# ADR-001: Keep Unified Repository Structure
+# ADR-001: Adopt Canonical Plugin Structure
 
-- **Status:** Accepted
-- **Date:** 2025-07-15
+- **Status:** Superseded
+- **Date:** 2025-07-15 (original), 2026-03-18 (superseded)
 - **Decision maker:** Daniel Scott-Raynsford
 
 ## Context
@@ -34,6 +34,7 @@ OS workspace.
 
 - Gives each plugin bundle its own documentation space.
 - Closer to the canonical copilot-plugins structure.
+- Plugin README.md is served correctly by VS Code's "Open Readme" action.
 
 **Cons:**
 
@@ -44,7 +45,7 @@ OS workspace.
   moving skills would break them.
 - Increased cognitive overhead maintaining two directory trees.
 
-### Option 2 — Keep the repository as-is (chosen)
+### Option 2 — Keep the repository as-is (originally chosen)
 
 Make no structural changes. Improve discoverability by adding a plugin-focused
 README at `.github/plugin/README.md` and keeping the root README plugin table
@@ -62,6 +63,8 @@ up to date.
 - Plugin consumers see the full OS repo rather than a focused plugin catalog.
 - Per-plugin documentation lives in each skill folder rather than in a dedicated
   plugin bundle directory.
+- VS Code "Open Readme" for plugins 404s because there is no `README.md` at
+  the `source` path.
 
 ### Option 3 — Create a separate `plagueho.copilot-plugins` repository
 
@@ -81,35 +84,72 @@ canonical copilot-plugins pattern.
 - Duplicating skills across repos introduces synchronization burden.
 - Additional CI/CD and maintenance overhead.
 
-## Decision
+### Option 4 — Canonical `plugins/` layout with repo-local skills (adopted)
 
-**Option 2 — keep the repository as-is** with the following improvements:
+Adopt the canonical [`github/copilot-plugins`](https://github.com/github/copilot-plugins)
+layout: move distributed skills to `plugins/<plugin>/skills/<skill>/`, keep
+repo-local skills (e.g., `sensei`, `update-marketplace`) in `.github/skills/`.
 
-1. Add a plugin-focused [`README.md`](../../.github/plugin/README.md) in
-   `.github/plugin/` documenting all available plugins, their skills, and
-   setup instructions.
-2. Keep the root `README.md` plugin table as the primary entry point for
-   consumers.
-3. Document this decision for future reference.
+**Pros:**
+
+- Matches the canonical copilot-plugins structure exactly.
+- Each plugin gets its own `README.md` served by VS Code's "Open Readme".
+- No skill duplication — distributed skills move once to `plugins/`.
+- Repo-local skills remain in `.github/skills/` for agentic workflows.
+- Clean separation: `plugins/` = distributed, `.github/skills/` = repo-only.
+
+**Cons:**
+
+- Migration effort to move 16 skills.
+- Agentic workflows that reference moved skills would need updating (confirmed
+  none currently do).
+- Two skill locations still exist, but the separation is intentional and clear.
+
+## Original Decision (2025-07-15)
+
+**Option 2 — keep the repository as-is.** This was chosen because the agentic
+workflow constraint seemed to require all skills in `.github/skills/`. However,
+testing revealed that no agentic workflows depend on the distributed skills,
+and the plugin system's "Open Readme" feature specifically looks for
+`README.md` at the plugin `source` path.
+
+## Revised Decision (2026-03-18)
+
+**Option 4 — canonical `plugins/` layout with repo-local skills.** After
+testing the `..` path traversal approach (which worked for skill resolution but
+not for READMEs) and analyzing the canonical `github/copilot-plugins` repo, we
+adopted its layout:
+
+1. Moved 16 distributed skills to `plugins/<plugin>/skills/<skill>/`.
+2. Retained `sensei` (git submodule) and `update-marketplace` (repo
+   management) in `.github/skills/`.
+3. Removed `sensei` and `marketplace-management` from the marketplace plugins.
+4. Updated `marketplace.json` to v2.0.0 with canonical
+   `source: "./plugins/<name>"` paths.
+5. Rewrote the `update-marketplace` skill and script to scan `plugins/`
+   and generate per-plugin `README.md` files.
 
 ## Rationale
 
-- **Agentic workflow compatibility** is the strongest constraint. Skills must
-  live at `.github/skills/` for `engine: copilot` workflows to invoke them.
-  Moving or duplicating them undermines this.
-- **The plugin system is still evolving.** Restructuring now risks rework when
-  the plugin specification matures.
-- **Single source of truth** is simpler to maintain than any multi-location
-  approach.
+- **Canonical compatibility** — matching the `github/copilot-plugins` layout
+  ensures plugin features (README display, skill resolution) work correctly.
+- **No agentic workflow breakage** — confirmed that no `engine: copilot`
+  workflows reference the moved skills; they only use MCP tools directly.
+- **Clear separation** — `plugins/` contains everything for distribution;
+  `.github/skills/` contains repo-only tooling.
 - **The `sensei` skill is a git submodule** (from
-  [spboyer/sensei](https://github.com/spboyer/sensei)) and should not be
-  moved or modified in this repository.
+  [spboyer/sensei](https://github.com/spboyer/sensei)) and remains in
+  `.github/skills/sensei/`.
 
 ## Consequences
 
-- Plugin documentation is distributed across individual skill folders and the
-  new `.github/plugin/README.md` rather than in per-plugin bundle directories.
-- If the plugin specification later supports alternative skill locations, this
-  decision can be revisited.
-- The `update-marketplace` skill should be used regularly to keep
-  `marketplace.json` in sync with new skills.
+- Each plugin has its own `README.md` at `plugins/<plugin>/README.md`, served
+  by VS Code's "Open Readme" action.
+- The `update-marketplace` skill auto-generates plugin READMEs via its
+  `-UpdateReadmes` mode.
+- Future skills intended for distribution should be created under
+  `plugins/<plugin>/skills/`.
+- Repo-local skills should remain in `.github/skills/`.
+- This decision should still be revisited if the plugin specification changes
+  significantly (tracked in
+  [issue #9](https://github.com/PlagueHO/plagueho.os/issues/9)).

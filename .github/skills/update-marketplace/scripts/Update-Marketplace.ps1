@@ -1,17 +1,23 @@
 <#
 .SYNOPSIS
-    Update marketplace.json by discovering unassigned skills/agents or
-    appending items to plugins.
+    Update marketplace.json by discovering unassigned skills/agents in the
+    plugins/ directory or appending items to plugins. Also generates README.md
+    files for each plugin.
 
 .DESCRIPTION
-    Supports three modes:
-    - Discover: list skills and agents not assigned to any plugin.
+    Supports four modes:
+    - Discover: list skills and agents in plugins/ not assigned to any plugin
+      entry in marketplace.json.
     - Add to existing plugin: append a skill or agent to a named plugin.
     - Create new plugin: create a new plugin entry with an initial skill/agent.
+    - Update READMEs: regenerate README.md in each plugin directory.
 
     Follows append-only semantics — never removes entries. Bumps plugin MINOR
     version when content is added and marketplace MINOR version when any
     changes are made.
+
+    Skills in .github/skills/ are repo-local and not included in the
+    marketplace index.
 
 .PARAMETER RepoRoot
     Path to the repository root. Defaults to the parent of the directory
@@ -24,10 +30,10 @@
     The name of the plugin to add to or create.
 
 .PARAMETER AddSkill
-    Relative path (from plugin source) of a skill to add to the plugin.
+    Relative path (from plugin source) of a skill to add (e.g., ./skills/my-skill).
 
 .PARAMETER AddAgent
-    Relative path (from plugin source) of an agent to add to the plugin.
+    Relative path (from plugin source) of an agent to add.
 
 .PARAMETER NewPlugin
     When specified, creates a new plugin entry.
@@ -35,8 +41,8 @@
 .PARAMETER PluginDescription
     Description for the new plugin (required with -NewPlugin).
 
-.PARAMETER PluginSource
-    Source path for the new plugin (required with -NewPlugin).
+.PARAMETER UpdateReadmes
+    When specified, regenerates README.md for every plugin in marketplace.json.
 
 .EXAMPLE
     # Discover unassigned items
@@ -44,12 +50,16 @@
 
 .EXAMPLE
     # Add a skill to an existing plugin
-    .\Update-Marketplace.ps1 -RepoRoot "C:\repo" -PluginName "my-plugin" -AddSkill "."
+    .\Update-Marketplace.ps1 -RepoRoot "C:\repo" -PluginName "my-plugin" -AddSkill "./skills/new-skill"
 
 .EXAMPLE
     # Create a new plugin with a skill
     .\Update-Marketplace.ps1 -RepoRoot "C:\repo" -NewPlugin -PluginName "new-plugin" `
-        -PluginDescription "Does something useful." -PluginSource "./.github/skills/new-plugin" -AddSkill "."
+        -PluginDescription "Does something useful." -AddSkill "./skills/new-skill"
+
+.EXAMPLE
+    # Regenerate all plugin READMEs
+    .\Update-Marketplace.ps1 -RepoRoot "C:\repo" -UpdateReadmes
 #>
 [CmdletBinding()]
 param(
@@ -75,15 +85,14 @@ param(
     [string]$PluginDescription,
 
     [Parameter()]
-    [string]$PluginSource
+    [switch]$UpdateReadmes
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $marketplacePath = Join-Path $RepoRoot '.github' 'plugin' 'marketplace.json'
-$skillsDir = Join-Path $RepoRoot '.github' 'skills'
-$agentsDir = Join-Path $RepoRoot '.github' 'agents'
+$pluginsDir = Join-Path $RepoRoot 'plugins'
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -120,40 +129,6 @@ function Read-SkillFrontmatter {
     return $result
 }
 
-function Read-AgentFrontmatter {
-    param([string]$Path)
-    $content = Get-Content -Path $Path -Raw -Encoding UTF8
-    $result = @{}
-
-    if ($content -match '(?s)^---\s*\r?\n(.+?)\r?\n---') {
-        $yaml = $Matches[1]
-        if ($yaml -match "(?m)^description:\s*['\""](.*?)['\""]") {
-            $result['description'] = $Matches[1].Trim()
-        }
-        elseif ($yaml -match '(?m)^description:\s*(.+)$') {
-            $result['description'] = $Matches[1].Trim().Trim('"', "'")
-        }
-    }
-
-    # Derive name from filename (remove .agent.md suffix)
-    $fileName = [System.IO.Path]::GetFileName($Path)
-    $result['name'] = $fileName -replace '\.agent\.md$', ''
-
-    if (-not $result['description']) {
-        # Use first non-empty, non-heading line as description
-        $lines = $content -split '\r?\n'
-        foreach ($line in $lines) {
-            $trimmed = $line.Trim()
-            if ($trimmed -ne '' -and $trimmed -notmatch '^---' -and $trimmed -notmatch '^#') {
-                $result['description'] = $trimmed
-                break
-            }
-        }
-    }
-
-    return $result
-}
-
 function Bump-MinorVersion {
     param([string]$Version)
     if ($Version -match '^(\d+)\.(\d+)\.(\d+)$') {
@@ -182,6 +157,95 @@ function Write-Marketplace {
     Set-Content -Path $marketplacePath -Value $json -Encoding UTF8 -NoNewline
 }
 
+function Generate-PluginReadme {
+    param(
+        [string]$PluginDir,
+        [string]$PluginName,
+        [string]$Description,
+        [array]$Skills
+    )
+    $title = ($PluginName -replace '-', ' ') -replace '(?:^|\s)\S', { $_.Value.ToUpper() }
+    $lines = @()
+    $lines += "# $title"
+    $lines += ''
+    $lines += $Description
+    $lines += ''
+    $lines += '## What it does'
+    $lines += ''
+
+    # Collect skill details for the "What it does" bullets and skill sections
+    $skillDetails = @()
+    foreach ($skillRef in $Skills) {
+        $skillName = $skillRef -replace '^\./skills/', ''
+        $skillDir = Join-Path $PluginDir 'skills' $skillName
+        $skillFile = Join-Path $skillDir 'SKILL.md'
+        $purpose = ''
+        if (Test-Path $skillFile) {
+            $fm = Read-SkillFrontmatter -Path $skillFile
+            if ($fm -and $fm['description']) {
+                $raw = $fm['description']
+                $raw = $raw -replace '^\*\*\w+ SKILL\*\*\s*[-—]\s*', ''
+                $raw = $raw -replace '\s*WHEN:.*$', ''
+                $raw = $raw -replace '\s*INVOKES:.*$', ''
+                $raw = $raw -replace '\s*FOR SINGLE OPERATIONS:.*$', ''
+                $purpose = $raw.Trim()
+            }
+        }
+        $skillDetails += @{ name = $skillName; purpose = $purpose }
+    }
+
+    # Generate bullet list from skill purposes
+    foreach ($s in $skillDetails) {
+        if ($s.purpose) {
+            # Take first sentence for bullet
+            $sentence = $s.purpose -replace '\..*$', ''
+            $bullet = $sentence.Substring(0, 1).ToUpper() + $sentence.Substring(1)
+            $lines += "- $bullet"
+        }
+    }
+
+    $lines += ''
+    $lines += '## Skills'
+
+    foreach ($s in $skillDetails) {
+        $lines += ''
+        $lines += "### ``$($s.name)``"
+        $lines += ''
+        if ($s.purpose) {
+            $lines += "Activated when a user asks to $($s.purpose.Substring(0, 1).ToLower())$($s.purpose.Substring(1))"
+        }
+    }
+
+    $lines += ''
+    $readmePath = Join-Path $PluginDir 'README.md'
+    $content = ($lines -join "`n") + "`n"
+    Set-Content -Path $readmePath -Value $content -Encoding UTF8 -NoNewline
+    Write-Host "Generated README: $readmePath"
+}
+
+# ---------------------------------------------------------------------------
+# Update READMEs mode
+# ---------------------------------------------------------------------------
+
+if ($UpdateReadmes) {
+    $marketplace = Read-Marketplace
+    foreach ($plugin in $marketplace.plugins) {
+        $pluginDirName = $plugin.source -replace '^\./plugins/', ''
+        $pluginDirPath = Join-Path $pluginsDir $pluginDirName
+        if (-not (Test-Path $pluginDirPath)) {
+            Write-Warning "Plugin directory not found: $pluginDirPath"
+            continue
+        }
+        $skillsList = if ($plugin.PSObject.Properties['skills']) { @($plugin.skills) } else { @() }
+        Generate-PluginReadme `
+            -PluginDir $pluginDirPath `
+            -PluginName $plugin.name `
+            -Description $plugin.description `
+            -Skills $skillsList
+    }
+    exit 0
+}
+
 # ---------------------------------------------------------------------------
 # Discover mode
 # ---------------------------------------------------------------------------
@@ -189,96 +253,48 @@ function Write-Marketplace {
 if ($Discover) {
     $marketplace = Read-Marketplace
 
-    # Collect all skills and agents already assigned
+    # Build a set of all assigned skill paths (relative to repo root)
     $assignedSkills = @{}
-    $assignedAgents = @{}
-
     foreach ($plugin in $marketplace.plugins) {
-        $pluginSource = $plugin.source
+        $pluginSource = $plugin.source -replace '\\', '/'
         $skillsList = if ($plugin.PSObject.Properties['skills']) { $plugin.skills } else { @() }
         foreach ($s in $skillsList) {
-            if ($s -eq '.') {
-                $assignedSkills[$pluginSource] = $true
-            }
-            else {
-                $fullPath = "$pluginSource/$s" -replace '\\', '/'
-                $assignedSkills[$fullPath] = $true
-            }
-        }
-        $agentsList = if ($plugin.PSObject.Properties['agents']) { $plugin.agents } else { @() }
-        foreach ($a in $agentsList) {
-            $fullPath = "$pluginSource/$a" -replace '\\', '/'
-            $assignedAgents[$fullPath] = $true
+            # Normalize: source + / + skill → e.g., ./plugins/my-plugin/./skills/foo
+            $fullPath = "$pluginSource/$s" -replace '\\', '/' -replace '/\./', '/'
+            $assignedSkills[$fullPath] = $true
         }
     }
 
     $unassigned = @()
 
-    # Check skills
-    if (Test-Path $skillsDir) {
-        $skillDirs = Get-ChildItem -Path $skillsDir -Directory | Sort-Object Name
-        foreach ($dir in $skillDirs) {
-            $skillFile = Join-Path $dir.FullName 'SKILL.md'
-            if (-not (Test-Path $skillFile)) { continue }
+    # Scan plugins/ directory for skill directories
+    if (Test-Path $pluginsDir) {
+        $pluginDirs = Get-ChildItem -Path $pluginsDir -Directory | Sort-Object Name
+        foreach ($pDir in $pluginDirs) {
+            $skillsPath = Join-Path $pDir.FullName 'skills'
+            if (-not (Test-Path $skillsPath)) { continue }
 
-            $source = "./.github/skills/$($dir.Name)"
-            # Check if this skill source is assigned (either as plugin source with "." or as a sub-path)
-            $isAssigned = $false
-            foreach ($plugin in $marketplace.plugins) {
-                $pluginSource = $plugin.source -replace '\\', '/'
-                $skillsList = if ($plugin.PSObject.Properties['skills']) { $plugin.skills } else { @() }
-                foreach ($s in $skillsList) {
-                    if ($s -eq '.') {
-                        if ($pluginSource -eq $source) { $isAssigned = $true; break }
-                    }
-                    else {
-                        $fullPath = "$pluginSource/$s" -replace '\\', '/'
-                        if ($fullPath -eq $source) { $isAssigned = $true; break }
-                    }
+            $skillDirs = Get-ChildItem -Path $skillsPath -Directory | Sort-Object Name
+            foreach ($sDir in $skillDirs) {
+                $skillFile = Join-Path $sDir.FullName 'SKILL.md'
+                if (-not (Test-Path $skillFile)) {
+                    Write-Warning "No SKILL.md in $($sDir.FullName) — skipping."
+                    continue
                 }
-                if ($isAssigned) { break }
-            }
 
-            if (-not $isAssigned) {
+                # Build the full canonical path
+                $canonicalPath = "./plugins/$($pDir.Name)/./skills/$($sDir.Name)" -replace '/\./', '/'
+                if ($assignedSkills.ContainsKey($canonicalPath)) { continue }
+
                 $fm = Read-SkillFrontmatter -Path $skillFile
-                $name = if ($fm -and $fm['name']) { $fm['name'] } else { $dir.Name }
+                $name = if ($fm -and $fm['name']) { $fm['name'] } else { $sDir.Name }
                 $desc = if ($fm -and $fm['description']) { $fm['description'] } else { '' }
                 $unassigned += @{
-                    type        = 'skill'
-                    name        = $name
-                    description = $desc
-                    source      = $source
-                }
-            }
-        }
-    }
-
-    # Check agents
-    if (Test-Path $agentsDir) {
-        $agentFiles = Get-ChildItem -Path $agentsDir -File -Filter '*.agent.md' | Sort-Object Name
-        foreach ($file in $agentFiles) {
-            $relPath = "./.github/agents/$($file.Name)"
-            $isAssigned = $false
-            foreach ($plugin in $marketplace.plugins) {
-                $agentsList = if ($plugin.PSObject.Properties['agents']) { $plugin.agents } else { @() }
-                foreach ($a in $agentsList) {
-                    $pluginSource = $plugin.source -replace '\\', '/'
-                    $fullPath = "$pluginSource/$a" -replace '\\', '/'
-                    if ($fullPath -eq $relPath -or $a -eq $relPath -or $a -eq $file.Name) {
-                        $isAssigned = $true
-                        break
-                    }
-                }
-                if ($isAssigned) { break }
-            }
-
-            if (-not $isAssigned) {
-                $fm = Read-AgentFrontmatter -Path $file.FullName
-                $unassigned += @{
-                    type        = 'agent'
-                    name        = $fm['name']
-                    description = if ($fm['description']) { $fm['description'] } else { '' }
-                    source      = $relPath
+                    type         = 'skill'
+                    name         = $name
+                    description  = $desc
+                    plugin       = $pDir.Name
+                    relativePath = "./skills/$($sDir.Name)"
                 }
             }
         }
@@ -301,13 +317,8 @@ $marketplace = Read-Marketplace
 $changed = $false
 
 if ($NewPlugin) {
-    # Validate required parameters for new plugin
     if (-not $PluginDescription) {
         Write-Error '-PluginDescription is required when creating a new plugin.'
-        exit 1
-    }
-    if (-not $PluginSource) {
-        Write-Error '-PluginSource is required when creating a new plugin.'
         exit 1
     }
 
@@ -318,21 +329,24 @@ if ($NewPlugin) {
         exit 1
     }
 
+    # Canonical source path
+    $pluginSource = "./plugins/$PluginName"
+
+    # Create plugin directory structure if it doesn't exist
+    $pluginDirPath = Join-Path $pluginsDir $PluginName 'skills'
+    if (-not (Test-Path $pluginDirPath)) {
+        New-Item -Path $pluginDirPath -ItemType Directory -Force | Out-Null
+    }
+
     $newPluginObj = [ordered]@{
         name        = $PluginName
-        source      = $PluginSource
+        source      = $pluginSource
         description = $PluginDescription
         version     = '1.0.0'
         skills      = @()
-        agents      = @()
     }
 
     if ($AddSkill) { $newPluginObj.skills = @($AddSkill) }
-    if ($AddAgent) { $newPluginObj.agents = @($AddAgent) }
-
-    # Remove empty arrays for cleaner JSON
-    if ($newPluginObj.skills.Count -eq 0) { $newPluginObj.Remove('skills') }
-    if ($newPluginObj.agents.Count -eq 0) { $newPluginObj.Remove('agents') }
 
     # Add to plugins array (sorted by name)
     $pluginsList = [System.Collections.ArrayList]@($marketplace.plugins)
@@ -352,7 +366,6 @@ else {
     }
 
     if ($AddSkill) {
-        # Ensure skills array exists
         if (-not $plugin.PSObject.Properties['skills']) {
             $plugin | Add-Member -NotePropertyName 'skills' -NotePropertyValue @() -Force
         }

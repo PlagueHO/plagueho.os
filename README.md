@@ -3,7 +3,14 @@
 [![CI][ci-shield]][ci-url]
 [![License][license-shield]][license-url]
 
-Organizational engineering assets for Daniel Scott-Raynsford, including GitHub Copilot agents, prompts, scripts, patterns, and reference documentation commonly used across repositories for software development.
+Organizational engineering assets and VS Code agent plugin marketplace for
+Daniel Scott-Raynsford. Includes GitHub Copilot agent plugins, prompts,
+scripts, patterns, and reference documentation commonly used across
+repositories for software development.
+
+The plugin marketplace follows the canonical
+[github/copilot-plugins](https://github.com/github/copilot-plugins) layout —
+install plugins directly into GitHub Copilot Chat via VS Code.
 
 <p align="center">
   <img src="docs/images/overview.svg" alt="Repository content overview" width="840"/>
@@ -52,10 +59,22 @@ type lives.
 
 ```text
 PlagueHO-OS/
+├── plugins/                    # Agent plugin bundles (canonical layout)
+│   ├── <plugin-name>/
+│   │   ├── README.md           # Plugin documentation
+│   │   └── skills/
+│   │       └── <skill-name>/
+│   │           └── SKILL.md
+│   └── ...
 ├── .github/                    # GitHub configuration
 │   ├── agents/                 # GitHub Copilot coding agents
+│   ├── plugin/                 # Marketplace index and schema
+│   │   ├── marketplace.json
+│   │   └── marketplace.schema.json
 │   ├── prompts/                # GitHub Copilot prompt files
-│   ├── skills/                 # GitHub Copilot skill definitions
+│   ├── skills/                 # Repo-local skills (not distributed)
+│   │   ├── sensei/             # Git submodule (spboyer/sensei)
+│   │   └── update-marketplace/ # Marketplace management automation
 │   ├── workflows/              # GitHub Actions workflows
 │   ├── ISSUE_TEMPLATE/         # Issue templates
 │   ├── PULL_REQUEST_TEMPLATE.md
@@ -74,9 +93,16 @@ PlagueHO-OS/
 
 ## Asset Categories
 
-### 🎯 GitHub Copilot Skills ([`.github/skills/`](.github/skills/))
+### 🔌 Agent Plugins ([`plugins/`](plugins/))
 
-Modular GitHub Copilot skill definitions that can be attached to agents to provide specific capabilities.
+Installable plugin bundles following the canonical
+[github/copilot-plugins](https://github.com/github/copilot-plugins) layout.
+Each plugin has its own directory with a README and one or more skills.
+
+### 🎯 Repo-local Skills ([`.github/skills/`](.github/skills/))
+
+Skills used only within this repository (e.g., `sensei`, `update-marketplace`).
+These are not distributed via the plugin marketplace.
 
 ### 🤖 GitHub Copilot Agents ([`.github/agents/`](.github/agents/))
 
@@ -100,32 +126,50 @@ Reference documentation, how-to guides, conventions, and cheat sheets.
 
 ## Usage
 
-Assets in this repository are intended to be copied into or referenced from other repositories. Where GitHub supports organizational-level configuration, the files in `.github/` follow those conventions.
+Assets in this repository are intended to be used in two ways:
+
+1. **Install via the plugin marketplace** — add the marketplace to VS Code
+   and install plugin bundles directly into Copilot Chat
+   (see [Quickstart](#quickstart)).
+2. **Copy assets directly** — copy individual skills, prompts, or scripts
+   into your own repositories.
+
+Where GitHub supports organizational-level configuration, the files in
+`.github/` follow those conventions.
 
 ## Plugin Marketplace
 
-This repository doubles as a VS Code agent plugin marketplace. Skills and agents
-defined in [`.github/skills/`](.github/skills/) and
-[`.github/agents/`](.github/agents/) are exposed as installable plugin bundles
-via [`.github/plugin/marketplace.json`](.github/plugin/marketplace.json).
+This repository serves as a VS Code agent plugin marketplace following the
+canonical [github/copilot-plugins](https://github.com/github/copilot-plugins)
+layout. Plugin skills live under [`plugins/`](plugins/) and are indexed by
+[`.github/plugin/marketplace.json`](.github/plugin/marketplace.json).
 
 See [Quickstart](#quickstart) above for installation instructions.
 
 ### Available Plugins
 
-Plugins group related skills and agents together. Install a plugin to get all
-the capabilities in its bundle.
+Each plugin bundles related skills together. Install a plugin to get all the
+capabilities in its bundle. Click a plugin name to view its full README.
 
-| Plugin | Skills | Description |
-|--------|--------|-------------|
-| `suggest-awesome-github-copilot` | `suggest-awesome-github-copilot-agents`, `suggest-awesome-github-copilot-instructions`, `suggest-awesome-github-copilot-prompts`, `suggest-awesome-github-copilot-skills` | Discover and install GitHub Copilot assets from the awesome-copilot repository. |
-| `skill-lifecycle` | `skill-creator`, `convert-prompt-to-skill`, `create-skill-from-pr`, `sensei` | Create, convert, validate, and iteratively improve agent skills. |
-| `azure-infrastructure` | `azure-github-managed-identity`, `update-avm-modules` | Provision Azure identities and manage Azure Verified Module versions. |
-| `azure-architecture-review` | `review-aac-multitenant-guidance` + `saas-startups-multitenancy-and-isv-arb-reviewer` agent | Review Azure Architecture Center multitenant guidance for currency. |
-| `content-and-learning` | `ai-content-readiness-review`, `create-learning-pathway` | Review content for AI readiness and generate Microsoft technology learning pathways. |
-| `developer-environment` | `create-dotfiles-repo`, `vscode-profile-sync` | Scaffold dotfiles repos and sync VS Code profiles across editions. |
-| `dotnet-modernization` | `dotnet-sdk-style-upgrade` | Convert legacy .NET project files to modern SDK-style format. |
-| `marketplace-management` | `update-marketplace` | Discover unassigned skills and agents and maintain the marketplace index. |
+| Plugin | Description |
+|--------|-------------|
+| [`azure-architecture-review`](plugins/azure-architecture-review/) | Review Azure Architecture Center multitenant guidance for currency. |
+| [`azure-infrastructure`](plugins/azure-infrastructure/) | Provision Azure identities and manage Azure Verified Module versions. |
+| [`content-and-learning`](plugins/content-and-learning/) | Review content for AI readiness and generate Microsoft technology learning pathways. |
+| [`developer-environment`](plugins/developer-environment/) | Scaffold dotfiles repos and sync VS Code profiles across editions. |
+| [`dotnet-modernization`](plugins/dotnet-modernization/) | Convert legacy .NET project files to modern SDK-style format. |
+| [`skill-lifecycle`](plugins/skill-lifecycle/) | Create, convert, and generate agent skills from prompts and pull requests. |
+| [`suggest-awesome-github-copilot`](plugins/suggest-awesome-github-copilot/) | Discover and install GitHub Copilot assets from the awesome-copilot repository. |
+
+### Repo-local Skills
+
+The following skills are used only within this repository and are **not**
+distributed via the plugin marketplace:
+
+| Skill | Location | Purpose |
+|-------|----------|---------|
+| `sensei` | [`.github/skills/sensei/`](.github/skills/sensei/) | Iterative skill-improvement workflow (git submodule — [spboyer/sensei](https://github.com/spboyer/sensei)) |
+| `update-marketplace` | [`.github/skills/update-marketplace/`](.github/skills/update-marketplace/) | Discover unassigned skills, update `marketplace.json`, and generate plugin READMEs |
 
 ## Agentic Workflows
 
@@ -243,10 +287,18 @@ gh workflow run update-foundry-model-catalog.lock.yml
 
 ## Contributing
 
-1. Fork or branch from `main`
-2. Add your asset in the appropriate directory
-3. Follow the style and documentation conventions for that asset type
-4. Open a pull request using the provided template
+1. Fork or branch from `main`.
+2. Add your asset in the appropriate directory:
+   - **New plugin skill** — create
+     `plugins/<plugin-name>/skills/<skill-name>/SKILL.md`.
+   - **New plugin** — create the plugin directory under `plugins/`, add a
+     `README.md` and `skills/` subdirectory, then add a plugin entry in
+     [`.github/plugin/marketplace.json`](.github/plugin/marketplace.json).
+   - **Repo-local skill** — add to `.github/skills/`.
+   - **Other assets** — place in the appropriate `scripts/`, `patterns/`,
+     `docs/`, or `.github/prompts/` directory.
+3. Run `pnpm lint:md` to verify markdown compliance.
+4. Open a pull request using the provided template.
 <!-- Badge reference links -->
 [ci-shield]: https://img.shields.io/github/actions/workflow/status/PlagueHO/plagueho.os/continuous-integration.yml?branch=main&label=CI
 [ci-url]: https://github.com/PlagueHO/plagueho.os/actions/workflows/continuous-integration.yml
