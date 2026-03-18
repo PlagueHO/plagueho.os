@@ -4,7 +4,11 @@ These instructions apply to all GitHub Copilot interactions in this repository.
 
 ## Repository Purpose
 
-This is an organizational assets repository for Daniel Scott-Raynsford (PlagueHO). It stores GitHub Copilot agents, skills, prompts, scripts, documents, patterns, and other assets commonly used across repositories for software development.
+This is an organizational assets repository for Daniel Scott-Raynsford
+(PlagueHO). It stores GitHub Copilot agents, prompts, scripts, documents,
+patterns, learning pathways, and other assets commonly used across repositories
+for software development. Plugins and skills are maintained separately in
+[PlagueHO/skills](https://github.com/PlagueHO/skills).
 
 ## General Coding Principles
 

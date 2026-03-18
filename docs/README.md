@@ -1,6 +1,10 @@
 # Documentation
 
-This directory contains reference documentation, guides, and other materials used across repositories.
+This directory contains reference documentation, guides, and other materials
+used across repositories.
+
+> **Skills documentation** has moved to
+> [PlagueHO/skills](https://github.com/PlagueHO/skills).
 
 ## Structure
 
