@@ -24,9 +24,7 @@ install the plugins you need.
 ```text
 plugins/
 ├── <plugin-name>/
-│   ├── .github/
-│   │   └── plugin/
-│   │       └── plugin.json    # Plugin definition (source of truth)
+│   ├── plugin.json            # Plugin definition (source of truth)
 │   ├── README.md              # Plugin documentation
 │   └── skills/
 │       └── <skill-name>/
@@ -41,7 +39,7 @@ scripts/
 └── update-marketplace-from-plugins.sh # Bash aggregation script
 ```
 
-Each plugin contains its own `.github/plugin/plugin.json` that defines its
+Each plugin contains its own `plugin.json` at the plugin root that defines its
 metadata, skills, agents, and hooks. The root `marketplace.json` is
 **generated** by aggregating all individual `plugin.json` files.
 
@@ -72,7 +70,7 @@ npx --yes ajv-cli validate \
   -d .github/plugin/marketplace.json
 
 # Validate individual plugin.json files
-find plugins -path '*/.github/plugin/plugin.json' -exec \
+find plugins -maxdepth 2 -name 'plugin.json' -exec \
   npx --yes ajv-cli validate -s .github/plugin/plugin.schema.json -d {} \;
 ```
 
@@ -91,7 +89,7 @@ The marketplace index is regenerated from individual `plugin.json` files using:
 ## Adding a New Plugin
 
 1. Create `plugins/<plugin-name>/skills/<skill-name>/SKILL.md`.
-2. Create `plugins/<plugin-name>/.github/plugin/plugin.json` with the
+2. Create `plugins/<plugin-name>/plugin.json` with the
    plugin metadata (see `plugin.schema.json` for the schema).
 3. Run the aggregation script to rebuild `marketplace.json`:
 

@@ -184,7 +184,7 @@ function Generate-PluginReadme {
     $lines += '|---------|-------------|'
 
     # Read skills from the plugin's own plugin.json
-    $pluginJsonPath = Join-Path $PluginDir '.github' 'plugin' 'plugin.json'
+    $pluginJsonPath = Join-Path $PluginDir 'plugin.json'
     $skills = @()
     if (Test-Path $pluginJsonPath) {
         $pluginJson = Get-Content -Path $pluginJsonPath -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -265,7 +265,7 @@ if ($Discover) {
     $assignedSkills = @{}
     foreach ($plugin in $marketplace.plugins) {
         $pluginDirName = $plugin.source
-        $pluginJsonPath = Join-Path $pluginsDir $pluginDirName '.github' 'plugin' 'plugin.json'
+        $pluginJsonPath = Join-Path $pluginsDir $pluginDirName 'plugin.json'
         if (Test-Path $pluginJsonPath) {
             $pluginJson = Get-Content -Path $pluginJsonPath -Raw -Encoding UTF8 | ConvertFrom-Json
             $skillsList = if ($pluginJson.PSObject.Properties['skills']) { @($pluginJson.skills) } else { @() }
@@ -348,11 +348,7 @@ if ($NewPlugin) {
         New-Item -Path $pluginSkillsPath -ItemType Directory -Force | Out-Null
     }
 
-    # Create plugin.json in the plugin directory
-    $pluginJsonDir = Join-Path $pluginDirPath '.github' 'plugin'
-    if (-not (Test-Path $pluginJsonDir)) {
-        New-Item -Path $pluginJsonDir -ItemType Directory -Force | Out-Null
-    }
+    # Create plugin.json at the plugin root
     $pluginJsonObj = [ordered]@{
         name        = $PluginName
         description = $PluginDescription
@@ -367,7 +363,7 @@ if ($NewPlugin) {
         skills      = @()
     }
     if ($AddSkill) { $pluginJsonObj.skills = @($AddSkill) }
-    $pluginJsonPath = Join-Path $pluginJsonDir 'plugin.json'
+    $pluginJsonPath = Join-Path $pluginDirPath 'plugin.json'
     $json = ($pluginJsonObj | ConvertTo-Json -Depth 10) + "`n"
     Set-Content -Path $pluginJsonPath -Value $json -Encoding UTF8 -NoNewline
     Write-Host "Created plugin.json: $pluginJsonPath"
@@ -398,7 +394,7 @@ else {
     }
 
     $pluginDirPath = Join-Path $pluginsDir $plugin.source
-    $pluginJsonPath = Join-Path $pluginDirPath '.github' 'plugin' 'plugin.json'
+    $pluginJsonPath = Join-Path $pluginDirPath 'plugin.json'
     if (-not (Test-Path $pluginJsonPath)) {
         Write-Error "plugin.json not found at: $pluginJsonPath"
         exit 1

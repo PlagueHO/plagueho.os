@@ -3,10 +3,10 @@
     Build marketplace.json from individual plugin.json files.
 
 .DESCRIPTION
-    Scans every plugins/<name>/.github/plugin/plugin.json file and aggregates
-    them into the root .github/plugin/marketplace.json. The marketplace
-    envelope (name, metadata, owner) is preserved; the plugins array is
-    rebuilt from the individual plugin.json files sorted by name.
+    Scans every plugins/<name>/plugin.json file and aggregates them into
+    the root .github/plugin/marketplace.json. The marketplace envelope
+    (name, metadata, owner) is preserved; the plugins array is rebuilt
+    from the individual plugin.json files sorted by name.
 
 .PARAMETER RepoRoot
     Path to the repository root. Defaults to four levels up from this script.
@@ -47,8 +47,7 @@ if (-not (Test-Path $pluginsDir)) {
     exit 1
 }
 
-$pluginJsonFiles = Get-ChildItem -Path $pluginsDir -Recurse -Filter 'plugin.json' |
-    Where-Object { $_.FullName -match '[/\\]\.github[/\\]plugin[/\\]plugin\.json$' } |
+$pluginJsonFiles = Get-ChildItem -Path $pluginsDir -Filter 'plugin.json' -Recurse -Depth 1 |
     Sort-Object FullName
 
 if ($pluginJsonFiles.Count -eq 0) {
@@ -68,9 +67,8 @@ foreach ($file in $pluginJsonFiles) {
     $pluginData = Get-Content -Path $file.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
 
     # Derive the plugin directory name from the path
-    # e.g., plugins/azure-infrastructure/.github/plugin/plugin.json -> azure-infrastructure
-    $relativePath = $file.FullName.Substring($pluginsDir.Length).TrimStart('\', '/')
-    $pluginDirName = ($relativePath -split '[/\\]')[0]
+    # e.g., plugins/azure-infrastructure/plugin.json -> azure-infrastructure
+    $pluginDirName = (Split-Path $file.DirectoryName -Leaf)
 
     # Build the marketplace plugin entry — source is just the directory name
     $entry = [ordered]@{

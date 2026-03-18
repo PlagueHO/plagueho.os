@@ -157,7 +157,7 @@ if $DISCOVER; then
     # Build a list of all assigned skill paths by reading each plugin's plugin.json
     assigned_skills=""
     for plugin_name in $(echo "$marketplace" | jq -r '.plugins[].source'); do
-        plugin_json_path="$REPO_ROOT/plugins/$plugin_name/.github/plugin/plugin.json"
+        plugin_json_path="$REPO_ROOT/plugins/$plugin_name/plugin.json"
         if [[ -f "$plugin_json_path" ]]; then
             while IFS= read -r skill; do
                 skill_name="${skill#./skills/}"
@@ -254,9 +254,8 @@ if $NEW_PLUGIN; then
     # Create plugin directory structure
     plugin_dir="$REPO_ROOT/plugins/$PLUGIN_NAME"
     mkdir -p "$plugin_dir/skills"
-    mkdir -p "$plugin_dir/.github/plugin"
 
-    # Create plugin.json
+    # Create plugin.json at plugin root
     plugin_json="$(jq -n \
         --arg name "$PLUGIN_NAME" \
         --arg desc "$PLUGIN_DESCRIPTION" \
@@ -266,8 +265,8 @@ if $NEW_PLUGIN; then
         plugin_json="$(echo "$plugin_json" | jq --arg s "$ADD_SKILL" '.skills += [$s]')"
     fi
 
-    echo "$plugin_json" | jq . > "$plugin_dir/.github/plugin/plugin.json"
-    echo "Created plugin.json: $plugin_dir/.github/plugin/plugin.json"
+    echo "$plugin_json" | jq . > "$plugin_dir/plugin.json"
+    echo "Created plugin.json: $plugin_dir/plugin.json"
 
     # Add marketplace entry (source is just the directory name)
     new_plugin="$(jq -n \
@@ -290,7 +289,7 @@ else
     fi
 
     plugin_source="$(jq -r --arg n "$PLUGIN_NAME" '.plugins[] | select(.name == $n) | .source' "$MARKETPLACE_PATH")"
-    plugin_json_path="$REPO_ROOT/plugins/$plugin_source/.github/plugin/plugin.json"
+    plugin_json_path="$REPO_ROOT/plugins/$plugin_source/plugin.json"
 
     if [[ ! -f "$plugin_json_path" ]]; then
         echo "Error: plugin.json not found at: $plugin_json_path" >&2

@@ -3,10 +3,10 @@
 #
 # Build marketplace.json from individual plugin.json files.
 #
-# Scans every plugins/<name>/.github/plugin/plugin.json file and aggregates
-# them into the root .github/plugin/marketplace.json. The marketplace
-# envelope (name, metadata, owner) is preserved; the plugins array is
-# rebuilt from the individual plugin.json files sorted by name.
+# Scans every plugins/<name>/plugin.json file and aggregates them into
+# the root .github/plugin/marketplace.json. The marketplace envelope
+# (name, metadata, owner) is preserved; the plugins array is rebuilt
+# from the individual plugin.json files sorted by name.
 #
 # Usage:
 #   ./update-marketplace-from-plugins.sh [--repo-root <path>]
@@ -61,7 +61,7 @@ fi
 plugin_json_files=()
 while IFS= read -r -d '' f; do
     plugin_json_files+=("$f")
-done < <(find "$PLUGINS_DIR" -path '*/.github/plugin/plugin.json' -print0 | sort -z)
+done < <(find "$PLUGINS_DIR" -maxdepth 2 -name 'plugin.json' -print0 | sort -z)
 
 if [[ ${#plugin_json_files[@]} -eq 0 ]]; then
     echo "Warning: No plugin.json files found under $PLUGINS_DIR"
@@ -78,7 +78,7 @@ plugins_json="[]"
 
 for file in "${plugin_json_files[@]}"; do
     # Derive plugin directory name from path
-    # e.g., plugins/azure-infrastructure/.github/plugin/plugin.json -> azure-infrastructure
+    # e.g., plugins/azure-infrastructure/plugin.json -> azure-infrastructure
     relative="${file#"$PLUGINS_DIR/"}"
     plugin_dir_name="${relative%%/*}"
 
