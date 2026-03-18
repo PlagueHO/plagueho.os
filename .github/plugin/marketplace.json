@@ -1,8 +1,8 @@
 {
   "name": "plagueho-os",
   "metadata": {
-    "description": "PlagueHO's personal GitHub Copilot agent plugins for Daniel Scott-Raynsford.",
-    "version": "1.0.2"
+    "description": "Agent plugin marketplace for PlagueHO organizational assets.",
+    "version": "1.0.0"
   },
   "owner": {
     "name": "Daniel Scott-Raynsford",
@@ -10,139 +10,95 @@
   },
   "plugins": [
     {
-      "name": "ai-content-readiness-review",
-      "source": "./.github/skills/ai-content-readiness-review",
-      "description": "**ANALYSIS SKILL** — Review documents for compliance with AI-optimized content guidelines. Evaluates accuracy, metadata tagging, structure, tone, accessibility, and AI-friendly formatting.",
+      "name": "suggest-awesome-github-copilot",
+      "source": "./.github/skills",
+      "description": "Discover and install GitHub Copilot assets from the awesome-copilot repository.",
       "version": "1.0.0",
       "skills": [
-        "."
-      ]
+        "suggest-awesome-github-copilot-agents",
+        "suggest-awesome-github-copilot-instructions",
+        "suggest-awesome-github-copilot-prompts",
+        "suggest-awesome-github-copilot-skills"
+      ],
+      "agents": []
     },
     {
-      "name": "azure-github-managed-identity",
-      "source": "./.github/skills/azure-github-managed-identity",
-      "description": "Provision Azure User Assigned Managed Identities with OIDC federation and RBAC for passwordless GitHub authentication.",
+      "name": "skill-lifecycle",
+      "source": "./.github/skills",
+      "description": "Create, convert, validate, and iteratively improve agent skills.",
       "version": "1.0.0",
       "skills": [
-        "."
-      ]
+        "skill-creator",
+        "convert-prompt-to-skill",
+        "create-skill-from-pr",
+        "sensei"
+      ],
+      "agents": []
     },
     {
-      "name": "convert-prompt-to-skill",
-      "source": "./.github/skills/convert-prompt-to-skill",
-      "description": "Convert an existing GitHub Copilot prompt file (.prompt.md) into a conformant Agent Skill (SKILL.md) following the agentskills.io specification. Evaluates prompt suitability before conversion and scaffolds the full skill directory.",
+      "name": "azure-infrastructure",
+      "source": "./.github/skills",
+      "description": "Provision Azure identities and manage Azure Verified Module versions.",
       "version": "1.0.0",
       "skills": [
-        "."
-      ]
+        "azure-github-managed-identity",
+        "update-avm-modules"
+      ],
+      "agents": []
     },
     {
-      "name": "create-dotfiles-repo",
-      "source": "./.github/skills/create-dotfiles-repo",
-      "description": "Scaffold a dotfiles template repository in a GitHub Organization from an existing workspace. Scans for shell, git, editor, and package configs; interviews the user via vscode_askQuestions; generates bootstrap installers.",
+      "name": "azure-architecture-review",
+      "source": "./.github",
+      "description": "Review Azure Architecture Center multitenant guidance for currency.",
       "version": "1.0.0",
       "skills": [
-        "."
+        "skills/review-aac-multitenant-guidance"
+      ],
+      "agents": [
+        "agents/saas-startups-multitenancy-and-isv-arb-reviewer.agent.md"
       ]
     },
     {
-      "name": "create-learning-pathway",
-      "source": "./.github/skills/create-learning-pathway",
-      "description": "Generate structured Learning Pathway documents for Microsoft technologies, progressing L100–L400.",
-      "version": "1.1.0",
+      "name": "content-and-learning",
+      "source": "./.github/skills",
+      "description": "Review content for AI readiness and generate Microsoft technology learning pathways.",
+      "version": "1.0.0",
       "skills": [
-        "."
-      ]
+        "ai-content-readiness-review",
+        "create-learning-pathway"
+      ],
+      "agents": []
     },
     {
-      "name": "create-skill-from-pr",
-      "source": "./.github/skills/create-skill-from-pr",
-      "description": "Generate a reusable GitHub Copilot Agent Skill from a single-purpose refactoring or tech debt Pull Request.",
-      "version": "1.1.0",
+      "name": "developer-environment",
+      "source": "./.github/skills",
+      "description": "Scaffold dotfiles repos and sync VS Code profiles across editions.",
+      "version": "1.0.0",
       "skills": [
-        "."
-      ]
+        "create-dotfiles-repo",
+        "vscode-profile-sync"
+      ],
+      "agents": []
     },
     {
-      "name": "dotnet-sdk-style-upgrade",
+      "name": "dotnet-modernization",
       "source": "./.github/skills/dotnet-sdk-style-upgrade",
-      "description": "Convert legacy .NET project files (.csproj, .fsproj, .vbproj) to modern SDK-style format.",
+      "description": "Convert legacy .NET project files to modern SDK-style format.",
       "version": "1.0.0",
       "skills": [
         "."
-      ]
+      ],
+      "agents": []
     },
     {
-      "name": "sensei",
-      "source": "./.github/skills/sensei",
-      "description": "Iteratively improve skill frontmatter compliance using the Ralph loop pattern.",
+      "name": "marketplace-management",
+      "source": "./.github/skills/update-marketplace",
+      "description": "Discover unassigned skills and agents and maintain the marketplace index.",
       "version": "1.0.0",
       "skills": [
         "."
-      ]
-    },
-    {
-      "name": "skill-creator",
-      "source": "./.github/skills/skill-creator",
-      "description": "Create a new Agent Skill from a user's description and goal, following the agentskills.io specification. Scaffolds directory structure, generates SKILL.md with YAML frontmatter, and validates the result.",
-      "version": "1.0.0",
-      "skills": [
-        "."
-      ]
-    },
-    {
-      "name": "suggest-awesome-github-copilot-agents",
-      "source": "./.github/skills/suggest-awesome-github-copilot-agents",
-      "description": "Suggest and install GitHub Copilot Custom Agents from the awesome-copilot repository, detecting duplicates and outdated local agents.",
-      "version": "1.0.0",
-      "skills": [
-        "."
-      ]
-    },
-    {
-      "name": "suggest-awesome-github-copilot-instructions",
-      "source": "./.github/skills/suggest-awesome-github-copilot-instructions",
-      "description": "Suggest and install GitHub Copilot instruction files from the awesome-copilot repository, detecting duplicates and outdated local instructions.",
-      "version": "1.0.0",
-      "skills": [
-        "."
-      ]
-    },
-    {
-      "name": "suggest-awesome-github-copilot-prompts",
-      "source": "./.github/skills/suggest-awesome-github-copilot-prompts",
-      "description": "Suggest and install GitHub Copilot prompt files from the awesome-copilot repository, detecting duplicates and outdated local prompts.",
-      "version": "1.0.0",
-      "skills": [
-        "."
-      ]
-    },
-    {
-      "name": "suggest-awesome-github-copilot-skills",
-      "source": "./.github/skills/suggest-awesome-github-copilot-skills",
-      "description": "Suggest and install GitHub Copilot skills from the awesome-copilot repository, detecting duplicates and outdated local skills.",
-      "version": "1.0.0",
-      "skills": [
-        "."
-      ]
-    },
-    {
-      "name": "update-avm-modules",
-      "source": "./.github/skills/update-avm-modules",
-      "description": "Update Azure Verified Modules (AVM) to their latest versions in Bicep files. Scans for AVM module references, queries the Microsoft Container Registry (MCR) for latest versions, compares using semantic versioning, reviews breaking changes, and applies updates with validation.",
-      "version": "1.0.0",
-      "skills": [
-        "."
-      ]
-    },
-    {
-      "name": "vscode-profile-sync",
-      "source": "./.github/skills/vscode-profile-sync",
-      "description": "Replicate VS Code Insiders profiles and extensions into VS Code stable. Discovers profiles, diffs extensions, installs missing ones, optionally removes extras. Supports dry-run and selective sync.",
-      "version": "1.0.0",
-      "skills": [
-        "."
-      ]
+      ],
+      "agents": []
     }
   ]
 }
