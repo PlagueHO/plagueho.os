@@ -90,11 +90,11 @@
     },
     {
       "name": "marketplace-management",
-      "source": "./.github/skills",
+      "source": "./plugins/marketplace-management",
       "description": "Discover unassigned skills and agents and maintain the marketplace index.",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "skills": [
-        "update-marketplace"
+        "../../.github/skills/update-marketplace"
       ],
       "agents": []
     }
