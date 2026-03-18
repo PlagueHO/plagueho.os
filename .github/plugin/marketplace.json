@@ -2,7 +2,7 @@
   "name": "plagueho-os",
   "metadata": {
     "description": "Agent plugin marketplace for PlagueHO organizational assets.",
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
   "owner": {
     "name": "Daniel Scott-Raynsford",
@@ -50,12 +50,10 @@
       "name": "azure-architecture-review",
       "source": "./.github",
       "description": "Review Azure Architecture Center multitenant guidance for currency.",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "skills": [
-        "skills/review-aac-multitenant-guidance"
-      ],
-      "agents": [
-        "agents/saas-startups-multitenancy-and-isv-arb-reviewer.agent.md"
+        "skills/review-aac-multitenant-guidance",
+        "skills/review-aac-multitenant-doc"
       ]
     },
     {
