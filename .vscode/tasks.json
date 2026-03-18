@@ -39,49 +39,6 @@
             }
         },
         {
-            "label": "marketplace: discover",
-            "type": "shell",
-            "command": "pwsh",
-            "args": ["-NoProfile", "-File", ".github/skills/update-marketplace/scripts/Update-Marketplace.ps1", "-Discover"],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [],
-            "icon": {
-                "id": "package",
-                "color": "terminal.ansiCyan"
-            },
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            }
-        },
-        {
-            "label": "marketplace: validate",
-            "type": "shell",
-            "command": "npx",
-            "args": [
-                "--yes",
-                "ajv-cli",
-                "validate",
-                "-s", ".github/plugin/marketplace.schema.json",
-                "-d", ".github/plugin/marketplace.json"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [],
-            "group": "test",
-            "icon": {
-                "id": "shield",
-                "color": "terminal.ansiGreen"
-            },
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            }
-        },
-        {
             "label": "whitespace: fix trailing",
             "type": "shell",
             "command": "Get-ChildItem -Recurse -File -Include *.md,*.yml,*.yaml,*.json,*.ps1,*.py,*.sh | Where-Object { $_.FullName -notmatch '[/\\\\]\\.git[/\\\\]' -and $_.FullName -notmatch '[/\\\\]node_modules[/\\\\]' } | ForEach-Object { $content = [System.IO.File]::ReadAllText($_.FullName); $fixed = ($content -replace '[ \\t]+(?=\\r?\\n)', ''); if ($content -ne $fixed) { [System.IO.File]::WriteAllText($_.FullName, $fixed); Write-Host \"Fixed: $($_.FullName)\" } }; Write-Host 'Done.'",

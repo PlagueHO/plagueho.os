@@ -28,8 +28,7 @@ PlagueHO-OS/
 │   ├── agents/                 # GitHub Copilot coding agents
 │   ├── prompts/                # GitHub Copilot prompt files
 │   ├── skills/                 # Repo-local skills (not distributed)
-│   │   ├── sensei/             # Git submodule (spboyer/sensei)
-│   │   └── update-marketplace/ # Marketplace management automation
+│   │   └── sensei/             # Git submodule (spboyer/sensei)
 │   ├── instructions/           # Copilot instruction files
 │   ├── workflows/              # GitHub Actions workflows
 │   ├── ISSUE_TEMPLATE/         # Issue templates
@@ -57,7 +56,6 @@ Skills used only within this repository for automation and repo management.
 | Skill | Location | Purpose |
 |-------|----------|---------|
 | `sensei` | [`.github/skills/sensei/`](.github/skills/sensei/) | Iterative skill-improvement workflow (git submodule — [spboyer/sensei](https://github.com/spboyer/sensei)) |
-| `update-marketplace` | [`.github/skills/update-marketplace/`](.github/skills/update-marketplace/) | Discover unassigned skills, update `marketplace.json`, and generate plugin READMEs |
 
 ### 🤖 GitHub Copilot Agents ([`.github/agents/`](.github/agents/))
 
@@ -211,11 +209,8 @@ gh workflow run update-foundry-model-catalog.lock.yml
 
 1. Fork or branch from `main`.
 2. Add your asset in the appropriate directory:
-   - **New plugin skill** — create
-     `plugins/<plugin-name>/skills/<skill-name>/SKILL.md`.
-   - **New plugin** — create the plugin directory under `plugins/`, add a
-     `README.md` and `skills/` subdirectory, then add a plugin entry in
-     [`.github/plugin/marketplace.json`](.github/plugin/marketplace.json).
+   - **New plugin or skill** — contribute to
+     [PlagueHO/skills](https://github.com/PlagueHO/skills).
    - **Repo-local skill** — add to `.github/skills/`.
    - **Other assets** — place in the appropriate `scripts/`, `patterns/`,
      `docs/`, or `.github/prompts/` directory.
