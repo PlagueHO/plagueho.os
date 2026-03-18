@@ -331,9 +331,10 @@ fi
 
 # Bump marketplace version if changed
 if $changed; then
+    repo_name="$(basename "$REPO_ROOT" | tr '.' '-')-plugins"
     current_marketplace_ver="$(jq -r '.metadata.version' "$MARKETPLACE_PATH")"
     new_marketplace_ver="$(bump_minor_version "$current_marketplace_ver")"
-    jq --arg v "$new_marketplace_ver" '.metadata.version = $v' "$MARKETPLACE_PATH" > "${MARKETPLACE_PATH}.tmp"
+    jq --arg v "$new_marketplace_ver" --arg n "$repo_name" '.metadata.version = $v | .name = $n' "$MARKETPLACE_PATH" > "${MARKETPLACE_PATH}.tmp"
     mv "${MARKETPLACE_PATH}.tmp" "$MARKETPLACE_PATH"
     echo "Marketplace updated. Version: $new_marketplace_ver"
 fi

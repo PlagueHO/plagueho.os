@@ -400,6 +400,8 @@ else {
 
 # Bump marketplace version if anything changed
 if ($changed) {
+    $repoName = ((Split-Path $RepoRoot -Leaf) -replace '\.', '-') + '-plugins'
+    $marketplace.name = $repoName
     $marketplace.metadata.version = Bump-MinorVersion $marketplace.metadata.version
     Write-Marketplace -Marketplace $marketplace
     Write-Host "Marketplace updated. Version: $($marketplace.metadata.version)"

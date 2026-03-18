@@ -1,11 +1,12 @@
 {
-  "name": "plagueho-os",
+  "name": "plagueho-os-plugins",
   "metadata": {
     "description": "Agent plugin marketplace for PlagueHO organizational assets.",
     "version": "2.0.0"
   },
   "owner": {
     "name": "Daniel Scott-Raynsford",
+    "email": "dscottraynsford@outlook.com",
     "url": "https://github.com/PlagueHO"
   },
   "plugins": [
