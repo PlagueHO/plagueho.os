@@ -9,6 +9,45 @@ Organizational engineering assets for Daniel Scott-Raynsford, including GitHub C
   <img src="docs/images/overview.svg" alt="Repository content overview" width="840"/>
 </p>
 
+## Quickstart
+
+The fastest way to use these assets is through the **VS Code agent plugin
+marketplace**. This gives you access to all the skills and agents directly
+inside GitHub Copilot Chat.
+
+### 1. Enable the marketplace
+
+Add the following to your VS Code `settings.json`:
+
+```json
+"chat.plugins.enabled": true,
+"chat.plugins.marketplaces": [
+    "PlagueHO/plagueho.os"
+]
+```
+
+### 2. Install plugins
+
+Open the Extensions view (`Ctrl+Shift+X`), type `@agentPlugins` in the search
+field, and install the plugins you want.
+
+### 3. Use skills in Copilot Chat
+
+Once installed, skills are automatically available in GitHub Copilot Chat.
+For example:
+
+- *"create a learning pathway for Azure AI Foundry"* — invokes the
+  `create-learning-pathway` skill.
+- *"suggest copilot skills"* — invokes the
+  `suggest-awesome-github-copilot-skills` skill.
+- *"update AVM modules"* — invokes the `update-avm-modules` skill.
+
+### 4. Copy assets directly
+
+You can also copy individual skills, agents, prompts, or scripts into your own
+repositories. See [Asset Categories](#asset-categories) below for where each
+type lives.
+
 ## Repository Structure
 
 ```text
@@ -65,42 +104,28 @@ Assets in this repository are intended to be copied into or referenced from othe
 
 ## Plugin Marketplace
 
-This repository doubles as a VS Code agent plugin marketplace. Skills defined in
-[`.github/skills/`](.github/skills/) are exposed as installable agent plugins via
-[`.github/plugin/marketplace.json`](.github/plugin/marketplace.json).
+This repository doubles as a VS Code agent plugin marketplace. Skills and agents
+defined in [`.github/skills/`](.github/skills/) and
+[`.github/agents/`](.github/agents/) are exposed as installable plugin bundles
+via [`.github/plugin/marketplace.json`](.github/plugin/marketplace.json).
 
-### Installing the Marketplace
-
-Add `PlagueHO/plagueho.os` to the `chat.plugins.marketplaces` setting in your
-VS Code `settings.json`:
-
-```json
-"chat.plugins.enabled": true,
-"chat.plugins.marketplaces": [
-    "PlagueHO/plagueho.os"
-]
-```
-
-Then open the Extensions view (`Ctrl+Shift+X`), enter `@agentPlugins` in the search
-field, and install any skills you want.
+See [Quickstart](#quickstart) above for installation instructions.
 
 ### Available Plugins
 
-| Plugin | Description |
-|--------|-------------|
-| `azure-github-managed-identity` | Provision Azure Managed Identities with OIDC federation for passwordless GitHub Actions auth |
-| `convert-prompt-to-skill` | Convert a `.prompt.md` file into a conformant Agent Skill (SKILL.md) |
-| `create-dotfiles-repo` | Scaffold a dotfiles template repository from an existing workspace |
-| `create-learning-pathway` | Generate structured Learning Pathway documents for Microsoft technologies (L100–L400) |
-| `create-skill-from-pr` | Generate a reusable Agent Skill from a single-purpose Pull Request |
-| `dotnet-sdk-style-upgrade` | Convert legacy .NET project files to modern SDK-style format |
-| `skill-creator` | Create a new Agent Skill from a description following the agentskills.io specification |
-| `suggest-awesome-github-copilot-agents` | Suggest and install Copilot agents from the awesome-copilot repository |
-| `suggest-awesome-github-copilot-instructions` | Suggest and install Copilot instruction files from the awesome-copilot repository |
-| `suggest-awesome-github-copilot-prompts` | Suggest Copilot prompt files from the awesome-copilot repository |
-| `suggest-awesome-github-copilot-skills` | Suggest and install Copilot skills from the awesome-copilot repository |
-| `update-avm-modules` | Update Azure Verified Modules (AVM) to their latest versions in Bicep files |
-| `vscode-profile-sync` | Replicate VS Code Insiders profiles and extensions into VS Code stable |
+Plugins group related skills and agents together. Install a plugin to get all
+the capabilities in its bundle.
+
+| Plugin | Skills | Description |
+|--------|--------|-------------|
+| `suggest-awesome-github-copilot` | `suggest-awesome-github-copilot-agents`, `suggest-awesome-github-copilot-instructions`, `suggest-awesome-github-copilot-prompts`, `suggest-awesome-github-copilot-skills` | Discover and install GitHub Copilot assets from the awesome-copilot repository. |
+| `skill-lifecycle` | `skill-creator`, `convert-prompt-to-skill`, `create-skill-from-pr`, `sensei` | Create, convert, validate, and iteratively improve agent skills. |
+| `azure-infrastructure` | `azure-github-managed-identity`, `update-avm-modules` | Provision Azure identities and manage Azure Verified Module versions. |
+| `azure-architecture-review` | `review-aac-multitenant-guidance` + `saas-startups-multitenancy-and-isv-arb-reviewer` agent | Review Azure Architecture Center multitenant guidance for currency. |
+| `content-and-learning` | `ai-content-readiness-review`, `create-learning-pathway` | Review content for AI readiness and generate Microsoft technology learning pathways. |
+| `developer-environment` | `create-dotfiles-repo`, `vscode-profile-sync` | Scaffold dotfiles repos and sync VS Code profiles across editions. |
+| `dotnet-modernization` | `dotnet-sdk-style-upgrade` | Convert legacy .NET project files to modern SDK-style format. |
+| `marketplace-management` | `update-marketplace` | Discover unassigned skills and agents and maintain the marketplace index. |
 
 ## Agentic Workflows
 

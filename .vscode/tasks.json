@@ -39,10 +39,10 @@
             }
         },
         {
-            "label": "marketplace: sync",
+            "label": "marketplace: discover",
             "type": "shell",
             "command": "pwsh",
-            "args": ["-NoProfile", "-File", "scripts/Sync-MarketplaceJson.ps1"],
+            "args": ["-NoProfile", "-File", ".github/skills/update-marketplace/scripts/Update-Marketplace.ps1", "-Discover"],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
