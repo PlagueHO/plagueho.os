@@ -8,6 +8,7 @@ This directory contains reference documentation, guides, and other materials use
 docs/
 ├── README.md         # This file
 ├── conventions/      # Coding conventions and standards
+├── decisions/        # Architecture Decision Records (ADRs)
 ├── guides/           # How-to guides and tutorials
 └── reference/        # Reference material and cheat sheets
 ```
@@ -16,7 +17,13 @@ docs/
 
 ### Conventions
 
-Standards and conventions for code style, naming, commit messages, branching strategies, and other development practices.
+Standards and conventions for code style, naming, commit messages, branching
+strategies, and other development practices.
+
+### Decisions
+
+Architecture Decision Records (ADRs) capturing significant technical decisions
+and their rationale. See [decisions/](decisions/) for the full list.
 
 ### Guides
 
