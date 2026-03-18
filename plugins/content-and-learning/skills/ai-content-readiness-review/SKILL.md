@@ -59,7 +59,8 @@ Determine if the document includes metadata or front matter such as a title, aut
 
 #### Structure & Templates
 
-Check the organization of the content. Confirm it follows a sensible flow with clear sections and headings. If the content is expected to follow a specific template (how-to guide, FAQ, reference article), verify those elements are present — an introduction, step-by-step sections, and a conclusion. Point out structural improvements such as adding a summary, reordering sections for logical flow, or applying a standard template.
+Check the organization of the content. Confirm it follows a sensible flow with clear sections and headings. If the content is expected to follow a specific template (how-to guide, FAQ, reference article), verify those elements are present — an introduction, step-by-step sections, and a conclusion.
+Point out structural improvements such as adding a summary, reordering sections for logical flow, or applying a standard template.
 
 #### Conversational Tone
 
@@ -71,7 +72,9 @@ Verify that all non-text elements have text equivalents and that content is perc
 
 #### AI-Friendly Formatting
 
-Examine how information is formatted. Look for headings and subheadings to break up topics, bullet or numbered lists for enumerations or steps, and tables for data that would be clearer in rows and columns. Check that paragraphs are succinct (a few sentences each) and that content is not hidden in overly dense text. If the document is a wall of text, suggest breaking it into smaller paragraphs, using lists, or converting repetitive text into a table.
+Examine how information is formatted. Look for headings and subheadings to break up topics, bullet or numbered lists for enumerations or steps, and tables for data that would be clearer in rows and columns.
+Check that paragraphs are succinct (a few sentences each) and that content is not hidden in overly dense text.
+If the document is a wall of text, suggest breaking it into smaller paragraphs, using lists, or converting repetitive text into a table.
 
 ### Step 3 — Compile the Results
 

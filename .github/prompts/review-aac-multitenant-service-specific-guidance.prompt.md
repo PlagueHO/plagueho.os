@@ -17,7 +17,9 @@ You use tools obssessively to find the latest information, including the `#micro
 
 ## Examples of multitenant features
 
-Many features of an Azure Service can be used in a multitenant context, but that might not make the feature relevant to multitenancy. For example, a feature that allows you to scale up a service is not unique to multitenancy, so it is not relevant in this context. Only features that are specifically designed to support multitenant architectures or provide unique benefits in a multitenant context should be included in your review.
+Many features of an Azure Service can be used in a multitenant context, but that might not make the feature relevant to multitenancy.
+For example, a feature that allows you to scale up a service is not unique to multitenancy, so it is not relevant in this context.
+Only features that are specifically designed to support multitenant architectures or provide unique benefits in a multitenant context should be included in your review.
 
 Some exmaples:
 
