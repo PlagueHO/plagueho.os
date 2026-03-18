@@ -2,8 +2,8 @@
 
 This directory contains the VS Code agent plugin marketplace index for
 **plagueho.os**. Plugin skills are defined under
-[`../../plugins/`](../../plugins/) following the canonical
-[github/copilot-plugins](https://github.com/github/copilot-plugins) layout.
+[`../../plugins/`](../../plugins/) following the
+[github/awesome-copilot](https://github.com/github/awesome-copilot) layout.
 
 ## Setup
 
@@ -24,18 +24,26 @@ install the plugins you need.
 ```text
 plugins/
 ├── <plugin-name>/
-│   ├── README.md          # Plugin documentation
+│   ├── .github/
+│   │   └── plugin/
+│   │       └── plugin.json    # Plugin definition (source of truth)
+│   ├── README.md              # Plugin documentation
 │   └── skills/
 │       └── <skill-name>/
 │           └── SKILL.md
 .github/
 ├── plugin/
-│   ├── marketplace.json   # This marketplace index
-│   └── marketplace.schema.json
-└── skills/                # Repo-local skills (not distributed)
-    ├── sensei/            # Git submodule
-    └── update-marketplace/
+│   ├── marketplace.json       # Aggregated marketplace index (generated)
+│   ├── marketplace.schema.json
+│   └── plugin.schema.json     # Schema for individual plugin.json files
+scripts/
+├── Update-MarketplaceFromPlugins.ps1  # PowerShell aggregation script
+└── update-marketplace-from-plugins.sh # Bash aggregation script
 ```
+
+Each plugin contains its own `.github/plugin/plugin.json` that defines its
+metadata, skills, agents, and hooks. The root `marketplace.json` is
+**generated** by aggregating all individual `plugin.json` files.
 
 ## Available Plugins
 
@@ -52,26 +60,49 @@ plugins/
 ## Marketplace Schema
 
 The marketplace index is validated against
-[`marketplace.schema.json`](marketplace.schema.json). Run validation locally:
+[`marketplace.schema.json`](marketplace.schema.json). Individual plugin files
+are validated against [`plugin.schema.json`](plugin.schema.json).
+
+Run validation locally:
 
 ```bash
+# Validate marketplace.json
 npx --yes ajv-cli validate \
   -s .github/plugin/marketplace.schema.json \
   -d .github/plugin/marketplace.json
+
+# Validate individual plugin.json files
+find plugins -path '*/.github/plugin/plugin.json' -exec \
+  npx --yes ajv-cli validate -s .github/plugin/plugin.schema.json -d {} \;
+```
+
+## Rebuilding marketplace.json from plugin.json Files
+
+The marketplace index is regenerated from individual `plugin.json` files using:
+
+```powershell
+# PowerShell
+./scripts/Update-MarketplaceFromPlugins.ps1
+
+# Bash (requires jq)
+./scripts/update-marketplace-from-plugins.sh
 ```
 
 ## Adding a New Plugin
 
 1. Create `plugins/<plugin-name>/skills/<skill-name>/SKILL.md`.
-2. Add a plugin entry in [`marketplace.json`](marketplace.json) with
-   `source: "./plugins/<plugin-name>"` and skills listed as
-   `"./skills/<skill-name>"`.
-3. Run the schema validation above to verify the entry.
-4. Run the `update-marketplace` skill to auto-generate the plugin README:
+2. Create `plugins/<plugin-name>/.github/plugin/plugin.json` with the
+   plugin metadata (see `plugin.schema.json` for the schema).
+3. Run the aggregation script to rebuild `marketplace.json`:
+
+   ```powershell
+   ./scripts/Update-MarketplaceFromPlugins.ps1
+   ```
+
+4. Run the schema validation to verify the result.
+5. Run the `update-marketplace` skill to auto-generate the plugin README:
 
    ```powershell
    & ".github/skills/update-marketplace/scripts/Update-Marketplace.ps1" `
        -RepoRoot "." -UpdateReadmes
    ```
-
-   [`README.md`](../../README.md#available-plugins).

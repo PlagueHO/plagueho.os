@@ -161,21 +161,39 @@ function Generate-PluginReadme {
     param(
         [string]$PluginDir,
         [string]$PluginName,
-        [string]$Description,
-        [array]$Skills
+        [string]$Description
     )
     $title = ($PluginName -replace '-', ' ') -replace '(?:^|\s)\S', { $_.Value.ToUpper() }
     $lines = @()
-    $lines += "# $title"
+    $lines += "# $title Plugin"
     $lines += ''
     $lines += $Description
     $lines += ''
-    $lines += '## What it does'
+    $lines += '## Installation'
     $lines += ''
+    $lines += '```bash'
+    $lines += '# Using Copilot CLI'
+    $lines += "copilot plugin install $PluginName@plagueho-os"
+    $lines += '```'
+    $lines += ''
+    $lines += "## What's Included"
+    $lines += ''
+    $lines += '### Commands (Slash Commands)'
+    $lines += ''
+    $lines += '| Command | Description |'
+    $lines += '|---------|-------------|'
 
-    # Collect skill details for the "What it does" bullets and skill sections
-    $skillDetails = @()
-    foreach ($skillRef in $Skills) {
+    # Read skills from the plugin's own plugin.json
+    $pluginJsonPath = Join-Path $PluginDir '.github' 'plugin' 'plugin.json'
+    $skills = @()
+    if (Test-Path $pluginJsonPath) {
+        $pluginJson = Get-Content -Path $pluginJsonPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($pluginJson.PSObject.Properties['skills']) {
+            $skills = @($pluginJson.skills)
+        }
+    }
+
+    foreach ($skillRef in $skills) {
         $skillName = $skillRef -replace '^\./skills/', ''
         $skillDir = Join-Path $PluginDir 'skills' $skillName
         $skillFile = Join-Path $skillDir 'SKILL.md'
@@ -191,30 +209,22 @@ function Generate-PluginReadme {
                 $purpose = $raw.Trim()
             }
         }
-        $skillDetails += @{ name = $skillName; purpose = $purpose }
-    }
-
-    # Generate bullet list from skill purposes
-    foreach ($s in $skillDetails) {
-        if ($s.purpose) {
-            # Take first sentence for bullet
-            $sentence = $s.purpose -replace '\..*$', ''
-            $bullet = $sentence.Substring(0, 1).ToUpper() + $sentence.Substring(1)
-            $lines += "- $bullet"
-        }
+        $lines += "| ``/$PluginName`:$skillName`` | $purpose |"
     }
 
     $lines += ''
-    $lines += '## Skills'
-
-    foreach ($s in $skillDetails) {
-        $lines += ''
-        $lines += "### ``$($s.name)``"
-        $lines += ''
-        if ($s.purpose) {
-            $lines += "Activated when a user asks to $($s.purpose.Substring(0, 1).ToLower())$($s.purpose.Substring(1))"
-        }
-    }
+    $lines += '### Agents'
+    $lines += ''
+    $lines += '| Agent | Description |'
+    $lines += '|-------|-------------|'
+    $lines += ''
+    $lines += '## Source'
+    $lines += ''
+    $lines += 'This plugin is part of [plagueho.os](https://github.com/PlagueHO/plagueho.os), organizational assets for Daniel Scott-Raynsford.'
+    $lines += ''
+    $lines += '## License'
+    $lines += ''
+    $lines += 'MIT'
 
     $lines += ''
     $readmePath = Join-Path $PluginDir 'README.md'
@@ -230,18 +240,16 @@ function Generate-PluginReadme {
 if ($UpdateReadmes) {
     $marketplace = Read-Marketplace
     foreach ($plugin in $marketplace.plugins) {
-        $pluginDirName = $plugin.source -replace '^\./plugins/', ''
+        $pluginDirName = $plugin.source
         $pluginDirPath = Join-Path $pluginsDir $pluginDirName
         if (-not (Test-Path $pluginDirPath)) {
             Write-Warning "Plugin directory not found: $pluginDirPath"
             continue
         }
-        $skillsList = if ($plugin.PSObject.Properties['skills']) { @($plugin.skills) } else { @() }
         Generate-PluginReadme `
             -PluginDir $pluginDirPath `
             -PluginName $plugin.name `
-            -Description $plugin.description `
-            -Skills $skillsList
+            -Description $plugin.description
     }
     exit 0
 }
@@ -253,15 +261,19 @@ if ($UpdateReadmes) {
 if ($Discover) {
     $marketplace = Read-Marketplace
 
-    # Build a set of all assigned skill paths (relative to repo root)
+    # Build a set of all assigned skill paths by reading each plugin's plugin.json
     $assignedSkills = @{}
     foreach ($plugin in $marketplace.plugins) {
-        $pluginSource = $plugin.source -replace '\\', '/'
-        $skillsList = if ($plugin.PSObject.Properties['skills']) { $plugin.skills } else { @() }
-        foreach ($s in $skillsList) {
-            # Normalize: source + / + skill → e.g., ./plugins/my-plugin/./skills/foo
-            $fullPath = "$pluginSource/$s" -replace '\\', '/' -replace '/\./', '/'
-            $assignedSkills[$fullPath] = $true
+        $pluginDirName = $plugin.source
+        $pluginJsonPath = Join-Path $pluginsDir $pluginDirName '.github' 'plugin' 'plugin.json'
+        if (Test-Path $pluginJsonPath) {
+            $pluginJson = Get-Content -Path $pluginJsonPath -Raw -Encoding UTF8 | ConvertFrom-Json
+            $skillsList = if ($pluginJson.PSObject.Properties['skills']) { @($pluginJson.skills) } else { @() }
+            foreach ($s in $skillsList) {
+                $skillName = $s -replace '^\./skills/', ''
+                $canonicalPath = "./plugins/$pluginDirName/skills/$skillName" -replace '\\', '/'
+                $assignedSkills[$canonicalPath] = $true
+            }
         }
     }
 
@@ -283,7 +295,7 @@ if ($Discover) {
                 }
 
                 # Build the full canonical path
-                $canonicalPath = "./plugins/$($pDir.Name)/./skills/$($sDir.Name)" -replace '/\./', '/'
+                $canonicalPath = "./plugins/$($pDir.Name)/skills/$($sDir.Name)" -replace '\\', '/'
                 if ($assignedSkills.ContainsKey($canonicalPath)) { continue }
 
                 $fm = Read-SkillFrontmatter -Path $skillFile
@@ -329,24 +341,44 @@ if ($NewPlugin) {
         exit 1
     }
 
-    # Canonical source path
-    $pluginSource = "./plugins/$PluginName"
-
     # Create plugin directory structure if it doesn't exist
-    $pluginDirPath = Join-Path $pluginsDir $PluginName 'skills'
-    if (-not (Test-Path $pluginDirPath)) {
-        New-Item -Path $pluginDirPath -ItemType Directory -Force | Out-Null
+    $pluginDirPath = Join-Path $pluginsDir $PluginName
+    $pluginSkillsPath = Join-Path $pluginDirPath 'skills'
+    if (-not (Test-Path $pluginSkillsPath)) {
+        New-Item -Path $pluginSkillsPath -ItemType Directory -Force | Out-Null
     }
 
-    $newPluginObj = [ordered]@{
+    # Create plugin.json in the plugin directory
+    $pluginJsonDir = Join-Path $pluginDirPath '.github' 'plugin'
+    if (-not (Test-Path $pluginJsonDir)) {
+        New-Item -Path $pluginJsonDir -ItemType Directory -Force | Out-Null
+    }
+    $pluginJsonObj = [ordered]@{
         name        = $PluginName
-        source      = $pluginSource
         description = $PluginDescription
         version     = '1.0.0'
+        author      = [ordered]@{
+            name = 'Daniel Scott-Raynsford'
+            url  = 'https://github.com/PlagueHO'
+        }
+        repository  = 'https://github.com/PlagueHO/plagueho.os'
+        license     = 'MIT'
+        keywords    = @()
         skills      = @()
     }
+    if ($AddSkill) { $pluginJsonObj.skills = @($AddSkill) }
+    $pluginJsonPath = Join-Path $pluginJsonDir 'plugin.json'
+    $json = ($pluginJsonObj | ConvertTo-Json -Depth 10) + "`n"
+    Set-Content -Path $pluginJsonPath -Value $json -Encoding UTF8 -NoNewline
+    Write-Host "Created plugin.json: $pluginJsonPath"
 
-    if ($AddSkill) { $newPluginObj.skills = @($AddSkill) }
+    # Add marketplace entry (source is just the directory name)
+    $newPluginObj = [ordered]@{
+        name        = $PluginName
+        source      = $PluginName
+        description = $PluginDescription
+        version     = '1.0.0'
+    }
 
     # Add to plugins array (sorted by name)
     $pluginsList = [System.Collections.ArrayList]@($marketplace.plugins)
@@ -358,21 +390,29 @@ if ($NewPlugin) {
     Write-Host "Created new plugin '$PluginName'."
 }
 else {
-    # Add to existing plugin
+    # Add to existing plugin's plugin.json
     $plugin = $marketplace.plugins | Where-Object { $_.name -eq $PluginName }
     if (-not $plugin) {
         Write-Error "Plugin '$PluginName' not found. Use -NewPlugin to create it."
         exit 1
     }
 
+    $pluginDirPath = Join-Path $pluginsDir $plugin.source
+    $pluginJsonPath = Join-Path $pluginDirPath '.github' 'plugin' 'plugin.json'
+    if (-not (Test-Path $pluginJsonPath)) {
+        Write-Error "plugin.json not found at: $pluginJsonPath"
+        exit 1
+    }
+    $pluginJson = Get-Content -Path $pluginJsonPath -Raw -Encoding UTF8 | ConvertFrom-Json
+
     if ($AddSkill) {
-        if (-not $plugin.PSObject.Properties['skills']) {
-            $plugin | Add-Member -NotePropertyName 'skills' -NotePropertyValue @() -Force
+        if (-not $pluginJson.PSObject.Properties['skills']) {
+            $pluginJson | Add-Member -NotePropertyName 'skills' -NotePropertyValue @() -Force
         }
-        $existingSkills = @($plugin.skills)
+        $existingSkills = @($pluginJson.skills)
         if ($AddSkill -notin $existingSkills) {
-            $plugin.skills = @($existingSkills + $AddSkill)
-            $plugin.version = Bump-MinorVersion $plugin.version
+            $pluginJson.skills = @($existingSkills + $AddSkill)
+            $pluginJson.version = Bump-MinorVersion $pluginJson.version
             $changed = $true
             Write-Host "Added skill '$AddSkill' to plugin '$PluginName'."
         }
@@ -382,19 +422,28 @@ else {
     }
 
     if ($AddAgent) {
-        if (-not $plugin.PSObject.Properties['agents']) {
-            $plugin | Add-Member -NotePropertyName 'agents' -NotePropertyValue @() -Force
+        if (-not $pluginJson.PSObject.Properties['agents']) {
+            $pluginJson | Add-Member -NotePropertyName 'agents' -NotePropertyValue @() -Force
         }
-        $existingAgents = @($plugin.agents)
+        $existingAgents = @($pluginJson.agents)
         if ($AddAgent -notin $existingAgents) {
-            $plugin.agents = @($existingAgents + $AddAgent)
-            $plugin.version = Bump-MinorVersion $plugin.version
+            $pluginJson.agents = @($existingAgents + $AddAgent)
+            $pluginJson.version = Bump-MinorVersion $pluginJson.version
             $changed = $true
             Write-Host "Added agent '$AddAgent' to plugin '$PluginName'."
         }
         else {
             Write-Host "Agent '$AddAgent' already exists in plugin '$PluginName'. Skipping."
         }
+    }
+
+    if ($changed) {
+        # Update the version in marketplace.json to match
+        $plugin.version = $pluginJson.version
+        # Write updated plugin.json
+        $json = ($pluginJson | ConvertTo-Json -Depth 10) + "`n"
+        Set-Content -Path $pluginJsonPath -Value $json -Encoding UTF8 -NoNewline
+        Write-Host "Updated plugin.json: $pluginJsonPath"
     }
 }
 

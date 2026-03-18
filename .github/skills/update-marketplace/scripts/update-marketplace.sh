@@ -11,7 +11,6 @@
 #   --add-agent <path>       Add an agent path to the plugin.
 #   --new-plugin             Create a new plugin entry.
 #   --plugin-description <d> Description for the new plugin.
-#   --plugin-source <path>   Source path for the new plugin.
 #   --repo-root <path>       Repository root (default: 4 levels up from script).
 #
 # Requires: jq
@@ -26,7 +25,6 @@ ADD_SKILL=""
 ADD_AGENT=""
 NEW_PLUGIN=false
 PLUGIN_DESCRIPTION=""
-PLUGIN_SOURCE=""
 
 # ---------------------------------------------------------------------------
 # Parse arguments
@@ -41,7 +39,6 @@ while [[ $# -gt 0 ]]; do
         --add-agent)        ADD_AGENT="$2"; shift 2 ;;
         --new-plugin)       NEW_PLUGIN=true; shift ;;
         --plugin-description) PLUGIN_DESCRIPTION="$2"; shift 2 ;;
-        --plugin-source)    PLUGIN_SOURCE="$2"; shift 2 ;;
         *)
             echo "Unknown option: $1" >&2
             exit 1
@@ -157,24 +154,17 @@ if $DISCOVER; then
 
     marketplace="$(cat "$MARKETPLACE_PATH")"
 
-    # Build a list of all assigned skill sources and agent references
-    assigned_skills="$(echo "$marketplace" | jq -r '
-        [.plugins[] | . as $p |
-            (.skills // [] | .[] |
-                if . == "." then $p.source
-                else ($p.source + "/" + .)
-                end
-            )
-        ] | .[]'
-    )"
-
-    assigned_agents="$(echo "$marketplace" | jq -r '
-        [.plugins[] | . as $p |
-            (.agents // [] | .[] |
-                ($p.source + "/" + .)
-            )
-        ] | .[]'
-    )"
+    # Build a list of all assigned skill paths by reading each plugin's plugin.json
+    assigned_skills=""
+    for plugin_name in $(echo "$marketplace" | jq -r '.plugins[].source'); do
+        plugin_json_path="$REPO_ROOT/plugins/$plugin_name/.github/plugin/plugin.json"
+        if [[ -f "$plugin_json_path" ]]; then
+            while IFS= read -r skill; do
+                skill_name="${skill#./skills/}"
+                assigned_skills+="./plugins/$plugin_name/skills/$skill_name"$'\n'
+            done < <(jq -r '.skills // [] | .[]' "$plugin_json_path")
+        fi
+    done
 
     results="[]"
 
@@ -253,10 +243,6 @@ if $NEW_PLUGIN; then
         echo "Error: --plugin-description is required for new plugins." >&2
         exit 1
     fi
-    if [[ -z "$PLUGIN_SOURCE" ]]; then
-        echo "Error: --plugin-source is required for new plugins." >&2
-        exit 1
-    fi
 
     # Check plugin doesn't already exist
     existing="$(jq -r --arg n "$PLUGIN_NAME" '.plugins[] | select(.name == $n) | .name' "$MARKETPLACE_PATH")"
@@ -265,21 +251,30 @@ if $NEW_PLUGIN; then
         exit 1
     fi
 
-    new_plugin="$(jq -n \
+    # Create plugin directory structure
+    plugin_dir="$REPO_ROOT/plugins/$PLUGIN_NAME"
+    mkdir -p "$plugin_dir/skills"
+    mkdir -p "$plugin_dir/.github/plugin"
+
+    # Create plugin.json
+    plugin_json="$(jq -n \
         --arg name "$PLUGIN_NAME" \
-        --arg source "$PLUGIN_SOURCE" \
         --arg desc "$PLUGIN_DESCRIPTION" \
-        '{name: $name, source: $source, description: $desc, version: "1.0.0", skills: [], agents: []}')"
+        '{name: $name, description: $desc, version: "1.0.0", author: {name: "Daniel Scott-Raynsford", url: "https://github.com/PlagueHO"}, repository: "https://github.com/PlagueHO/plagueho.os", license: "MIT", keywords: [], skills: []}')"
 
     if [[ -n "$ADD_SKILL" ]]; then
-        new_plugin="$(echo "$new_plugin" | jq --arg s "$ADD_SKILL" '.skills += [$s]')"
-    fi
-    if [[ -n "$ADD_AGENT" ]]; then
-        new_plugin="$(echo "$new_plugin" | jq --arg a "$ADD_AGENT" '.agents += [$a]')"
+        plugin_json="$(echo "$plugin_json" | jq --arg s "$ADD_SKILL" '.skills += [$s]')"
     fi
 
-    # Remove empty arrays
-    new_plugin="$(echo "$new_plugin" | jq 'if (.skills | length) == 0 then del(.skills) else . end | if (.agents | length) == 0 then del(.agents) else . end')"
+    echo "$plugin_json" | jq . > "$plugin_dir/.github/plugin/plugin.json"
+    echo "Created plugin.json: $plugin_dir/.github/plugin/plugin.json"
+
+    # Add marketplace entry (source is just the directory name)
+    new_plugin="$(jq -n \
+        --arg name "$PLUGIN_NAME" \
+        --arg source "$PLUGIN_NAME" \
+        --arg desc "$PLUGIN_DESCRIPTION" \
+        '{name: $name, source: $source, description: $desc, version: "1.0.0"}')"
 
     # Add plugin and sort by name
     jq --argjson p "$new_plugin" '.plugins += [$p] | .plugins |= sort_by(.name)' "$MARKETPLACE_PATH" > "${MARKETPLACE_PATH}.tmp"
@@ -287,21 +282,33 @@ if $NEW_PLUGIN; then
     changed=true
     echo "Created new plugin '$PLUGIN_NAME'."
 else
-    # Add to existing plugin
+    # Add to existing plugin's plugin.json
     existing="$(jq -r --arg n "$PLUGIN_NAME" '.plugins[] | select(.name == $n) | .name' "$MARKETPLACE_PATH")"
     if [[ -z "$existing" ]]; then
         echo "Error: Plugin '$PLUGIN_NAME' not found. Use --new-plugin to create it." >&2
         exit 1
     fi
 
+    plugin_source="$(jq -r --arg n "$PLUGIN_NAME" '.plugins[] | select(.name == $n) | .source' "$MARKETPLACE_PATH")"
+    plugin_json_path="$REPO_ROOT/plugins/$plugin_source/.github/plugin/plugin.json"
+
+    if [[ ! -f "$plugin_json_path" ]]; then
+        echo "Error: plugin.json not found at: $plugin_json_path" >&2
+        exit 1
+    fi
+
     if [[ -n "$ADD_SKILL" ]]; then
-        already="$(jq -r --arg n "$PLUGIN_NAME" --arg s "$ADD_SKILL" \
-            '.plugins[] | select(.name == $n) | .skills // [] | .[] | select(. == $s)' "$MARKETPLACE_PATH")"
+        already="$(jq -r --arg s "$ADD_SKILL" '.skills // [] | .[] | select(. == $s)' "$plugin_json_path")"
         if [[ -z "$already" ]]; then
-            current_ver="$(jq -r --arg n "$PLUGIN_NAME" '.plugins[] | select(.name == $n) | .version' "$MARKETPLACE_PATH")"
+            current_ver="$(jq -r '.version' "$plugin_json_path")"
             new_ver="$(bump_minor_version "$current_ver")"
-            jq --arg n "$PLUGIN_NAME" --arg s "$ADD_SKILL" --arg v "$new_ver" \
-                '(.plugins[] | select(.name == $n)) |= (.skills = ((.skills // []) + [$s]) | .version = $v)' \
+            jq --arg s "$ADD_SKILL" --arg v "$new_ver" \
+                '.skills = ((.skills // []) + [$s]) | .version = $v' \
+                "$plugin_json_path" > "${plugin_json_path}.tmp"
+            mv "${plugin_json_path}.tmp" "$plugin_json_path"
+            # Update version in marketplace.json
+            jq --arg n "$PLUGIN_NAME" --arg v "$new_ver" \
+                '(.plugins[] | select(.name == $n)) |= .version = $v' \
                 "$MARKETPLACE_PATH" > "${MARKETPLACE_PATH}.tmp"
             mv "${MARKETPLACE_PATH}.tmp" "$MARKETPLACE_PATH"
             changed=true
@@ -312,13 +319,17 @@ else
     fi
 
     if [[ -n "$ADD_AGENT" ]]; then
-        already="$(jq -r --arg n "$PLUGIN_NAME" --arg a "$ADD_AGENT" \
-            '.plugins[] | select(.name == $n) | .agents // [] | .[] | select(. == $a)' "$MARKETPLACE_PATH")"
+        already="$(jq -r --arg a "$ADD_AGENT" '.agents // [] | .[] | select(. == $a)' "$plugin_json_path")"
         if [[ -z "$already" ]]; then
-            current_ver="$(jq -r --arg n "$PLUGIN_NAME" '.plugins[] | select(.name == $n) | .version' "$MARKETPLACE_PATH")"
+            current_ver="$(jq -r '.version' "$plugin_json_path")"
             new_ver="$(bump_minor_version "$current_ver")"
-            jq --arg n "$PLUGIN_NAME" --arg a "$ADD_AGENT" --arg v "$new_ver" \
-                '(.plugins[] | select(.name == $n)) |= (.agents = ((.agents // []) + [$a]) | .version = $v)' \
+            jq --arg a "$ADD_AGENT" --arg v "$new_ver" \
+                '.agents = ((.agents // []) + [$a]) | .version = $v' \
+                "$plugin_json_path" > "${plugin_json_path}.tmp"
+            mv "${plugin_json_path}.tmp" "$plugin_json_path"
+            # Update version in marketplace.json
+            jq --arg n "$PLUGIN_NAME" --arg v "$new_ver" \
+                '(.plugins[] | select(.name == $n)) |= .version = $v' \
                 "$MARKETPLACE_PATH" > "${MARKETPLACE_PATH}.tmp"
             mv "${MARKETPLACE_PATH}.tmp" "$MARKETPLACE_PATH"
             changed=true

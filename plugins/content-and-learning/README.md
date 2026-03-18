@@ -1,22 +1,32 @@
-# Content and Learning
+# Content and Learning Plugin
 
 Content quality and learning plugin that reviews documents for AI readiness and generates structured Microsoft technology learning pathways.
 
-## What it does
+## Installation
 
-Content and Learning helps produce high-quality technical content by:
+```bash
+# Using Copilot CLI
+copilot plugin install content-and-learning@plagueho-os
+```
 
-- Evaluating documents against AI-optimized content guidelines
-- Assessing accuracy, metadata tagging, structure, tone, and accessibility
-- Generating structured learning pathways (L100–L400) for Microsoft technologies
-- Sourcing training modules and documentation from Microsoft Learn via MCP tools
+## What's Included
 
-## Skills
+### Commands (Slash Commands)
 
-### `ai-content-readiness-review`
+| Command | Description |
+|---------|-------------|
+| `/content-and-learning:ai-content-readiness-review` | Review documents for compliance with AI-optimized content guidelines. Evaluates accuracy, metadata tagging, structure, tone, accessibility, and AI-friendly formatting. |
+| `/content-and-learning:create-learning-pathway` | Generate structured Learning Pathway documents for Microsoft technologies, progressing L100–L400. |
 
-Activated when a user asks to review content for AI readiness or perform an AI content audit. Reads the document and evaluates it against criteria including accuracy, metadata tagging, structure, tone, accessibility, and AI-friendly formatting.
+### Agents
 
-### `create-learning-pathway`
+| Agent | Description |
+|-------|-------------|
 
-Activated when a user asks to create a learning pathway, study guide, or skilling roadmap for a Microsoft technology. Queries Microsoft Learn MCP tools for relevant modules and generates a structured document progressing from L100 (introductory) through L400 (expert).
+## Source
+
+This plugin is part of [plagueho.os](https://github.com/PlagueHO/plagueho.os), organizational assets for Daniel Scott-Raynsford.
+
+## License
+
+MIT

@@ -23,6 +23,10 @@
         "version": {
           "type": "string",
           "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "pluginRoot": {
+          "type": "string",
+          "description": "Relative path to the plugins directory."
         }
       }
     },
@@ -60,7 +64,7 @@
           "source": {
             "type": "string",
             "minLength": 1,
-            "description": "Relative path to the plugin directory."
+            "description": "Plugin directory name within pluginRoot."
           },
           "description": {
             "type": "string",
@@ -69,27 +73,6 @@
           "version": {
             "type": "string",
             "pattern": "^\\d+\\.\\d+\\.\\d+$"
-          },
-          "skills": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            }
-          },
-          "agents": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            }
-          },
-          "hooks": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            }
           }
         }
       }

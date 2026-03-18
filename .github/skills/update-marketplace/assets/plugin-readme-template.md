@@ -1,13 +1,32 @@
-# {{PLUGIN_TITLE}}
+# {{PLUGIN_TITLE}} Plugin
 
 {{PLUGIN_DESCRIPTION}}
 
-## What it does
+## Installation
 
-{{PLUGIN_TITLE}} helps agents by:
+```bash
+# Using Copilot CLI
+copilot plugin install {{PLUGIN_NAME}}@plagueho-os
+```
 
-{{WHAT_IT_DOES_BULLETS}}
+## What's Included
 
-## Skills
+### Commands (Slash Commands)
 
-{{SKILLS_SECTIONS}}
+| Command | Description |
+|---------|-------------|
+| {{SKILLS_TABLE_ROWS}} | {{SKILLS_TABLE_ROWS}} |
+
+### Agents
+
+| Agent | Description |
+|-------|-------------|
+| {{AGENTS_TABLE_ROWS}} | {{AGENTS_TABLE_ROWS}} |
+
+## Source
+
+This plugin is part of [plagueho.os](https://github.com/PlagueHO/plagueho.os), organizational assets for Daniel Scott-Raynsford.
+
+## License
+
+MIT

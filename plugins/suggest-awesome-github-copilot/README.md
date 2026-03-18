@@ -1,30 +1,34 @@
-# Suggest Awesome GitHub Copilot
+# Suggest Awesome GitHub Copilot Plugin
 
-Discovery plugin that suggests and installs GitHub Copilot assets from the [awesome-copilot](https://github.com/PlagueHO/awesome-copilot) community repository.
+Discovery plugin that suggests and installs GitHub Copilot assets from the [awesome-copilot](https://github.com/github/awesome-copilot) community repository.
 
-## What it does
+## Installation
 
-Suggest Awesome GitHub Copilot connects to the curated awesome-copilot list to:
+```bash
+# Using Copilot CLI
+copilot plugin install suggest-awesome-github-copilot@plagueho-os
+```
 
-- Browse community-contributed agents, instructions, prompts, and skills
-- Detect duplicates and outdated versions already installed locally
-- Install selected assets directly into your workspace
-- Keep local Copilot customizations up to date with the community
+## What's Included
 
-## Skills
+### Commands (Slash Commands)
 
-### `suggest-awesome-github-copilot-agents`
+| Command | Description |
+|---------|-------------|
+| `/suggest-awesome-github-copilot:suggest-awesome-github-copilot-agents` | Suggest and install GitHub Copilot Custom Agents from the awesome-copilot repository, detecting duplicates and outdated local agents. |
+| `/suggest-awesome-github-copilot:suggest-awesome-github-copilot-instructions` | Suggest and install GitHub Copilot instruction files from the awesome-copilot repository, detecting duplicates and outdated local instructions. |
+| `/suggest-awesome-github-copilot:suggest-awesome-github-copilot-prompts` | Suggest and install GitHub Copilot prompt files from the awesome-copilot repository, detecting duplicates and outdated local prompts. |
+| `/suggest-awesome-github-copilot:suggest-awesome-github-copilot-skills` | Suggest and install GitHub Copilot skills from the awesome-copilot repository, detecting duplicates and outdated local skills. |
 
-Activated when a user asks to find or suggest Copilot agents. Fetches the agents list from the awesome-copilot repository, compares against locally installed agents, and presents suggestions with options to install.
+### Agents
 
-### `suggest-awesome-github-copilot-instructions`
+| Agent | Description |
+|-------|-------------|
 
-Activated when a user asks to find or suggest Copilot instructions. Fetches the instructions list from the awesome-copilot repository, detects duplicates and outdated local versions, and offers installation.
+## Source
 
-### `suggest-awesome-github-copilot-prompts`
+This plugin is part of [plagueho.os](https://github.com/PlagueHO/plagueho.os), organizational assets for Daniel Scott-Raynsford.
 
-Activated when a user asks to find or suggest Copilot prompts. Fetches the prompts list from the awesome-copilot repository, detects duplicates and outdated local versions, and offers installation.
+## License
 
-### `suggest-awesome-github-copilot-skills`
-
-Activated when a user asks to find or suggest Copilot skills. Fetches the skills list from the awesome-copilot repository, detects duplicates and outdated local versions, and offers installation.
+MIT

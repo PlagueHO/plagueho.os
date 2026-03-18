@@ -1,18 +1,31 @@
-# .NET Modernization
+# .NET Modernization Plugin
 
 Modernization plugin that converts legacy .NET project files to the modern SDK-style format.
 
-## What it does
+## Installation
 
-.NET Modernization helps upgrade legacy .NET projects by:
+```bash
+# Using Copilot CLI
+copilot plugin install dotnet-modernization@plagueho-os
+```
 
-- Analyzing `.csproj`, `.fsproj`, and `.vbproj` files for legacy patterns
-- Converting project files to the modern SDK-style format
-- Migrating package references, build properties, and project settings
-- Validating the converted project builds correctly
+## What's Included
 
-## Skills
+### Commands (Slash Commands)
 
-### `dotnet-sdk-style-upgrade`
+| Command | Description |
+|---------|-------------|
+| `/dotnet-modernization:dotnet-sdk-style-upgrade` | Convert legacy .NET project files (.csproj, .fsproj, .vbproj) to modern SDK-style format. |
 
-Activated when a user asks to modernize a .NET project or upgrade a project file to SDK-style. Analyzes the legacy project XML, maps properties and references to their SDK-style equivalents, and produces a converted project file.
+### Agents
+
+| Agent | Description |
+|-------|-------------|
+
+## Source
+
+This plugin is part of [plagueho.os](https://github.com/PlagueHO/plagueho.os), organizational assets for Daniel Scott-Raynsford.
+
+## License
+
+MIT

@@ -1,26 +1,33 @@
-# Skill Lifecycle
+# Skill Lifecycle Plugin
 
 Skill authoring plugin that creates, converts, and generates GitHub Copilot Agent Skills from various sources.
 
-## What it does
+## Installation
 
-Skill Lifecycle streamlines agent skill development by:
+```bash
+# Using Copilot CLI
+copilot plugin install skill-lifecycle@plagueho-os
+```
 
-- Scaffolding new skills from a description, following the [agentskills.io](https://agentskills.io) specification
-- Converting existing `.prompt.md` files into fully conformant `SKILL.md` definitions
-- Extracting reusable skills from single-purpose pull requests
-- Generating YAML frontmatter, directory structure, and validation scripts
+## What's Included
 
-## Skills
+### Commands (Slash Commands)
 
-### `skill-creator`
+| Command | Description |
+|---------|-------------|
+| `/skill-lifecycle:skill-creator` | Create a new Agent Skill from a description and goal, following the agentskills.io specification. Scaffolds directory structure, generates SKILL.md with YAML frontmatter, and validates the result. |
+| `/skill-lifecycle:convert-prompt-to-skill` | Convert an existing GitHub Copilot prompt file (.prompt.md) into a conformant Agent Skill (SKILL.md) following the agentskills.io specification. |
+| `/skill-lifecycle:create-skill-from-pr` | Generate a reusable GitHub Copilot Agent Skill from a single-purpose refactoring or tech debt Pull Request. |
 
-Activated when a user asks to create a new skill or scaffold a skill from scratch. Interviews the user for a description and goal, generates a `SKILL.md` with YAML frontmatter following the agentskills.io specification, scaffolds the directory structure, and validates the result.
+### Agents
 
-### `convert-prompt-to-skill`
+| Agent | Description |
+|-------|-------------|
 
-Activated when a user asks to convert a prompt to a skill or upgrade a `.prompt.md` file. Evaluates the prompt for suitability, maps its content to the skill specification, and scaffolds the full skill directory with `SKILL.md` and supporting scripts.
+## Source
 
-### `create-skill-from-pr`
+This plugin is part of [plagueho.os](https://github.com/PlagueHO/plagueho.os), organizational assets for Daniel Scott-Raynsford.
 
-Activated when a user asks to create a skill from a pull request. Reads the PR diff via GitHub MCP tools, identifies the reusable refactoring or tech debt pattern, and generates a skill definition that can be applied to similar codebases.
+## License
+
+MIT

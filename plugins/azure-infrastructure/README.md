@@ -1,22 +1,32 @@
-# Azure Infrastructure
+# Azure Infrastructure Plugin
 
 Infrastructure management plugin that provisions Azure identities for GitHub and keeps Azure Verified Module references up to date.
 
-## What it does
+## Installation
 
-Azure Infrastructure automates common Azure infrastructure tasks by:
+```bash
+# Using Copilot CLI
+copilot plugin install azure-infrastructure@plagueho-os
+```
 
-- Provisioning User Assigned Managed Identities with OIDC federation for passwordless GitHub Actions authentication
-- Configuring RBAC role assignments for GitHub-to-Azure workflows
-- Scanning Bicep files for Azure Verified Module (AVM) references
-- Querying the Microsoft Container Registry for latest AVM versions and applying updates
+## What's Included
 
-## Skills
+### Commands (Slash Commands)
 
-### `azure-github-managed-identity`
+| Command | Description |
+|---------|-------------|
+| `/azure-infrastructure:azure-github-managed-identity` | Provision Azure User Assigned Managed Identities with OIDC federation and RBAC for passwordless GitHub authentication. |
+| `/azure-infrastructure:update-avm-modules` | Update Azure Verified Modules (AVM) to their latest versions in Bicep files. Scans for AVM module references, queries MCR for latest versions, and applies updates with validation. |
 
-Activated when a user asks to set up Azure access for GitHub Actions or configure OIDC federation. Provisions a User Assigned Managed Identity, configures federated credentials for GitHub, and assigns RBAC roles — all via PowerShell scripts using the Azure CLI.
+### Agents
 
-### `update-avm-modules`
+| Agent | Description |
+|-------|-------------|
 
-Activated when a user asks to update Azure Verified Modules in Bicep files. Scans for AVM module references, queries the Microsoft Container Registry for latest versions, compares using semantic versioning, reviews breaking changes, and applies updates with validation.
+## Source
+
+This plugin is part of [plagueho.os](https://github.com/PlagueHO/plagueho.os), organizational assets for Daniel Scott-Raynsford.
+
+## License
+
+MIT

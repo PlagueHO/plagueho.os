@@ -1,22 +1,32 @@
-# Developer Environment
+# Developer Environment Plugin
 
 Developer environment plugin that scaffolds dotfiles repositories and synchronizes VS Code profiles across editions.
 
-## What it does
+## Installation
 
-Developer Environment automates environment setup tasks by:
+```bash
+# Using Copilot CLI
+copilot plugin install developer-environment@plagueho-os
+```
 
-- Scanning existing workspaces for shell, git, editor, and package configurations
-- Scaffolding dotfiles template repositories with bootstrap installers
-- Discovering VS Code profiles and extensions across Stable and Insiders editions
-- Syncing extensions between editions with dry-run and selective sync support
+## What's Included
 
-## Skills
+### Commands (Slash Commands)
 
-### `create-dotfiles-repo`
+| Command | Description |
+|---------|-------------|
+| `/developer-environment:create-dotfiles-repo` | Scaffold a dotfiles template repository in a GitHub Organization from an existing workspace. Scans for shell, git, editor, and package configs and generates bootstrap installers. |
+| `/developer-environment:vscode-profile-sync` | Replicate VS Code Insiders profiles and extensions into VS Code stable. Discovers profiles, diffs extensions, installs missing ones, and optionally removes extras. |
 
-Activated when a user asks to create a dotfiles repo or export their configuration. Scans the workspace for config files, interviews the user for preferences, and scaffolds a dotfiles template repository in a GitHub Organization with bootstrap installers for multiple platforms.
+### Agents
 
-### `vscode-profile-sync`
+| Agent | Description |
+|-------|-------------|
 
-Activated when a user asks to sync VS Code profiles or copy profiles from Insiders. Discovers profiles across VS Code editions, diffs extensions, installs missing ones, and optionally removes extras. Supports dry-run mode and selective profile sync.
+## Source
+
+This plugin is part of [plagueho.os](https://github.com/PlagueHO/plagueho.os), organizational assets for Daniel Scott-Raynsford.
+
+## License
+
+MIT

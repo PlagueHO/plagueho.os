@@ -1,22 +1,32 @@
-# Azure Architecture Review
+# Azure Architecture Review Plugin
 
 Architecture review plugin that evaluates Azure Architecture Center multitenant guidance and documentation for currency, accuracy, and completeness.
 
-## What it does
+## Installation
 
-Azure Architecture Review helps maintain high-quality multitenant architecture guidance by:
+```bash
+# Using Copilot CLI
+copilot plugin install azure-architecture-review@plagueho-os
+```
 
-- Reviewing service-specific multitenant guidance for changes since last review
-- Evaluating documentation structure, accuracy, and style against AAC standards
-- Producing categorized reports with actionable findings
-- Cross-referencing against Microsoft Learn source content via MCP tools
+## What's Included
 
-## Skills
+### Commands (Slash Commands)
 
-### `review-aac-multitenant-guidance`
+| Command | Description |
+|---------|-------------|
+| `/azure-architecture-review:review-aac-multitenant-guidance` | Review Azure Architecture Center multitenant service-specific guidance for currency. Produces a structured report of multitenant-relevant changes. |
+| `/azure-architecture-review:review-aac-multitenant-doc` | Review Azure Architecture Center multitenant documentation for accuracy, structure, and style. Produces a categorized review report. |
 
-Activated when a user asks to review Azure Architecture Center multitenant service-specific guidance for currency. Fetches the live documentation via Microsoft Learn MCP tools, compares against known patterns, and produces a structured report of multitenant-relevant changes.
+### Agents
 
-### `review-aac-multitenant-doc`
+| Agent | Description |
+|-------|-------------|
 
-Activated when a user asks to review a specific AAC multitenant documentation page for accuracy, structure, and style. Evaluates the document against AAC conventions and produces a categorized review report with recommendations.
+## Source
+
+This plugin is part of [plagueho.os](https://github.com/PlagueHO/plagueho.os), organizational assets for Daniel Scott-Raynsford.
+
+## License
+
+MIT
