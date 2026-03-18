@@ -2,7 +2,7 @@
   "name": "plagueho-os",
   "metadata": {
     "description": "Agent plugin marketplace for PlagueHO organizational assets.",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   "owner": {
     "name": "Daniel Scott-Raynsford",
@@ -48,12 +48,12 @@
     },
     {
       "name": "azure-architecture-review",
-      "source": "./.github",
+      "source": "./.github/skills",
       "description": "Review Azure Architecture Center multitenant guidance for currency.",
       "version": "2.0.0",
       "skills": [
-        "skills/review-aac-multitenant-guidance",
-        "skills/review-aac-multitenant-doc"
+        "review-aac-multitenant-guidance",
+        "review-aac-multitenant-doc"
       ]
     },
     {
@@ -80,21 +80,21 @@
     },
     {
       "name": "dotnet-modernization",
-      "source": "./.github/skills/dotnet-sdk-style-upgrade",
+      "source": "./.github/skills",
       "description": "Convert legacy .NET project files to modern SDK-style format.",
       "version": "1.0.0",
       "skills": [
-        "."
+        "dotnet-sdk-style-upgrade"
       ],
       "agents": []
     },
     {
       "name": "marketplace-management",
-      "source": "./.github/skills/update-marketplace",
+      "source": "./.github/skills",
       "description": "Discover unassigned skills and agents and maintain the marketplace index.",
       "version": "1.0.0",
       "skills": [
-        "."
+        "update-marketplace"
       ],
       "agents": []
     }
