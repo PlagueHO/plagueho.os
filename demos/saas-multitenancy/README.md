@@ -5,6 +5,4 @@ reference implementations.
 
 ## Demos
 
-<!-- Dozer adds entries here as demos are built -->
-
-*No demos yet — squad is bootstrapping.*
+*No demos yet.*

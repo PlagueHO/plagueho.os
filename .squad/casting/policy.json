@@ -1,8 +1,0 @@
-{
-  "universe": "the-matrix",
-  "agent_count": 5,
-  "scribe_exempt": true,
-  "ralph_exempt": true,
-  "allow_duplicates": false,
-  "casting_strategy": "resonance"
-}

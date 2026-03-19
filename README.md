@@ -20,52 +20,6 @@ development.
   <img src="docs/images/overview.svg" alt="Repository content overview" width="840"/>
 </p>
 
-## The Squad — My AI Demo Factory
-
-This repo is powered by [Squad](https://github.com/bradygaster/squad), an AI
-agent team that lives in the repository and continuously builds bleeding-edge
-demos. Cast from **The Matrix** universe, the squad autonomously discovers what
-to build (via WorkIQ intelligence), builds it, tests it, and delivers
-Build-keynote-quality demos daily.
-
-| Agent | Role | Mission |
-|-------|------|---------|
-| 🏗️ **Neo** | Lead Architect | Architecture decisions, demo quality gate ("Would Satya demo this?") |
-| 🔧 **Trinity** | Demo Engineer | Builds bleeding-edge Azure AI, Copilot, and .NET demos |
-| 📝 **Morpheus** | DevRel & Evangelist | Narratives, talk tracks, and presentation content |
-| 📊 **Oracle** | Intelligence Analyst | Mines WorkIQ for partner conversations and trending topics |
-| 🔒 **Dozer** | SaaS & Multitenancy | ARB patterns, tenant isolation, Entra ID integration |
-| 📋 **Scribe** | Session Logger | Records decisions, history, and team wisdom |
-| 🔄 **Ralph** | Work Monitor | Heartbeat, triage, backlog management |
-| 🤖 **@copilot** | Coding Agent | Auto-picks up well-defined tasks autonomously |
-
-### How It Works
-
-1. **Oracle** queries WorkIQ to identify what Daniel is discussing with partners
-   and customers, then proposes demos aligned with those conversations.
-2. A **daily GitHub Actions workflow** auto-creates a new demo issue each day.
-3. **Neo** triages issues and assigns to the right squad member.
-4. **Trinity** builds the demo, **Morpheus** writes the narrative, **Dozer**
-   adds multitenancy patterns where relevant.
-5. **Neo** reviews every demo PR against the quality bar: *"Would Satya demo
-   this on stage at Build?"*
-
-### Starting a Session
-
-```bash
-# In Copilot CLI
-copilot --yolo
-# Then type /agent and select Squad
-
-# Or talk to the team directly
-"Oracle, run an intelligence scan. What should we build next?"
-"Trinity, build the demo for issue #11"
-"Team, what's our status?"
-```
-
-See [`docs/workiq-intelligence-loop.md`](docs/workiq-intelligence-loop.md) for
-the full intelligence gathering protocol.
-
 ## Demos ([`demos/`](demos/))
 
 Build-keynote-quality demos organized by technology area. Every demo is
@@ -84,27 +38,20 @@ self-contained with README, source code, and deployment instructions.
 ```text
 PlagueHO-OS/
 ├── .github/                    # GitHub configuration
-│   ├── agents/                 # GitHub Copilot coding agents (inc. Squad)
+│   ├── agents/                 # GitHub Copilot coding agents
 │   ├── prompts/                # GitHub Copilot prompt files
 │   ├── skills/                 # Repo-local skills (not distributed)
 │   │   └── sensei/             # Git submodule (spboyer/sensei)
 │   ├── instructions/           # Copilot instruction files
-│   ├── workflows/              # GitHub Actions workflows (inc. Squad automation)
+│   ├── workflows/              # GitHub Actions workflows
 │   ├── ISSUE_TEMPLATE/         # Issue templates
 │   ├── PULL_REQUEST_TEMPLATE.md
 │   ├── CODEOWNERS
 │   └── copilot-instructions.md # Copilot custom instructions for this repo
-├── .squad/                     # Squad AI team state (The Matrix cast)
-│   ├── team.md                 # Roster — who's on the team
-│   ├── routing.md              # Work routing rules
-│   ├── decisions.md            # Shared brain — team decisions
-│   ├── agents/                 # Agent charters and history
-│   ├── casting/                # Persistent naming registry
-│   └── identity/               # Current focus and team wisdom
 ├── .vscode/                    # VS Code workspace settings
 │   ├── settings.json
 │   └── extensions.json
-├── demos/                      # Bleeding-edge demos (squad-built)
+├── demos/                      # Bleeding-edge demos
 │   ├── azure-ai/               # Azure AI Foundry, OpenAI, agents
 │   ├── github-copilot/         # Copilot extensions, agents, MCP
 │   ├── dotnet-aspire/          # .NET Aspire cloud-native apps

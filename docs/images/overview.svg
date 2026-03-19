@@ -6,19 +6,18 @@
     </linearGradient>
   </defs>
   <style>
-    .card { opacity: 0; animation: cycle 35s infinite; }
+    .card { opacity: 0; animation: cycle 30s infinite; }
     .card:nth-child(1) { animation-delay: 0s; }
     .card:nth-child(2) { animation-delay: 5s; }
     .card:nth-child(3) { animation-delay: 10s; }
     .card:nth-child(4) { animation-delay: 15s; }
     .card:nth-child(5) { animation-delay: 20s; }
     .card:nth-child(6) { animation-delay: 25s; }
-    .card:nth-child(7) { animation-delay: 30s; }
     @keyframes cycle {
       0%    { opacity: 0; }
-      1.5%  { opacity: 1; }
-      12.5% { opacity: 1; }
-      14.3% { opacity: 0; }
+      1.7%  { opacity: 1; }
+      14.5% { opacity: 1; }
+      16.7% { opacity: 0; }
       100%  { opacity: 0; }
     }
     .emoji   { font-size: 36px; }
@@ -36,116 +35,94 @@
   <rect class="border" x="1" y="1" width="838" height="178"/>
 
   <g id="slides">
-  <!-- Slide 1: Squad -->
-  <g class="card">
-    <text class="emoji" x="40" y="70">&#x1F3AC;</text>
-    <text class="title" x="90" y="58">The Squad &#x2014; AI Team</text>
-    <text class="desc" x="90" y="82">Matrix-cast AI agents: Neo, Trinity, Morpheus, Oracle, Dozer &#x2014; your demo factory</text>
-    <text class="count" x="90" y="106">5 agents + Scribe + Ralph + @copilot</text>
-    <text class="path" x="90" y="128">.squad/</text>
-    <circle class="pip-on" cx="360" cy="160" r="4"/>
-    <circle class="pip" cx="380" cy="160" r="4"/>
-    <circle class="pip" cx="400" cy="160" r="4"/>
-    <circle class="pip" cx="420" cy="160" r="4"/>
-    <circle class="pip" cx="440" cy="160" r="4"/>
-    <circle class="pip" cx="460" cy="160" r="4"/>
-    <circle class="pip" cx="480" cy="160" r="4"/>
-  </g>
-
-  <!-- Slide 2: Demos -->
+  <!-- Slide 1: Demos -->
   <g class="card">
     <text class="emoji" x="40" y="70">&#x1F680;</text>
     <text class="title" x="90" y="58">Demo Factory</text>
     <text class="desc" x="90" y="82">Bleeding-edge Azure AI, GitHub Copilot, .NET Aspire, and SaaS demos</text>
-    <text class="count" x="90" y="106">Build-keynote quality &#x2014; daily auto-generated</text>
+    <text class="count" x="90" y="106">Build-keynote quality</text>
     <text class="path" x="90" y="128">demos/</text>
-    <circle class="pip" cx="360" cy="160" r="4"/>
-    <circle class="pip-on" cx="380" cy="160" r="4"/>
-    <circle class="pip" cx="400" cy="160" r="4"/>
-    <circle class="pip" cx="420" cy="160" r="4"/>
-    <circle class="pip" cx="440" cy="160" r="4"/>
-    <circle class="pip" cx="460" cy="160" r="4"/>
-    <circle class="pip" cx="480" cy="160" r="4"/>
+    <circle class="pip-on" cx="370" cy="160" r="4"/>
+    <circle class="pip" cx="390" cy="160" r="4"/>
+    <circle class="pip" cx="410" cy="160" r="4"/>
+    <circle class="pip" cx="430" cy="160" r="4"/>
+    <circle class="pip" cx="450" cy="160" r="4"/>
+    <circle class="pip" cx="470" cy="160" r="4"/>
   </g>
 
-  <!-- Slide 3: Prompts -->
+  <!-- Slide 2: Prompts -->
   <g class="card">
     <text class="emoji" x="40" y="70">&#x1F4AC;</text>
     <text class="title" x="90" y="58">Copilot Prompts</text>
     <text class="desc" x="90" y="82">Reusable prompt files for consistent task execution in Copilot Chat</text>
     <text class="count" x="90" y="106">3 prompts available</text>
     <text class="path" x="90" y="128">.github/prompts/</text>
-    <circle class="pip" cx="360" cy="160" r="4"/>
-    <circle class="pip" cx="380" cy="160" r="4"/>
-    <circle class="pip-on" cx="400" cy="160" r="4"/>
-    <circle class="pip" cx="420" cy="160" r="4"/>
-    <circle class="pip" cx="440" cy="160" r="4"/>
-    <circle class="pip" cx="460" cy="160" r="4"/>
-    <circle class="pip" cx="480" cy="160" r="4"/>
+    <circle class="pip" cx="370" cy="160" r="4"/>
+    <circle class="pip-on" cx="390" cy="160" r="4"/>
+    <circle class="pip" cx="410" cy="160" r="4"/>
+    <circle class="pip" cx="430" cy="160" r="4"/>
+    <circle class="pip" cx="450" cy="160" r="4"/>
+    <circle class="pip" cx="470" cy="160" r="4"/>
   </g>
 
-  <!-- Slide 4: Learning Pathways -->
+  <!-- Slide 3: Learning Pathways -->
   <g class="card">
     <text class="emoji" x="40" y="70">&#x1F393;</text>
     <text class="title" x="90" y="58">Learning Pathways</text>
     <text class="desc" x="90" y="82">Structured L100&#x2013;L400 learning documents for Microsoft technologies</text>
     <text class="count" x="90" y="106">2 pathways available</text>
     <text class="path" x="90" y="128">learning-pathways/</text>
-    <circle class="pip" cx="360" cy="160" r="4"/>
-    <circle class="pip" cx="380" cy="160" r="4"/>
-    <circle class="pip" cx="400" cy="160" r="4"/>
-    <circle class="pip-on" cx="420" cy="160" r="4"/>
-    <circle class="pip" cx="440" cy="160" r="4"/>
-    <circle class="pip" cx="460" cy="160" r="4"/>
-    <circle class="pip" cx="480" cy="160" r="4"/>
+    <circle class="pip" cx="370" cy="160" r="4"/>
+    <circle class="pip" cx="390" cy="160" r="4"/>
+    <circle class="pip-on" cx="410" cy="160" r="4"/>
+    <circle class="pip" cx="430" cy="160" r="4"/>
+    <circle class="pip" cx="450" cy="160" r="4"/>
+    <circle class="pip" cx="470" cy="160" r="4"/>
   </g>
 
-  <!-- Slide 5: Agentic Workflows -->
+  <!-- Slide 4: Agentic Workflows -->
   <g class="card">
     <text class="emoji" x="40" y="70">&#x1F916;</text>
     <text class="title" x="90" y="58">Agentic Workflows</text>
     <text class="desc" x="90" y="82">AI-powered GitHub Actions that automate routine maintenance via gh aw</text>
     <text class="count" x="90" y="106">1 workflow active</text>
     <text class="path" x="90" y="128">.github/workflows/</text>
-    <circle class="pip" cx="360" cy="160" r="4"/>
-    <circle class="pip" cx="380" cy="160" r="4"/>
-    <circle class="pip" cx="400" cy="160" r="4"/>
-    <circle class="pip" cx="420" cy="160" r="4"/>
-    <circle class="pip-on" cx="440" cy="160" r="4"/>
-    <circle class="pip" cx="460" cy="160" r="4"/>
-    <circle class="pip" cx="480" cy="160" r="4"/>
+    <circle class="pip" cx="370" cy="160" r="4"/>
+    <circle class="pip" cx="390" cy="160" r="4"/>
+    <circle class="pip" cx="410" cy="160" r="4"/>
+    <circle class="pip-on" cx="430" cy="160" r="4"/>
+    <circle class="pip" cx="450" cy="160" r="4"/>
+    <circle class="pip" cx="470" cy="160" r="4"/>
   </g>
 
-  <!-- Slide 6: Scripts -->
+  <!-- Slide 5: Scripts -->
   <g class="card">
     <text class="emoji" x="40" y="70">&#x1F4DC;</text>
     <text class="title" x="90" y="58">Utility Scripts</text>
     <text class="desc" x="90" y="82">PowerShell, Python, and Bash scripts for common development tasks</text>
     <text class="count" x="90" y="106">Organized by technology</text>
     <text class="path" x="90" y="128">scripts/</text>
-    <circle class="pip" cx="360" cy="160" r="4"/>
-    <circle class="pip" cx="380" cy="160" r="4"/>
-    <circle class="pip" cx="400" cy="160" r="4"/>
-    <circle class="pip" cx="420" cy="160" r="4"/>
-    <circle class="pip" cx="440" cy="160" r="4"/>
-    <circle class="pip-on" cx="460" cy="160" r="4"/>
-    <circle class="pip" cx="480" cy="160" r="4"/>
+    <circle class="pip" cx="370" cy="160" r="4"/>
+    <circle class="pip" cx="390" cy="160" r="4"/>
+    <circle class="pip" cx="410" cy="160" r="4"/>
+    <circle class="pip" cx="430" cy="160" r="4"/>
+    <circle class="pip-on" cx="450" cy="160" r="4"/>
+    <circle class="pip" cx="470" cy="160" r="4"/>
   </g>
 
-  <!-- Slide 7: Patterns & Docs -->
+  <!-- Slide 6: Patterns & Docs -->
   <g class="card">
     <text class="emoji" x="40" y="70">&#x1F3D7;</text>
     <text class="title" x="90" y="58">Patterns &#x26; Documentation</text>
     <text class="desc" x="90" y="82">Reusable development patterns, architectural blueprints, and reference docs</text>
     <text class="count" x="90" y="106">Templates, conventions, and guides</text>
     <text class="path" x="90" y="128">patterns/ &#x2022; docs/</text>
-    <circle class="pip" cx="360" cy="160" r="4"/>
-    <circle class="pip" cx="380" cy="160" r="4"/>
-    <circle class="pip" cx="400" cy="160" r="4"/>
-    <circle class="pip" cx="420" cy="160" r="4"/>
-    <circle class="pip" cx="440" cy="160" r="4"/>
-    <circle class="pip" cx="460" cy="160" r="4"/>
-    <circle class="pip-on" cx="480" cy="160" r="4"/>
+    <circle class="pip" cx="370" cy="160" r="4"/>
+    <circle class="pip" cx="390" cy="160" r="4"/>
+    <circle class="pip" cx="410" cy="160" r="4"/>
+    <circle class="pip" cx="430" cy="160" r="4"/>
+    <circle class="pip" cx="450" cy="160" r="4"/>
+    <circle class="pip-on" cx="470" cy="160" r="4"/>
   </g>
   </g>
 </svg>
