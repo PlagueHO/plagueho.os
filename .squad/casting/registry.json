@@ -1,0 +1,42 @@
+[
+  {
+    "persistent_name": "Neo",
+    "role": "Lead Architect",
+    "universe": "the-matrix",
+    "created_at": "2026-03-18T23:17:00Z",
+    "legacy_named": false,
+    "status": "active"
+  },
+  {
+    "persistent_name": "Trinity",
+    "role": "Demo Engineer",
+    "universe": "the-matrix",
+    "created_at": "2026-03-18T23:17:00Z",
+    "legacy_named": false,
+    "status": "active"
+  },
+  {
+    "persistent_name": "Morpheus",
+    "role": "DevRel & Evangelist",
+    "universe": "the-matrix",
+    "created_at": "2026-03-18T23:17:00Z",
+    "legacy_named": false,
+    "status": "active"
+  },
+  {
+    "persistent_name": "Oracle",
+    "role": "Intelligence Analyst",
+    "universe": "the-matrix",
+    "created_at": "2026-03-18T23:17:00Z",
+    "legacy_named": false,
+    "status": "active"
+  },
+  {
+    "persistent_name": "Dozer",
+    "role": "SaaS & Multitenancy Specialist",
+    "universe": "the-matrix",
+    "created_at": "2026-03-18T23:17:00Z",
+    "legacy_named": false,
+    "status": "active"
+  }
+]

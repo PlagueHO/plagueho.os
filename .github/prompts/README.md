@@ -32,5 +32,5 @@ To use a prompt file:
 
 | Prompt | Description |
 |--------|-------------|
-| [assess-pr-review-comments](assess-pr-review-comments.prompt.md) | Assess and evaluate all review comments on a GitHub Pull Request, recommending whether each should be applied. |
+| [evaluate-pr-review-comments](evaluate-pr-review-comments.prompt.md) | Evaluate all review comments on a GitHub Pull Request, classifying each and recommending whether each should be applied. |
 | [optimize-prompt-tokens](optimize-prompt-tokens.prompt.md) | Optimize a prompt, skill, or agent definition to minimize token count while preserving clarity, determinism, and correctness. |

@@ -1,0 +1,218 @@
+name: Squad Daily Demo
+
+on:
+  schedule:
+    # Run daily at 06:00 UTC (evening in AU, morning in US)
+    - cron: '0 6 * * *'
+
+  # Manual trigger with optional topic override
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: 'Optional demo topic override (leave blank for auto-discovery)'
+        required: false
+        type: string
+      category:
+        description: 'Demo category'
+        required: false
+        type: choice
+        options:
+          - auto
+          - azure-ai
+          - github-copilot
+          - dotnet-aspire
+          - saas-multitenancy
+          - bleeding-edge
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  create-demo-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate daily demo issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            // Read team roster to verify squad is active
+            const teamFile = '.squad/team.md';
+            if (!fs.existsSync(teamFile)) {
+              core.info('No .squad/team.md found — skipping daily demo');
+              return;
+            }
+
+            const topicOverride = '${{ github.event.inputs.topic }}' || '';
+            const categoryOverride = '${{ github.event.inputs.category }}' || 'auto';
+
+            // Rotate through demo categories daily
+            const categories = [
+              {
+                name: 'azure-ai',
+                label: 'Azure AI',
+                topics: [
+                  'Azure AI Foundry agent with custom MCP tools',
+                  'Azure OpenAI real-time audio/video API demo',
+                  'AI agent evaluation pipeline with Azure AI Evaluation',
+                  'Multi-agent orchestration with Azure AI Agent Service',
+                  'Azure AI Foundry prompt flow with streaming responses',
+                  'Responsible AI content safety demo',
+                  'Azure AI Search with vector + hybrid search',
+                ]
+              },
+              {
+                name: 'github-copilot',
+                label: 'GitHub Copilot',
+                topics: [
+                  'Custom GitHub Copilot agent with Azure Foundry backend',
+                  'GitHub Copilot Extension for Azure resource management',
+                  'MCP server that connects Copilot to Azure AI Foundry',
+                  'GitHub Copilot skill for IaC generation (Bicep/Terraform)',
+                  'Copilot Workspace automation with GitHub Actions',
+                  'GitHub Copilot coding agent custom instructions showcase',
+                  'Multi-MCP-server Copilot setup for full-stack dev',
+                ]
+              },
+              {
+                name: 'dotnet-aspire',
+                label: '.NET Aspire',
+                topics: [
+                  '.NET Aspire 9 app with Azure OpenAI integration',
+                  '.NET Aspire multi-service app with AI orchestration',
+                  '.NET Aspire + Semantic Kernel agent demo',
+                  '.NET Aspire dashboard with custom metrics and traces',
+                  '.NET Aspire + Azure Container Apps deployment',
+                  'Blazor + .NET Aspire + Azure AI real-time chat',
+                  '.NET Aspire service-to-service auth with managed identity',
+                ]
+              },
+              {
+                name: 'saas-multitenancy',
+                label: 'SaaS Multitenancy',
+                topics: [
+                  'Multi-tenant SaaS app with Entra ID B2C and per-tenant config',
+                  'Database-per-tenant isolation with Azure SQL elastic pools',
+                  'SaaS billing integration with Azure Marketplace',
+                  'Multi-tenant AI service with per-tenant model customization',
+                  'Tenant onboarding automation with Bicep and managed identity',
+                  'SaaS observability dashboard with per-tenant metrics',
+                  'Zero-trust multitenancy with Azure Container Apps',
+                ]
+              },
+              {
+                name: 'bleeding-edge',
+                label: 'Bleeding Edge',
+                topics: [
+                  'Azure AI Foundry latest preview feature showcase',
+                  'GitHub Copilot newest capability demo',
+                  'Latest .NET preview feature with AI integration',
+                  'Azure preview service exploration and demo',
+                  'Cutting-edge AI pattern (reasoning, planning, tool-use)',
+                  'Microsoft Graph + AI integration demo',
+                  'Azure Developer CLI (azd) newest template patterns',
+                ]
+              },
+            ];
+
+            // Select category
+            let selectedCategory;
+            if (categoryOverride !== 'auto') {
+              selectedCategory = categories.find(c => c.name === categoryOverride);
+            }
+            if (!selectedCategory) {
+              // Rotate based on day of year
+              const dayOfYear = Math.floor(
+                (Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000
+              );
+              selectedCategory = categories[dayOfYear % categories.length];
+            }
+
+            // Select topic
+            let topic;
+            if (topicOverride) {
+              topic = topicOverride;
+            } else {
+              const dayOfYear = Math.floor(
+                (Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000
+              );
+              const topicIndex = Math.floor(dayOfYear / categories.length) %
+                selectedCategory.topics.length;
+              topic = selectedCategory.topics[topicIndex];
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+
+            const body = [
+              `## 🚀 Daily Demo — ${today}`,
+              '',
+              `**Category:** ${selectedCategory.label}`,
+              `**Topic:** ${topic}`,
+              '',
+              `### Instructions for the Squad`,
+              '',
+              `1. **Oracle:** Query WorkIQ for recent conversations related to this topic.`,
+              `   Add an intelligence brief: Why is this relevant right now? Who has been`,
+              `   asking about it?`,
+              '',
+              `2. **Trinity:** Build the demo under \`demos/${selectedCategory.name}/\`.`,
+              `   - Use the absolute latest SDK versions and preview APIs`,
+              `   - Include: README, source code, deployment script (\`azd up\` preferred)`,
+              `   - Must work out of the box — test before committing`,
+              `   - Include architecture diagram (Mermaid)`,
+              '',
+              `3. **Morpheus:** Write the narrative for the demo README.`,
+              `   - Problem → Solution → Wow moment structure`,
+              `   - Include a talk track section for live presentation`,
+              `   - Write it as if Satya Nadella or Scott Hanselman will present it`,
+              '',
+              `4. **Dozer:** If the demo involves multi-tenant scenarios, add tenant`,
+              `   isolation patterns and Entra ID integration.`,
+              '',
+              `5. **Neo:** Review the final demo PR. Gate check:`,
+              `   - [ ] Self-contained (single command to run)`,
+              `   - [ ] Stage-ready (Build keynote quality)`,
+              `   - [ ] Bleeding-edge (latest everything)`,
+              `   - [ ] Documented (README, architecture, talk track)`,
+              '',
+              `### Quality Bar`,
+              '',
+              `> "Would Satya demo this on stage at Build?"`,
+              `> If the answer isn't an emphatic YES, it's not done.`,
+              '',
+              `---`,
+              `*Auto-generated by Squad Daily Demo workflow*`,
+            ].join('\n');
+
+            // Check for existing issue today to avoid duplicates
+            const { data: existingIssues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'squad',
+              state: 'open',
+              per_page: 10
+            });
+
+            const todayIssue = existingIssues.find(i =>
+              i.title.includes(today) && i.title.includes('Daily Demo')
+            );
+
+            if (todayIssue) {
+              core.info(`Daily demo issue already exists: #${todayIssue.number}`);
+              return;
+            }
+
+            // Create the issue
+            const { data: issue } = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚀 Daily Demo [${today}]: ${topic}`,
+              body: body,
+              labels: ['squad', `type:feature`]
+            });
+
+            core.info(`Created daily demo issue #${issue.number}: ${topic}`);

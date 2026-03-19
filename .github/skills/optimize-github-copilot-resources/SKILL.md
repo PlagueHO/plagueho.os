@@ -1,13 +1,14 @@
----
-name: optimize-definition
-description: "**WORKFLOW SKILL** — Optimize a prompt, skill, or agent definition for minimal token count, clarity, and AI readability. WHEN: \"optimize tokens\", \"reduce prompt size\", \"minimize token count\", \"shrink prompt\", \"optimize definition\", \"reduce verbosity\", \"improve readability\". INVOKES: file read, file edit tools. FOR SINGLE OPERATIONS: manual find-and-replace of filler words."
-argument-hint: 'Provide the file path to the prompt, skill, or agent definition to optimize (e.g., .github/prompts/my-prompt.prompt.md)'
+name: optimize-github-copilot-resources
+description: "**WORKFLOW SKILL** — Optimize GitHub Copilot resources such as prompts, skills, agents, and instructions for minimal token count, clarity, and AI readability. WHEN: \"optimize tokens\", \"reduce prompt size\", \"minimize token count\", \"shrink prompt\", \"optimize Copilot resources\", \"reduce verbosity\", \"improve readability\". INVOKES: file read, file edit tools. FOR SINGLE OPERATIONS: manual find-and-replace of filler words."
+argument-hint: 'Provide the file path to the prompt, skill, agent, or instruction file to optimize (e.g., .github/prompts/my-prompt.prompt.md)'
 ---
 
-# Optimize Definition
+# Optimize GitHub Copilot Resources
 
-Optimize a prompt (`.prompt.md`), skill (`SKILL.md`), or agent definition
-(`.agent.md`) for minimal token count, maximum clarity, and AI readability.
+Optimize a GitHub Copilot resource such as a prompt (`.prompt.md`), skill
+(`SKILL.md`), agent definition (`.agent.md`), or instruction file
+(`copilot-instructions.md`, `*.instructions.md`) for minimal token count,
+maximum clarity, and AI readability.
 
 **Primary constraint**: The optimized output must retain 100% of the
 functionality, capability, and constraints of the original. The agent consuming
@@ -19,7 +20,8 @@ or generalize an instruction.
 - **File read tool**: Ability to read the target file.
 - **File edit tool**: Ability to edit file contents in place.
 - **Search tool**: Ability to search file contents for patterns.
-- **Target file**: A `.prompt.md`, `SKILL.md`, or `.agent.md` file to optimize.
+- **Target file**: A `.prompt.md`, `SKILL.md`, `.agent.md`,
+  `copilot-instructions.md`, or `*.instructions.md` file to optimize.
 
 ## Process
 

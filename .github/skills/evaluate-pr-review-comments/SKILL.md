@@ -1,10 +1,10 @@
 ---
-name: assess-pr-review-comments
-description: "**WORKFLOW SKILL** — Assesses review comments on a GitHub Pull Request, classifying each by validity, category, impact, and risk, then recommends whether to apply, consider, or skip. WHEN: \"assess PR comments\", \"review PR feedback\", \"triage review comments\", \"evaluate PR reviews\", \"PR comment assessment\", \"should I apply this review comment\". INVOKES: GitHub PR read tools, file reading tools. FOR SINGLE OPERATIONS: read individual PR review comments via GitHub MCP tools directly."
+name: evaluate-pr-review-comments
+description: "**WORKFLOW SKILL** — Evaluates review comments on a GitHub Pull Request, classifying each by validity, category, impact, and risk, then recommends whether to apply, consider, or skip. WHEN: \"evaluate PR comments\", \"review PR feedback\", \"triage review comments\", \"evaluate PR reviews\", \"PR comment evaluation\", \"should I apply this review comment\". INVOKES: GitHub PR read tools, file reading tools. FOR SINGLE OPERATIONS: read individual PR review comments via GitHub MCP tools directly."
 argument-hint: 'Optionally provide the PR number to review (e.g., 42)'
 ---
 
-# Assess PR Review Comments
+# Evaluate PR Review Comments
 
 Evaluate review comments on a Pull Request, classifying each for validity and
 recommending actions. Produces a structured assessment report with per-comment
