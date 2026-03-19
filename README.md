@@ -74,7 +74,6 @@ Skills used only within this repository for automation and repo management.
 
 | Skill | Location | Purpose |
 |-------|----------|---------|
-| `evaluate-pr-review-comments` | [`.github/skills/evaluate-pr-review-comments/`](.github/skills/evaluate-pr-review-comments/) | Evaluate and classify PR review comments with apply/consider/skip recommendations |
 | `sensei` | [`.github/skills/sensei/`](.github/skills/sensei/) | Iterative skill-improvement workflow (git submodule — [spboyer/sensei](https://github.com/spboyer/sensei)) |
 
 ### 🤖 GitHub Copilot Agents ([`.github/agents/`](.github/agents/))
