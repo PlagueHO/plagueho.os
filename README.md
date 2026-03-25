@@ -3,42 +3,27 @@
 [![CI][ci-shield]][ci-url]
 [![License][license-shield]][license-url]
 
-Organizational engineering assets for Daniel Scott-Raynsford. Includes
-GitHub Copilot agents, prompts, scripts, patterns, learning pathways, and
-reference documentation commonly used across repositories for software
-development.
+Personal OS repository for Daniel Scott-Raynsford — agentic workflow
+automation, GitHub Copilot agents, prompts, and reference documentation.
 
-> **Looking for plugins and skills?** My agent plugin marketplace has moved
-> to **[PlagueHO/skills](https://github.com/PlagueHO/skills)**. Add the
+> **Looking for demos, learning pathways, and patterns?** Those have
+> moved to **[PlagueHO/plagueho.learn](https://github.com/PlagueHO/plagueho.learn)**.
+
+> **Looking for plugins and skills?** My agent plugin marketplace is at
+> **[PlagueHO/skills](https://github.com/PlagueHO/skills)**. Add the
 > marketplace to VS Code with:
 >
 > ```jsonc
 > "chat.plugins.marketplaces": ["PlagueHO/skills"]
 > ```
 
-<p align="center">
-  <img src="docs/images/overview.svg" alt="Repository content overview" width="840"/>
-</p>
-
-## Demos ([`demos/`](demos/))
-
-Build-keynote-quality demos organized by technology area. Every demo is
-self-contained with README, source code, and deployment instructions.
-
-| Category | Folder | Focus |
-|----------|--------|-------|
-| Azure AI | [`demos/azure-ai/`](demos/azure-ai/) | Azure AI Foundry, OpenAI, agents, MCP |
-| GitHub Copilot | [`demos/github-copilot/`](demos/github-copilot/) | Extensions, custom agents, skills, MCP servers |
-| .NET Aspire | [`demos/dotnet-aspire/`](demos/dotnet-aspire/) | Cloud-native distributed apps with AI |
-| SaaS Multitenancy | [`demos/saas-multitenancy/`](demos/saas-multitenancy/) | Tenant isolation, Entra ID, ARB patterns |
-| Bleeding Edge | [`demos/bleeding-edge/`](demos/bleeding-edge/) | Preview features, just-announced capabilities |
-
 ## Repository Structure
 
 ```text
-PlagueHO-OS/
+plagueho.os/
 ├── .github/                    # GitHub configuration
 │   ├── agents/                 # GitHub Copilot coding agents
+│   ├── aw/                     # Agentic workflow definitions
 │   ├── prompts/                # GitHub Copilot prompt files
 │   ├── skills/                 # Repo-local skills (not distributed)
 │   │   └── sensei/             # Git submodule (spboyer/sensei)
@@ -47,19 +32,9 @@ PlagueHO-OS/
 │   ├── ISSUE_TEMPLATE/         # Issue templates
 │   ├── PULL_REQUEST_TEMPLATE.md
 │   ├── CODEOWNERS
-│   └── copilot-instructions.md # Copilot custom instructions for this repo
+│   └── copilot-instructions.md
 ├── .vscode/                    # VS Code workspace settings
-│   ├── settings.json
-│   └── extensions.json
-├── demos/                      # Bleeding-edge demos
-│   ├── azure-ai/               # Azure AI Foundry, OpenAI, agents
-│   ├── github-copilot/         # Copilot extensions, agents, MCP
-│   ├── dotnet-aspire/          # .NET Aspire cloud-native apps
-│   ├── saas-multitenancy/      # SaaS patterns, ARB references
-│   └── bleeding-edge/          # Preview and experimental features
 ├── docs/                       # Reference documentation and guides
-├── learning-pathways/          # Technology learning pathways
-├── patterns/                   # Reusable development patterns and templates
 ├── scripts/                    # Utility scripts (PowerShell, Python, Bash)
 ├── .gitignore
 ├── LICENSE
@@ -91,18 +66,12 @@ perform common tasks consistently.
 Utility scripts organized by technology (PowerShell, Python, Bash) for common
 development tasks.
 
-### 🏗️ Patterns ([`patterns/`](patterns/))
-
-Reusable development patterns, templates, and architectural blueprints
-organized by technology.
-
 ### 📚 Documentation ([`docs/`](docs/))
 
 Reference documentation, how-to guides, conventions, and cheat sheets.
 
-### 📖 Learning Pathways ([`learning-pathways/`](learning-pathways/))
-
-Structured learning pathways for Microsoft technologies.
+> Demos, learning pathways, and patterns have moved to
+> [PlagueHO/plagueho.learn](https://github.com/PlagueHO/plagueho.learn).
 
 ## Agentic Workflows
 
@@ -225,8 +194,10 @@ gh workflow run update-foundry-model-catalog.lock.yml
    - **New plugin or skill** — contribute to
      [PlagueHO/skills](https://github.com/PlagueHO/skills).
    - **Repo-local skill** — add to `.github/skills/`.
-   - **Other assets** — place in the appropriate `scripts/`, `patterns/`,
-     `docs/`, or `.github/prompts/` directory.
+   - **Demos, patterns, or learning pathways** — contribute to
+     [PlagueHO/plagueho.learn](https://github.com/PlagueHO/plagueho.learn).
+   - **Other assets** — place in the appropriate `scripts/`, `docs/`,
+     or `.github/prompts/` directory.
 3. Run `pnpm lint:md` to verify markdown compliance.
 4. Open a pull request using the provided template.
 <!-- Badge reference links -->

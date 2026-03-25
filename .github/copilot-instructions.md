@@ -4,10 +4,11 @@ These instructions apply to all GitHub Copilot interactions in this repository.
 
 ## Repository Purpose
 
-This is an organizational assets repository for Daniel Scott-Raynsford
-(PlagueHO). It stores GitHub Copilot agents, prompts, scripts, documents,
-patterns, learning pathways, and other assets commonly used across repositories
-for software development. Plugins and skills are maintained separately in
+This is the personal OS repository for Daniel Scott-Raynsford (PlagueHO).
+It stores agentic workflow automation, GitHub Copilot agents, prompts, scripts,
+and reference documentation. Demos, learning pathways, and patterns have moved
+to [PlagueHO/plagueho.learn](https://github.com/PlagueHO/plagueho.learn).
+Plugins and skills are maintained separately in
 [PlagueHO/skills](https://github.com/PlagueHO/skills).
 
 ## General Coding Principles
@@ -44,5 +45,5 @@ for software development. Plugins and skills are maintained separately in
 - **Prompts**: GitHub Copilot prompt files go in `.github/prompts/`
 - **Skills**: GitHub Copilot skill definitions go in `.github/skills/`
 - **Scripts**: Utility scripts organized by technology in `scripts/`
-- **Patterns**: Reusable development patterns in `patterns/`
 - **Docs**: Reference documentation in `docs/`
+- **Demos / Patterns / Learning Pathways**: These live in [PlagueHO/plagueho.learn](https://github.com/PlagueHO/plagueho.learn)
