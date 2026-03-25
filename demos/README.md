@@ -27,4 +27,3 @@ Every demo must pass the review gate:
 - [ ] **Stage-ready** — would you put this in front of Satya Nadella?
 - [ ] **Bleeding-edge** — uses the latest SDK/API/feature (not last year's tech)
 - [ ] **Tested** — actually works, not just compiles
-

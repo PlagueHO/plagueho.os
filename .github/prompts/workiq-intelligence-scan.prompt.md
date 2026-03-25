@@ -25,6 +25,7 @@ Use the WorkIQ MCP server to ask these questions:
 ### Step 2: Identify Patterns
 
 Look for:
+
 - **Repeated topics** — if 3+ conversations mention the same tech, it's hot
 - **Urgent requests** — partner asks with deadlines or exec visibility
 - **Upcoming events** — Build, Ignite, partner summits, internal reviews
@@ -34,6 +35,7 @@ Look for:
 ### Step 3: Cross-Reference with Latest Announcements
 
 Use web search to check:
+
 - Azure blog (azure.microsoft.com/blog)
 - GitHub blog (github.blog)
 - .NET blog (devblogs.microsoft.com/dotnet)

@@ -93,4 +93,3 @@ the [dotnet/skills](https://github.com/dotnet/skills) structure with:
   `PlagueHO/plagueho.os` to `PlagueHO/skills`.
 - New skills should be created in `PlagueHO/skills`.
 - Repo-local skills and automation remain in `plagueho.os`.
-

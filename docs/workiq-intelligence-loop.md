@@ -59,13 +59,13 @@ check WorkIQ context before or during the demo build to add relevance.
 
 Start a Copilot session and say:
 
-```
+```text
 Oracle, run an intelligence scan. What should we build next?
 ```
 
 Or use the prompt file:
 
-```
+```text
 @workspace /prompt workiq-intelligence-scan
 ```
 
