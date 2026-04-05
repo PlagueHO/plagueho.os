@@ -12,7 +12,6 @@ automation, GitHub Copilot agents, prompts, and reference documentation.
 > **Looking for plugins and skills?** My agent plugin marketplace is at
 > **[PlagueHO/skills](https://github.com/PlagueHO/skills)**. Add the
 > marketplace to VS Code with:
->
 > ```jsonc
 > "chat.plugins.marketplaces": ["PlagueHO/skills"]
 > ```
