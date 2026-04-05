@@ -8,10 +8,11 @@ automation, GitHub Copilot agents, prompts, and reference documentation.
 
 > **Looking for demos, learning pathways, and patterns?** Those have
 > moved to **[PlagueHO/plagueho.learn](https://github.com/PlagueHO/plagueho.learn)**.
-
+>
 > **Looking for plugins and skills?** My agent plugin marketplace is at
 > **[PlagueHO/skills](https://github.com/PlagueHO/skills)**. Add the
 > marketplace to VS Code with:
+>
 > ```jsonc
 > "chat.plugins.marketplaces": ["PlagueHO/skills"]
 > ```
